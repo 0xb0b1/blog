@@ -2,11 +2,10 @@
   max-width: 700px;
   margin: 2rem auto;
 
-
   button {
     border: 0;
     background: none;
-    color: var(--pink-500);
+    color: var(--highlight);
     padding: 1rem 2rem;
 
     font-family: "Inter", sans-serif;
@@ -16,15 +15,16 @@
 }
 
 .postListContent {
-  max-width: 1120px;
+  max-width: 700px;
   padding: 0 2rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 3rem;
 
   a {
     &:hover {
-      color: var(--pink-500);
+      color: var(--highlight);
     }
   }
 
@@ -40,9 +40,11 @@
 
   p {
     font-weight: 400;
-    color: #D7D7D7;
-    font-size: 18px;
+    color: var(--gray-900);
+    font-size: 16px;
     margin-bottom: 1rem;
+    vertical-align: baseline;
+    text-align: left;
   }
 
   ul {
@@ -52,7 +54,7 @@
 
     & li {
       font-weight: 400;
-      color: #BBBBBB;
+      color: var(--gray-900);
 
       & svg {
         margin-right: 0.5rem;

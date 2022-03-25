@@ -1,8 +1,29 @@
 .container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 0 2rem 4rem;
 
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  h2 {
+    margin: 1rem;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+  }
 }
