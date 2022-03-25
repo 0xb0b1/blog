@@ -1,1 +1,66 @@
-// TODO
+.postListContainer {
+  max-width: 700px;
+  margin: 2rem auto;
+
+
+  button {
+    border: 0;
+    background: none;
+    color: var(--pink-500);
+    padding: 1rem 2rem;
+
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+  }
+}
+
+.postListContent {
+  max-width: 1120px;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  a {
+    &:hover {
+      color: var(--pink-500);
+    }
+  }
+
+  strong,
+  p {
+    font-family: "Inter", sans-serif;
+  }
+
+  strong {
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  p {
+    font-weight: 400;
+    color: #D7D7D7;
+    font-size: 18px;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    display: inline-flex;
+    list-style: none;
+    gap: 1rem;
+
+    & li {
+      font-weight: 400;
+      color: #BBBBBB;
+
+      & svg {
+        margin-right: 0.5rem;
+      }
+
+      &+li {
+        margin-left: 1.625rem;
+      }
+    }
+  }
+}
