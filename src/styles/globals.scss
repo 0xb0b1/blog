@@ -42,6 +42,10 @@ body {
   color: var(--gray-900);
   background: var(--white);
   font-family: "Inter", sans-serif;
+
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 body,

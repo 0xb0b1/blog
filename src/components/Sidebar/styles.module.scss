@@ -1,12 +1,13 @@
 .aside {
-  width: auto;
   background-color: #FF57B2;
   background-image: linear-gradient(315deg, #FF57B2 0%, #0d324d 74%);
 
-  height: 100vh;
+  max-width: 20%;
+  width: auto;
+  height: 100%;
   position: fixed;
   left: 0;
-  top: 0;
+  // top: 0;
 
   display: flex;
   flex-direction: column;
@@ -14,6 +15,10 @@
   // align-items: flex-start;
   padding: 2rem 0.5rem;
   color: var(--body);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 
   ul {
     list-style: none;
