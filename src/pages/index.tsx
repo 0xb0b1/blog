@@ -40,6 +40,7 @@ export default function Home({ posts }: PostsProps): JSX.Element {
   return (
     <>
       <Header />
+
       <main className={styles.postListContainer}>
         <section className={styles.postListContent}>
           {posts.map(post => (
