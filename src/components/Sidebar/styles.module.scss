@@ -1,0 +1,49 @@
+.aside {
+  width: auto;
+  background-color: #FF57B2;
+  background-image: linear-gradient(315deg, #FF57B2 0%, #0d324d 74%);
+
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // align-items: flex-start;
+  padding: 2rem 0.5rem;
+  color: var(--body);
+
+  ul {
+    list-style: none;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    & li {
+      font-family: "Inter", sans-serif;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        color: #FF57B2;
+        cursor: pointer;
+      }
+
+      & span {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
+  button {
+    border: none;
+    background: none;
+    color: var(--body);
+
+
+  }
+}
