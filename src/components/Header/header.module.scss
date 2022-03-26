@@ -1,5 +1,5 @@
 .container {
-  max-width: 1120px;
+  // max-width: 1120px;
   width: 100%;
   margin: 0 auto;
   padding: 0 2rem 4rem;
@@ -7,6 +7,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  button {
+    position: fixed;
+    right: 0;
+    top: 0;
+    border: 0;
+    background: none;
+
+    margin: 1rem;
+  }
 }
 
 .content {
