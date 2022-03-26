@@ -12,6 +12,7 @@ import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import { Sidebar } from '../components/Sidebar';
 
 type Post = {
   slug: string;
@@ -38,9 +39,8 @@ export default function Home({ posts }: PostsProps): JSX.Element {
   // console.log(posts);
   return (
     <>
+      <Header />
       <main className={styles.postListContainer}>
-        <Header />
-
         <section className={styles.postListContent}>
           {posts.map(post => (
             <a key={post.slug} href="/">

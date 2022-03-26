@@ -19,6 +19,7 @@
   --info: #BBBBBB;
   --body: #D7D7D7;
 
+
   --pink-500: #FF57B2;
 
   --cyan-500: #61dafb;
@@ -58,4 +59,15 @@ button {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+}
+
+.has-tooltip .tooltip {
+  visibility: visible;
+  z-index: 100;
 }
