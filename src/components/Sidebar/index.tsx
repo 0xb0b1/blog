@@ -7,19 +7,39 @@ export const Sidebar = (): JSX.Element => {
     <aside className={styles.aside}>
       <ul>
         <li className="">
-          <FiGithub size={22} />
+          <a href="https://github.com/0xb0b1" target="_blank" rel="noreferrer">
+            <FiGithub size={22} />
+          </a>
           {/* <span className="">Github</span> */}
         </li>
         <li>
-          <FiTwitter size={22} />
+          <a
+            href="https://twitter.com/p_vcent"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FiTwitter size={22} />
+          </a>
           {/* <span>Twitter</span> */}
         </li>
         <li>
-          <FiLinkedin size={22} />
+          <a
+            href="https://www.linkedin.com/in/paulo-vicente-6abab0198/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FiLinkedin size={22} />
+          </a>
           {/* <span>Linkedin</span> */}
         </li>
         <li>
-          <FiInstagram size={22} />
+          <a
+            href="https://www.instagram.com/p_vcent/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FiInstagram size={22} />
+          </a>
           {/* <span>Instagram</span> */}
         </li>
       </ul>
