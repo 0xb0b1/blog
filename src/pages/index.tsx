@@ -5,7 +5,6 @@ import { GetStaticProps } from 'next';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 import Prismic from '@prismicio/client';
 import { RichText } from 'prismic-dom';
-import { Head } from 'next/document';
 import Header from '../components/Header';
 
 import { getPrismicClient } from '../services/prismic';
