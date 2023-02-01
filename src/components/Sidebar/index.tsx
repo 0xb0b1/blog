@@ -10,7 +10,6 @@ export const Sidebar = (): JSX.Element => {
           <a href="https://github.com/0xb0b1" target="_blank" rel="noreferrer">
             <FiGithub size={22} />
           </a>
-          {/* <span className="">Github</span> */}
         </li>
         <li>
           <a
@@ -20,7 +19,6 @@ export const Sidebar = (): JSX.Element => {
           >
             <FiTwitter size={22} />
           </a>
-          {/* <span>Twitter</span> */}
         </li>
         <li>
           <a
@@ -30,7 +28,6 @@ export const Sidebar = (): JSX.Element => {
           >
             <FiLinkedin size={22} />
           </a>
-          {/* <span>Linkedin</span> */}
         </li>
         <li>
           <a
@@ -40,7 +37,6 @@ export const Sidebar = (): JSX.Element => {
           >
             <FiInstagram size={22} />
           </a>
-          {/* <span>Instagram</span> */}
         </li>
       </ul>
     </aside>

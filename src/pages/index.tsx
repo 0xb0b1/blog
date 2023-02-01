@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { GetStaticProps } from 'next';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 import Prismic from '@prismicio/client';
@@ -9,7 +6,6 @@ import Header from '../components/Header';
 
 import { getPrismicClient } from '../services/prismic';
 
-// import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
 type Post = {
@@ -24,17 +20,7 @@ interface PostsProps {
   posts: Post[];
 }
 
-interface PostPagination {
-  next_page: string;
-  results: Post[];
-}
-
-interface HomeProps {
-  postsPagination: PostPagination;
-}
-
 export default function Home({ posts }: PostsProps): JSX.Element {
-  // console.log(posts);
   return (
     <>
       <Header />
@@ -74,8 +60,6 @@ export const getStaticProps: GetStaticProps = async () => {
       pageSize: 10,
     }
   );
-
-  console.log(postsResponse.results);
 
   const posts = postsResponse.results.map(post => {
     return {
