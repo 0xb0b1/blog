@@ -1,0 +1,85 @@
+{{template "base.html" .}}
+
+{{define "title"}}Home - Paulo's Blog{{end}}
+
+{{define "content"}}
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Paulo Vicente</h1>
+        <p class="hero-role">Full-Stack Software Engineer</p>
+        <p class="hero-tagline">Building scalable, resilient systems with Golang and modern distributed architectures</p>
+
+        <div class="hero-bio">
+            <p>I'm a full-stack Software Engineer with backend expertise and a passion for building scalable, resilient systems. With years of experience designing and developing high-performance backends and modern TypeScript/React frontends, I specialize in turning challenging business requirements into efficient, maintainable end-to-end solutions.</p>
+
+            <p>From fast-paced startups to enterprise-level platforms, I've consistently delivered complete application stacks—from robust backend systems that prioritize performance, scalability, and reliability to intuitive, responsive user interfaces.</p>
+        </div>
+
+        <div class="tech-highlights">
+            <div class="tech-category">
+                <h3>Backend & Architecture</h3>
+                <p>Expert in Golang, microservices, RESTful APIs, gRPC, and event-driven architectures with Kafka and RabbitMQ. Experienced with CQRS, Event Sourcing, Domain-Driven Design (DDD), and scalable system design patterns</p>
+            </div>
+            <div class="tech-category">
+                <h3>Frontend & UX</h3>
+                <p>Proficient in React, TypeScript, Redux, and building responsive, accessible user experiences</p>
+            </div>
+            <div class="tech-category">
+                <h3>Infrastructure & DevOps</h3>
+                <p>Hands-on with Docker, Kubernetes, AWS, CI/CD pipelines, and observability tools</p>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <span class="tech-badge">Golang</span>
+            <span class="tech-badge">Python</span>
+            <span class="tech-badge">TypeScript</span>
+            <span class="tech-badge">React</span>
+            <span class="tech-badge">Kafka</span>
+            <span class="tech-badge">RabbitMQ</span>
+            <span class="tech-badge">Docker</span>
+            <span class="tech-badge">Kubernetes</span>
+            <span class="tech-badge">AWS</span>
+            <span class="tech-badge">Microservices</span>
+            <span class="tech-badge">CQRS</span>
+            <span class="tech-badge">Event Sourcing</span>
+            <span class="tech-badge">DDD</span>
+            <span class="tech-badge">System Design</span>
+        </div>
+
+        <div class="hero-cta">
+            <a href="https://github.com/0xb0b1" target="_blank" class="cta-button">GitHub</a>
+            <a href="https://linkedin.com/in/paulovicente" target="_blank" class="cta-button cta-button-secondary">LinkedIn</a>
+        </div>
+    </div>
+</section>
+
+<section id="posts" class="blog-section">
+    <h2 class="section-title">Latest Blog Posts</h2>
+    <div class="posts">
+        {{range .Posts}}
+        <article class="post-card">
+            <div class="post-meta">
+                <time class="post-date">{{.Date.Format "January 2, 2006"}}</time>
+                <span class="post-reading-time">{{.ReadingTime}} min read</span>
+            </div>
+            <h3 class="post-card-title">
+                <a href="/posts/{{.Slug}}">{{.Title}}</a>
+            </h3>
+            {{if .Description}}
+            <p class="post-description">{{.Description}}</p>
+            {{end}}
+            {{if .Tags}}
+            <div class="post-tags">
+                {{range .Tags}}
+                <span class="tag">{{.}}</span>
+                {{end}}
+            </div>
+            {{end}}
+        </article>
+        {{else}}
+        <p class="no-posts">No posts yet. Check back soon!</p>
+        {{end}}
+    </div>
+</section>
+{{end}}
