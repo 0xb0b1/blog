@@ -593,6 +593,9 @@ body {
 [data-theme="dark"] .chroma {
     background: #1e1e2e;
     color: #cdd6f4;
+    border: 1px solid #45475a;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
 }
 
 [data-theme="dark"] .chroma .k { color: #cba6f7; } /* Keyword - Mauve */
@@ -655,6 +658,9 @@ body {
 [data-theme="light"] .chroma {
     background: #e6e9ef;
     color: #4c4f69;
+    border: 1px solid #ccd0da;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
 }
 
 [data-theme="light"] .chroma .k { color: #8839ef; } /* Keyword - Mauve */
