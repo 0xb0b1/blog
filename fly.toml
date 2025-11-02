@@ -1,16 +1,22 @@
-app = "pv-blog"
-primary_region = "ewr"
+# fly.toml app configuration file generated for paulo-vicente on 2025-11-01T18:56:37Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'paulo-vicente'
+primary_region = 'ewr'
 
 [build]
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
+  processes = ['app']
 
 [[vm]]
-  cpu_kind = "shared"
+  cpu_kind = 'shared'
   cpus = 1
   memory_mb = 256
