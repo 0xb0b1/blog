@@ -8,12 +8,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/base16/catppuccin-latte.min.css" id="highlight-light">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/base16/catppuccin-mocha.min.css" id="highlight-dark" disabled>
     <link rel="stylesheet" href="/static/css/style.css">
     <script>
         // Apply theme before page renders to prevent flash
         (function() {
             const theme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', theme);
+
+            // Toggle highlight.js theme
+            const lightTheme = document.getElementById('highlight-light');
+            const darkTheme = document.getElementById('highlight-dark');
+            if (theme === 'dark') {
+                lightTheme.disabled = true;
+                darkTheme.disabled = false;
+            } else {
+                lightTheme.disabled = false;
+                darkTheme.disabled = true;
+            }
         })();
     </script>
 </head>
@@ -55,6 +68,19 @@
             themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
         }
 
+        function toggleHighlightTheme(theme) {
+            const lightTheme = document.getElementById('highlight-light');
+            const darkTheme = document.getElementById('highlight-dark');
+
+            if (theme === 'dark') {
+                lightTheme.disabled = true;
+                darkTheme.disabled = false;
+            } else {
+                lightTheme.disabled = false;
+                darkTheme.disabled = true;
+            }
+        }
+
         // Initialize icon based on current theme
         const currentTheme = document.documentElement.getAttribute('data-theme');
         updateThemeIcon(currentTheme);
@@ -66,9 +92,15 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
+            toggleHighlightTheme(newTheme);
         });
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+    <script>
+        // Initialize highlight.js
+        hljs.highlightAll();
+    </script>
     <script src="/static/js/molecules.js"></script>
 </body>
 </html>

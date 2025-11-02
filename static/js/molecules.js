@@ -63,16 +63,18 @@ class MolecularNetwork {
         const theme = document.documentElement.getAttribute('data-theme');
 
         if (theme === 'dark') {
+            // Catppuccin Mocha - Blue
             return {
-                particle: 'rgba(59, 130, 246, 0.5)',
-                particleGlow: 'rgba(59, 130, 246, 0.15)',
-                line: 'rgba(59, 130, 246, 0.12)'
+                particle: 'rgba(137, 180, 250, 0.5)',
+                particleGlow: 'rgba(137, 180, 250, 0.15)',
+                line: 'rgba(137, 180, 250, 0.12)'
             };
         } else {
+            // Catppuccin Latte - Blue
             return {
-                particle: 'rgba(37, 99, 235, 0.3)',
-                particleGlow: 'rgba(37, 99, 235, 0.08)',
-                line: 'rgba(37, 99, 235, 0.08)'
+                particle: 'rgba(30, 102, 245, 0.3)',
+                particleGlow: 'rgba(30, 102, 245, 0.08)',
+                line: 'rgba(30, 102, 245, 0.08)'
             };
         }
     }
@@ -90,7 +92,7 @@ class MolecularNetwork {
             // Draw subtle glow
             const gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentSize * 2);
             gradient.addColorStop(0, colors.particleGlow);
-            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+            gradient.addColorStop(1, 'transparent');
 
             this.ctx.fillStyle = gradient;
             this.ctx.beginPath();

@@ -18,7 +18,7 @@ Here's my real talk on using Go for distributed systems.
 
 ## 𝗪𝗵𝘆 𝗚𝗼 𝗘𝘅𝗰𝗲𝗹𝘀
 
-### 🚀 Goroutines = Game Changer
+### Goroutines = Game Changer
 
 Handling 10k+ concurrent connections with minimal overhead. I migrated a Python API gateway to Go and saw **60% less memory usage** while handling **3x more traffic**.
 

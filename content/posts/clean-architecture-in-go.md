@@ -11,7 +11,7 @@ One of the best things I've learned while building backend services in Golang is
 
 Here's a simplified breakdown I wish I had when I started:
 
-## 🔹 Handler Layer (Presentation)
+## Handler Layer (Presentation)
 
 This is the entry point of your application. It handles HTTP/gRPC/GraphQL requests, converts them to domain-friendly inputs, and forwards them to your service layer.
 
@@ -51,9 +51,9 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-**❌ Never put core logic here.** Otherwise, changing frameworks becomes a nightmare.
+** Never put core logic here.** Otherwise, changing frameworks becomes a nightmare.
 
-## 🔹 Service Layer (Application)
+## Service Layer (Application)
 
 This is where the actual **use cases** live. It orchestrates logic, talks to repositories, and implements business processes.
 
@@ -110,7 +110,7 @@ func isValidEmail(email string) bool {
 }
 ```
 
-## 🔹 Repository Layer (Data Access)
+## Repository Layer (Data Access)
 
 This layer deals with **persistence**: databases, message queues, external APIs.
 
@@ -165,7 +165,7 @@ func (r *PostgresUserRepository) FindByEmail(ctx context.Context, email string) 
 }
 ```
 
-## 🔹 Model Layer (Domain)
+## Model Layer (Domain)
 
 At the heart of it all lies the **domain** — pure, clean Go structs representing your business concepts.
 
@@ -211,7 +211,7 @@ func (u *User) IsActive() bool {
 }
 ```
 
-## 📌 Dependency Rule
+## Dependency Rule
 
 Everything points **inward**:
 
@@ -228,7 +228,7 @@ This means:
 - Repositories only import models
 - Handlers import everything
 
-## 📎 Adapter Roles
+## Adapter Roles
 
 - **Handlers** = Primary adapter (driving port) - they drive your application
 - **Repositories** = Secondary adapter (driven port) - they're driven by your application

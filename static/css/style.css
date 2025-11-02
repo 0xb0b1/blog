@@ -8,16 +8,16 @@
 }
 
 :root {
-    /* Colors - Light Mode */
-    --color-bg: #ffffff;
-    --color-text: #1a1a1a;
-    --color-text-muted: #6b7280;
-    --color-border: #e5e7eb;
-    --color-accent: #2563eb;
-    --color-accent-hover: #1d4ed8;
-    --color-card-bg: #ffffff;
-    --color-card-hover: #f9fafb;
-    --color-code-bg: #f3f4f6;
+    /* Colors - Light Mode (Catppuccin Latte) */
+    --color-bg: #eff1f5;
+    --color-text: #4c4f69;
+    --color-text-muted: #6c6f85;
+    --color-border: #ccd0da;
+    --color-accent: #1e66f5;
+    --color-accent-hover: #04a5e5;
+    --color-card-bg: #e6e9ef;
+    --color-card-hover: #dce0e8;
+    --color-code-bg: #dce0e8;
 
     /* Typography */
     --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -42,18 +42,18 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Dark Mode */
+/* Dark Mode (Catppuccin Mocha) */
 [data-theme="dark"] {
     /* Colors - Dark Mode */
-    --color-bg: #0f172a;
-    --color-text: #e2e8f0;
-    --color-text-muted: #94a3b8;
-    --color-border: #334155;
-    --color-accent: #3b82f6;
-    --color-accent-hover: #60a5fa;
-    --color-card-bg: #1e293b;
-    --color-card-hover: #283548;
-    --color-code-bg: #1e293b;
+    --color-bg: #1e1e2e;
+    --color-text: #cdd6f4;
+    --color-text-muted: #bac2de;
+    --color-border: #45475a;
+    --color-accent: #89b4fa;
+    --color-accent-hover: #b4befe;
+    --color-card-bg: #181825;
+    --color-card-hover: #313244;
+    --color-code-bg: #313244;
 
     /* Shadows for dark mode */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
@@ -117,11 +117,11 @@ body {
 }
 
 [data-theme="light"] .nav {
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(230, 233, 239, 0.95);
 }
 
 [data-theme="dark"] .nav {
-    background-color: rgba(15, 23, 42, 0.95);
+    background-color: rgba(24, 24, 37, 0.95);
 }
 
 .nav .container {
@@ -573,12 +573,7 @@ body {
 }
 
 .post-content pre {
-    background: #282a36;
-    color: #f8f8f2;
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius);
     overflow-x: auto;
-    margin: var(--spacing-lg) 0;
     line-height: 1.6;
 }
 
@@ -588,6 +583,13 @@ body {
     color: inherit;
     font-size: 0.875rem;
     font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* Override highlight.js defaults to match our theme */
+.post-content pre {
+    padding: var(--spacing-md) !important;
+    border-radius: var(--border-radius) !important;
+    margin: var(--spacing-lg) 0 !important;
 }
 
 .post-content img {
