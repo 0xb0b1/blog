@@ -5,16 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A programming blog">
     <title>{{block "title" .}}Paulo's Blog{{end}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script>
+        // Apply theme before page renders to prevent flash
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
+    <canvas id="molecules-canvas"></canvas>
+
     <nav class="nav">
         <div class="container">
             <a href="/" class="logo">Paulo Vicente</a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/#posts">Posts</a>
-                <a href="/about">About</a>
+            <div style="display: flex; align-items: center;">
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/#posts">Posts</a>
+                    <a href="/about">About</a>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon">☀️</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -28,5 +45,30 @@
             <p>&copy; 2025 Paulo Vicente. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+
+        function updateThemeIcon(theme) {
+            themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+
+        // Initialize icon based on current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    </script>
+
+    <script src="/static/js/molecules.js"></script>
 </body>
 </html>
