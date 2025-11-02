@@ -12,9 +12,10 @@ import (
 	"time"
 
 	"github.com/yuin/goldmark"
-	highlighting "github.com/yuin/goldmark-highlighting"
+	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	meta "github.com/yuin/goldmark-meta"
 	"github.com/yuin/goldmark/parser"
+	"github.com/alecthomas/chroma/v2/formatters/html"
 )
 
 type Post struct {
@@ -31,7 +32,10 @@ var markdown = goldmark.New(
 	goldmark.WithExtensions(
 		meta.Meta,
 		highlighting.NewHighlighting(
-			highlighting.WithStyle("monokai"),
+			highlighting.WithFormatOptions(
+				html.WithClasses(true), // Use CSS classes instead of inline styles
+				html.WithLineNumbers(false),
+			),
 		),
 	),
 )
