@@ -82,11 +82,12 @@ pv-blog/
 │   ├── posts.go
 │   └── about.go
 ├── models/              # Data models
-│   └── posts.go
+│   └── post.go
 ├── templates/           # HTML templates
 │   ├── base.html
 │   ├── home.html
 │   ├── post.html
+│   ├── posts.html
 │   └── about.html
 ├── static/              # Static assets
 │   └── css/
