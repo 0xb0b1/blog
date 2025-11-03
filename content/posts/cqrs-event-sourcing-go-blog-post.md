@@ -765,18 +765,18 @@ func (p *ProjectionRunner) Run(ctx context.Context) {
 
 Three Dots Labs makes an excellent point in their book: these patterns aren't silver bullets. Use them when:
 
-✅ **You need audit trails** - Every state change is recorded
-✅ **Complex domain logic** - Commands and domain events model it naturally  
-✅ **Read/write patterns diverge** - One size doesn't fit all
-✅ **Time travel debugging** - Replay events to any point in time
-✅ **Multiple read models** - Same events, different projections
+✅ **You need audit trails** - Every state change is recorded <br/> 
+✅ **Complex domain logic** - Commands and domain events model it naturally   <br/> 
+✅ **Read/write patterns diverge** - One size doesn't fit all <br/> 
+✅ **Time travel debugging** - Replay events to any point in time <br/> 
+✅ **Multiple read models** - Same events, different projections<br/>
 
 Avoid them when:
 
-❌ **Simple CRUD** - Don't overcomplicate
-❌ **Strong consistency required** - Eventual consistency is the default
-❌ **Team lacks experience** - Start with simpler patterns
-❌ **Low event volume** - The overhead might not be worth it
+❌ **Simple CRUD** - Don't overcomplicate <br/> 
+❌ **Strong consistency required** - Eventual consistency is the default <br/> 
+❌ **Team lacks experience** - Start with simpler patterns <br/> 
+❌ **Low event volume** - The overhead might not be worth it <br/> 
 
 ## Conclusion
 
