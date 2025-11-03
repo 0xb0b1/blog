@@ -53,33 +53,4 @@
         </div>
     </div>
 </section>
-
-<section id="posts" class="blog-section">
-    <h2 class="section-title">Latest Blog Posts</h2>
-    <div class="posts">
-        {{range .Posts}}
-        <article class="post-card">
-            <div class="post-meta">
-                <time class="post-date">{{.Date.Format "January 2, 2006"}}</time>
-                <span class="post-reading-time">{{.ReadingTime}} min read</span>
-            </div>
-            <h3 class="post-card-title">
-                <a href="/posts/{{.Slug}}">{{.Title}}</a>
-            </h3>
-            {{if .Description}}
-            <p class="post-description">{{.Description}}</p>
-            {{end}}
-            {{if .Tags}}
-            <div class="post-tags">
-                {{range .Tags}}
-                <span class="tag">{{.}}</span>
-                {{end}}
-            </div>
-            {{end}}
-        </article>
-        {{else}}
-        <p class="no-posts">No posts yet. Check back soon!</p>
-        {{end}}
-    </div>
-</section>
 {{end}}

@@ -1,0 +1,37 @@
+{{define "title"}}Posts - Paulo's Blog{{end}}
+
+{{define "content"}}
+<div class="posts-page">
+    <header class="posts-header">
+        <h1 class="page-title">Posts</h1>
+        <form action="/posts" method="GET" class="search-form">
+            <input type-="search" name="q" placeholder="Search posts..." value="{{.SearchQuery}}" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </header>
+
+    <div class="posts">
+        {{if .Posts}}
+            {{range .Posts}}
+                <div class="post-card">
+                    <h2 class="post-card-title"><a href="/posts/{{.Slug}}">{{.Title}}</a></h2>
+                    <div class="post-meta">
+                        <span class="post-date">{{.Date.Format "January 2, 2006"}}</span>
+                        <span class="post-reading-time">{{.ReadingTime}} min read</span>
+                    </div>
+                    <p class="post-description">{{.Description}}</p>
+                    <div class="post-tags">
+                        {{range .Tags}}
+                            <span class="tag">{{.}}</span>
+                        {{end}}
+                    </div>
+                </div>
+            {{end}}
+        {{else}}
+            <div class="no-posts">
+                <p>No posts found for "{{.SearchQuery}}".</p>
+            </div>
+        {{end}}
+    </div>
+</div>
+{{end}}
