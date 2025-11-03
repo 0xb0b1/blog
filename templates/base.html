@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css?v=3">
+    <link rel="stylesheet" href="/static/css/style.css?v=5">
     <script>
         // Apply theme before page renders to prevent flash
         (function() {
@@ -20,24 +20,32 @@
 <body>
     <canvas id="molecules-canvas"></canvas>
 
-    <nav class="nav">
-        <div class="container">
-            <a href="/" class="logo">Paulo Vicente</a>
-            <div style="display: flex; align-items: center;">
-                <div class="nav-links">
-                    <a href="/">Home</a>
-                    <a href="/#posts">Posts</a>
-                    <a href="/about">About</a>
-                </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <span class="theme-icon">☀️</span>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-    <main class="main">
-        {{block "content" .}}{{end}}
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="/" class="logo">Paulo Vicente</a>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/">Home</a>
+            <a href="/posts">Posts</a>
+            <a href="/about">About</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon">☀️</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content" id="main-content">
+        <div class="container">
+            {{block "content" .}}{{end}}
+        </div>
     </main>
 
     <footer class="footer">
@@ -55,7 +63,6 @@
             themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
         }
 
-        // Initialize icon based on current theme
         const currentTheme = document.documentElement.getAttribute('data-theme');
         updateThemeIcon(currentTheme);
 
@@ -66,6 +73,16 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
+        });
+
+        // Mobile navigation toggle
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+
+        mobileNavToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            mobileNavToggle.classList.toggle('open');
         });
     </script>
 

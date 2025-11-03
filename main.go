@@ -31,6 +31,11 @@ func main() {
 		log.Fatalf("Failed to parse post templates: %v", err)
 	}
 
+	postsTmpl, err := template.ParseFiles("templates/base.html", "templates/posts.html")
+	if err != nil {
+		log.Fatalf("Failed to parse posts templates: %v", err)
+	}
+
 	aboutTmpl, err := template.ParseFiles("templates/base.html", "templates/about.html")
 	if err != nil {
 		log.Fatalf("Failed to parse about templates: %v", err)
@@ -45,9 +50,10 @@ func main() {
 		Template: homeTmpl,
 	}
 
-	postHandler := &handlers.PostHandler{
-		Posts:    posts,
-		Template: postTmpl,
+	postsHandler := &handlers.PostsHandler{
+		Posts:         posts,
+		PostsTemplate: postsTmpl,
+		PostTemplate:  postTmpl,
 	}
 
 	aboutHandler := &handlers.AboutHandler{
@@ -56,7 +62,7 @@ func main() {
 
 	// Routes
 	mux.Handle("/", homeHandler)
-	mux.Handle("/posts/", postHandler)
+	mux.Handle("/posts/", postsHandler)
 	mux.Handle("/about", aboutHandler)
 
 	// Static files
