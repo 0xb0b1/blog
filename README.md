@@ -79,10 +79,10 @@ pv-blog/
 ├── go.mod               # Go module file
 ├── handlers/            # HTTP handlers
 │   ├── home.go
-│   ├── post.go
+│   ├── posts.go
 │   └── about.go
 ├── models/              # Data models
-│   └── post.go
+│   └── posts.go
 ├── templates/           # HTML templates
 │   ├── base.html
 │   ├── home.html
