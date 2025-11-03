@@ -141,6 +141,13 @@ body {
   transition: color 0.2s ease;
 }
 
+.logo span {
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 .logo:hover {
   color: var(--color-accent);
 }
@@ -158,10 +165,26 @@ body {
   font-size: 1.125rem;
   transition: color 0.2s ease;
   padding: var(--spacing-xs) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.sidebar-nav a svg {
+    width: 20px;
+    height: 20px;
 }
 
 .sidebar-nav a:hover {
   color: var(--color-accent);
+}
+
+.sidebar-nav a.active {
+  color: var(--color-accent);
+}
+
+.sidebar-nav a.active svg {
+  stroke: var(--color-accent);
 }
 
 .sidebar-footer {
