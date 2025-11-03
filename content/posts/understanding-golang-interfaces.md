@@ -1,6 +1,6 @@
 ---
 title: "Understanding Go Interfaces"
-date: 2025-01-10
+date: 2025-01-18
 description: "A deep dive into Go's interface system and how it enables polymorphism and flexible code design."
 tags: ["golang", "interfaces", "design-patterns"]
 ---
