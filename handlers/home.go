@@ -1,16 +1,15 @@
 package handlers
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/0xb0b1/blog/models"
+	"github.com/0xb0b1/blog/templates"
 )
 
 type HomeHandler struct {
-	Posts    []models.Post
-	Template *template.Template
+	Posts []models.Post
 }
 
 func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -19,13 +18,8 @@ func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := struct {
-		Posts []models.Post
-	}{
-		Posts: h.Posts,
-	}
-
-	if err := h.Template.ExecuteTemplate(w, "home.html", data); err != nil {
+	component := templates.Base("Home - Paulo's Blog", templates.Home())
+	if err := component.Render(r.Context(), w); err != nil {
 		log.Printf("Error executing template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return

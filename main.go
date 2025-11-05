@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -20,45 +19,19 @@ func main() {
 
 	log.Printf("Loaded %d posts", len(posts))
 
-	// Parse templates separately for each handler to avoid block conflicts
-	homeTmpl, err := template.ParseFiles("templates/base.html", "templates/home.html")
-	if err != nil {
-		log.Fatalf("Failed to parse home templates: %v", err)
-	}
-
-	postTmpl, err := template.ParseFiles("templates/base.html", "templates/post.html")
-	if err != nil {
-		log.Fatalf("Failed to parse post templates: %v", err)
-	}
-
-	postsTmpl, err := template.ParseFiles("templates/base.html", "templates/posts.html")
-	if err != nil {
-		log.Fatalf("Failed to parse posts templates: %v", err)
-	}
-
-	aboutTmpl, err := template.ParseFiles("templates/base.html", "templates/about.html")
-	if err != nil {
-		log.Fatalf("Failed to parse about templates: %v", err)
-	}
-
 	// Setup routes
 	mux := http.NewServeMux()
 
 	// Handlers
 	homeHandler := &handlers.HomeHandler{
-		Posts:    posts,
-		Template: homeTmpl,
+		Posts: posts,
 	}
 
 	postsHandler := &handlers.PostsHandler{
-		Posts:         posts,
-		PostsTemplate: postsTmpl,
-		PostTemplate:  postTmpl,
+		Posts: posts,
 	}
 
-	aboutHandler := &handlers.AboutHandler{
-		Template: aboutTmpl,
-	}
+	aboutHandler := &handlers.AboutHandler{}
 
 	// Routes
 	mux.Handle("/", homeHandler)

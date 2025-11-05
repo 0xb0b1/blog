@@ -1,0 +1,49 @@
+package templates
+
+import "github.com/0xb0b1/blog/models"
+
+templ Posts(posts []models.Post, searchQuery string) {
+	<div class="posts-page">
+		<header class="posts-header">
+			<h1 class="page-title">Posts</h1>
+			<form
+				hx-get="/posts/search"
+				hx-target="#posts-list"
+				hx-trigger="submit, keyup changed delay:300ms from:#search-input"
+				hx-indicator=".search-indicator"
+				class="search-form"
+			>
+				<input
+					type="search"
+					id="search-input"
+					name="q"
+					placeholder="Search posts..."
+					value={ searchQuery }
+					class="search-input"
+				/>
+				<button type="submit" class="search-button">
+					Search
+					<span class="search-indicator htmx-indicator">...</span>
+				</button>
+			</form>
+		</header>
+
+		<div id="posts-list">
+			@PostsList(posts, searchQuery)
+		</div>
+	</div>
+}
+
+templ PostsList(posts []models.Post, searchQuery string) {
+	<div class="posts">
+		if len(posts) > 0 {
+			for _, post := range posts {
+				@PostCard(post)
+			}
+		} else {
+			<div class="no-posts">
+				<p>No posts found for "{ searchQuery }".</p>
+			</div>
+		}
+	</div>
+}
