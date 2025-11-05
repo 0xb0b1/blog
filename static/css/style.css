@@ -550,6 +550,29 @@ body {
   border-color: var(--color-accent-hover);
 }
 
+/* HTMX Loading Indicator */
+.search-indicator {
+  display: none;
+  margin-left: 0.5rem;
+}
+
+.search-indicator.htmx-request {
+  display: inline;
+}
+
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+  opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+  opacity: 1;
+}
+
 .post-meta {
   display: flex;
   gap: var(--spacing-md);

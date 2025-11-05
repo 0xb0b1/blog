@@ -1,0 +1,35 @@
+package templates
+
+import (
+	"github.com/0xb0b1/blog/models"
+	"fmt"
+)
+
+templ Post(post models.Post) {
+	<div class="container">
+		<article class="post">
+			<header class="post-header">
+				<h1 class="post-title">{ post.Title }</h1>
+				<div class="post-meta">
+					<time class="post-date">{ post.Date.Format("January 2, 2006") }</time>
+					<span class="post-reading-time">{ fmt.Sprintf("%d min read", post.ReadingTime) }</span>
+				</div>
+				if len(post.Tags) > 0 {
+					<div class="post-tags">
+						for _, tag := range post.Tags {
+							<span class="tag">{ tag }</span>
+						}
+					</div>
+				}
+			</header>
+
+			<div class="post-content">
+				@templ.Raw(string(post.Content))
+			</div>
+
+			<footer class="post-footer">
+				<a href="/" class="back-link">← Back to home</a>
+			</footer>
+		</article>
+	</div>
+}

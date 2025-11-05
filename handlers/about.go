@@ -1,16 +1,16 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
+
+	"github.com/0xb0b1/blog/templates"
 )
 
-type AboutHandler struct {
-	Template *template.Template
-}
+type AboutHandler struct{}
 
 func (h *AboutHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if err := h.Template.ExecuteTemplate(w, "about.html", nil); err != nil {
+	component := templates.Base("About - Paulo's Blog", templates.About())
+	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

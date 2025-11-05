@@ -3,6 +3,7 @@ module github.com/0xb0b1/blog
 go 1.25.1
 
 require (
+	github.com/a-h/templ v0.3.960
 	github.com/alecthomas/chroma/v2 v2.20.0
 	github.com/yuin/goldmark v1.7.13
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc

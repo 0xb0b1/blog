@@ -1,16 +1,15 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
 	"strings"
 
 	"github.com/0xb0b1/blog/models"
+	"github.com/0xb0b1/blog/templates"
 )
 
 type PostHandler struct {
-	Posts    []models.Post
-	Template *template.Template
+	Posts []models.Post
 }
 
 func (h *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -35,13 +34,8 @@ func (h *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := struct {
-		Post models.Post
-	}{
-		Post: *post,
-	}
-
-	if err := h.Template.ExecuteTemplate(w, "post.html", data); err != nil {
+	component := templates.Base(post.Title+" - Paulo's Blog", templates.Post(*post))
+	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

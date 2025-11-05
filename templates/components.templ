@@ -1,0 +1,22 @@
+package templates
+
+import (
+	"github.com/0xb0b1/blog/models"
+	"fmt"
+)
+
+templ PostCard(post models.Post) {
+	<div class="post-card">
+		<h2 class="post-card-title"><a href={ templ.SafeURL("/posts/" + post.Slug) }>{ post.Title }</a></h2>
+		<div class="post-meta">
+			<span class="post-date">{ post.Date.Format("January 2, 2006") }</span>
+			<span class="post-reading-time">{ fmt.Sprintf("%d min read", post.ReadingTime) }</span>
+		</div>
+		<p class="post-description">{ post.Description }</p>
+		<div class="post-tags">
+			for _, tag := range post.Tags {
+				<span class="tag">{ tag }</span>
+			}
+		</div>
+	</div>
+}
