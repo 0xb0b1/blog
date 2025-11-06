@@ -5,13 +5,24 @@ description: "Part 1 of the 'Building an MMORPG' series"
 tags: ["golang", "websockets", "game-development", "multiplayer"]
 ---
 
-Just to clafify, I'm not thinking about creating and publishing this game as professional gaming, I'm building it just for fun. So, enjoy it.
+## Quick Disclaimer: I Have No Idea What I'm Doing
 
-# Building a Martial Arts MMORPG from Scratch with Go - Part 1: The Foundation
+Okay, that's not entirely true. I know how to code - I'm a backend engineer with years of experience building servers and APIs.
 
-_Part 1 of the "Building a Martial Arts MMORPG" series_
+**But game development?** Never touched it. Not even a Unity tutorial. My game dev experience literally consists of:
 
----
+- Playing lots of games
+- Thinking "I could build this" while playing
+- Never actually trying until now
+
+**This project is 100% for fun.** I'm not trying to become a professional game developer. I'm not launching a startup. I just thought "wouldn't it be cool to build an MMORPG?" and decided to see what happens.
+
+**Why share this journey?**
+Because it's way more fun to learn publicly! Plus, maybe someone else is in the same boat - experienced developer, zero game dev knowledge, curious what's possible.
+
+**Fair warning:** I'm going to make rookie mistakes. I'm going to refactor code when I realize there's a better way. I'm going to Google "how to make a game" more times than I'd like to admit.
+
+But that's the fun part, right? Let's figure this out together. 🚀
 
 ## Introduction
 
@@ -927,9 +938,17 @@ This is the foundation **everything else builds on**. The architecture is solid,
 
 **But here's what I'm most excited about:** This isn't just a technical exercise. We're building something unique - a game where exploration and skill matter more than grinding. A game where finding a hidden technique in a secret cave feels more rewarding than killing 1000 slimes.
 
+**Am I making mistakes along the way?** Definitely. **Will I refactor things later?** Absolutely. **Is that part of the journey?** You bet.
+
 In the next post, we'll make it look like an actual martial arts game with smooth character animations and polished movement. Then we'll add the combat system that makes discovering techniques meaningful.
 
-**The journey from colored squares to a playable MMORPG starts now.** 🥋
+**The journey from colored squares to a playable MMORPG starts now.** And we're learning together, one commit at a time. 🥋
+
+---
+
+**Found this helpful?** Let me know in the comments what you'd like to see next, or share your own game dev journey!
+
+**Spotted a mistake or have a suggestion?** That's exactly what I need! Drop a comment and help me improve. This is a learning project, after all.
 
 ## Resources
 
@@ -955,14 +974,12 @@ Want to learn more? Check out these resources:
 Follow the series:
 
 - ✅ **Part 1**: The Foundation (You are here!)
-- 📅 **Part 2**: Graphics and Smooth Movement (coming next)
+- 📅 **Part 2**: Graphics and Smooth Movement
 - 📅 **Part 3**: Combat System and Combos
 - 📅 **Part 4**: Technique Discovery System
 - 📅 **Part 5**: Character Progression
 - 📅 **Part 6**: Guild Wars
 - ... and many more!
-
----
 
 _Follow me for more game development content! Building an MMORPG from scratch - one commit at a time._ 🎮
 
