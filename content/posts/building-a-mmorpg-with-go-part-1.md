@@ -1,6 +1,6 @@
 ---
 title: "Building an MMORPG from Scratch with Go - Part 1: The Foundation"
-date: 2025-11-05
+date: 2025-11-13
 description: "Part 1 of the 'Building an MMORPG' series"
 tags: ["golang", "websockets", "game-development", "multiplayer"]
 ---
