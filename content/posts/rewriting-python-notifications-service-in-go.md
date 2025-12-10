@@ -288,5 +288,3 @@ Not necessarily. Rewrites are expensive and risky. But consider Go when:
 - Your team is comfortable with statically-typed languages
 
 The Python version worked fine at lower scale. But for handling thousands of events per second with guaranteed exactly-once delivery, Go was the right choice.
-
----
