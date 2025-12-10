@@ -5,8 +5,6 @@ description: "A hands-on guide to implementing Event Sourcing and CQRS in Go, wi
 tags: ["golang", "event-sourcing", "CQRS", "DDD", "architecture", "backend"]
 ---
 
-# Building an Event-Sourced Banking System in Go
-
 I wrote about [CQRS and Event Sourcing patterns](/posts/cqrs-event-sourcing-go-blog-post) a while back, covering the theory and concepts. But theory only gets you so far. This time, I'm sharing something different: **a complete, working implementation** you can run, study, and extend.
 
 The project is called [eventsource](https://github.com/0xb0b1/eventsource) — a banking system that demonstrates Event Sourcing and CQRS in action. Let's break down how it all fits together.
