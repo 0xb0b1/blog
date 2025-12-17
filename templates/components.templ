@@ -1,15 +1,16 @@
 package templates
 
 import (
+	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
 	"fmt"
 )
 
-templ PostCard(post models.Post) {
+templ PostCard(post models.Post, lang i18n.Lang) {
 	<div class="post-card">
-		<h2 class="post-card-title"><a href={ templ.SafeURL("/posts/" + post.Slug) }>{ post.Title }</a></h2>
+		<h2 class="post-card-title"><a href={ templ.SafeURL("/" + string(lang) + "/posts/" + post.Slug) }>{ post.Title }</a></h2>
 		<div class="post-meta">
-			<span class="post-date">{ post.Date.Format("January 2, 2006") }</span>
+			<span class="post-date">{ formatDate(post.Date, lang) }</span>
 			<span class="post-reading-time">{ fmt.Sprintf("%d min read", post.ReadingTime) }</span>
 		</div>
 		<p class="post-description">{ post.Description }</p>

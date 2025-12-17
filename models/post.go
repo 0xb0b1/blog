@@ -26,6 +26,7 @@ type Post struct {
 	Tags        []string
 	Content     template.HTML
 	ReadingTime int
+	Lang        string
 }
 
 var markdown = goldmark.New(
@@ -40,11 +41,12 @@ var markdown = goldmark.New(
 	),
 )
 
-// LoadPosts reads all markdown files from the content/posts directory
-func LoadPosts(contentDir string) ([]Post, error) {
+// LoadPosts reads all markdown files from the content/posts/{lang} directory
+func LoadPosts(contentDir string, lang string) ([]Post, error) {
 	var posts []Post
+	langDir := filepath.Join(contentDir, lang)
 
-	err := filepath.WalkDir(contentDir, func(path string, d fs.DirEntry, err error) error {
+	err := filepath.WalkDir(langDir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -53,7 +55,7 @@ func LoadPosts(contentDir string) ([]Post, error) {
 			return nil
 		}
 
-		post, err := parsePost(path)
+		post, err := parsePost(path, lang)
 		if err != nil {
 			return err
 		}
@@ -74,7 +76,7 @@ func LoadPosts(contentDir string) ([]Post, error) {
 	return posts, nil
 }
 
-func parsePost(path string) (Post, error) {
+func parsePost(path string, lang string) (Post, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return Post{}, err
@@ -111,6 +113,7 @@ func parsePost(path string) (Post, error) {
 		Tags:        tags,
 		Content:     template.HTML(buf.String()),
 		ReadingTime: readingTime,
+		Lang:        lang,
 	}, nil
 }
 

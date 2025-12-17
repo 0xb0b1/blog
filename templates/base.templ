@@ -1,8 +1,10 @@
 package templates
 
-templ Base(title string, content templ.Component) {
+import "github.com/0xb0b1/blog/i18n"
+
+templ Base(title string, lang i18n.Lang, currentPath string, content templ.Component) {
 	<!DOCTYPE html>
-	<html lang="en">
+	<html lang={ string(lang) }>
 	<head>
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -30,7 +32,7 @@ templ Base(title string, content templ.Component) {
 			<span></span>
 		</button>
 
-		@Sidebar()
+		@Sidebar(lang, currentPath)
 
 		<main class="main-content" id="main-content">
 			<div class="container">
@@ -38,30 +40,30 @@ templ Base(title string, content templ.Component) {
 			</div>
 		</main>
 
-		@Footer()
+		@Footer(lang)
 
 		@Scripts()
 	</body>
 	</html>
 }
 
-templ Sidebar() {
+templ Sidebar(lang i18n.Lang, currentPath string) {
 	<aside class="sidebar" id="sidebar">
 		<div class="sidebar-header">
-			<a href="/" class="logo"><span>Paulo</span> Vicente</a>
+			<a href={ templ.SafeURL("/" + string(lang) + "/") } class="logo"><span>Paulo</span> Vicente</a>
 		</div>
 		<nav class="sidebar-nav">
-			<a href="/">
+			<a href={ templ.SafeURL("/" + string(lang) + "/") }>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-				<span>Home</span>
+				<span>{ i18n.Get(lang).NavHome }</span>
 			</a>
-			<a href="/posts">
+			<a href={ templ.SafeURL("/" + string(lang) + "/posts/") }>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pen-tool"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
-				<span>Posts</span>
+				<span>{ i18n.Get(lang).NavPosts }</span>
 			</a>
-			<a href="/about">
+			<a href={ templ.SafeURL("/" + string(lang) + "/about") }>
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-				<span>About</span>
+				<span>{ i18n.Get(lang).NavAbout }</span>
 			</a>
 		</nav>
 		<script>
@@ -71,15 +73,17 @@ templ Sidebar() {
 
 				navLinks.forEach(link => {
 					const linkPath = link.getAttribute('href');
-					if (linkPath === '/' && currentPath === '/') {
+					// Handle language-prefixed paths
+					if (currentPath === linkPath) {
 						link.classList.add('active');
-					} else if (linkPath !== '/' && currentPath.startsWith(linkPath)) {
+					} else if (linkPath.endsWith('/posts/') && currentPath.includes('/posts/')) {
 						link.classList.add('active');
 					}
 				});
 			});
 		</script>
 		<div class="sidebar-footer">
+			@LanguageSwitcher(lang, currentPath)
 			<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
 				<span class="theme-icon">☀️</span>
 			</button>
@@ -87,10 +91,38 @@ templ Sidebar() {
 	</aside>
 }
 
-templ Footer() {
+templ LanguageSwitcher(lang i18n.Lang, currentPath string) {
+	<div class="language-switcher">
+		<a
+			href={ templ.SafeURL(switchLangInPath(currentPath, i18n.EN)) }
+			class={ "lang-link", templ.KV("active", lang == i18n.EN) }
+		>
+			EN
+		</a>
+		<span class="lang-separator">|</span>
+		<a
+			href={ templ.SafeURL(switchLangInPath(currentPath, i18n.PT)) }
+			class={ "lang-link", templ.KV("active", lang == i18n.PT) }
+		>
+			PT
+		</a>
+	</div>
+}
+
+func switchLangInPath(path string, newLang i18n.Lang) string {
+	// Replace /en/ or /pt/ with the new language
+	if len(path) >= 4 {
+		if path[1:3] == "en" || path[1:3] == "pt" {
+			return "/" + string(newLang) + path[3:]
+		}
+	}
+	return "/" + string(newLang) + "/"
+}
+
+templ Footer(lang i18n.Lang) {
 	<footer class="footer">
 		<div class="container">
-			<p>&copy; 2025 Paulo Vicente. All rights reserved.</p>
+			<p>&copy; 2025 { i18n.Get(lang).FooterCopyright }</p>
 		</div>
 	</footer>
 }

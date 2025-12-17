@@ -1,28 +1,30 @@
 package templates
 
-templ Home() {
+import "github.com/0xb0b1/blog/i18n"
+
+templ Home(lang i18n.Lang) {
 	<section class="hero-section">
 		<div class="hero-content">
-			<h1 class="hero-title">Paulo Vicente</h1>
-			<p class="hero-role">Full-Stack Software Engineer</p>
-			<p class="hero-tagline">Building scalable, resilient systems with Golang and modern distributed architectures</p>
+			<h1 class="hero-title">{ i18n.Get(lang).HeroTitle }</h1>
+			<p class="hero-role">{ i18n.Get(lang).HeroRole }</p>
+			<p class="hero-tagline">{ i18n.Get(lang).HeroTagline }</p>
 
 			<div class="hero-bio">
-				<p>I'm a full-stack Software Engineer with backend expertise and a passion for building scalable, resilient systems using Golang and modern distributed architectures. With years of experience designing high-performance backends—leveraging Go's concurrency model, efficient memory management, and compile-time safety—alongside modern TypeScript/React frontends, I specialize in turning challenging business requirements into efficient, maintainable end-to-end solutions.</p>
+				<p>{ i18n.Get(lang).HeroBio }</p>
 			</div>
 
 			<div class="tech-highlights">
 				<div class="tech-category">
-					<h3>Backend & Architecture</h3>
-					<p>Expert in Golang, microservices, RESTful APIs, gRPC, and event-driven architectures with Kafka and RabbitMQ. Experienced with CQRS, Event Sourcing, Domain-Driven Design (DDD), and scalable system design patterns</p>
+					<h3>{ i18n.Get(lang).TechBackendTitle }</h3>
+					<p>{ i18n.Get(lang).TechBackendDesc }</p>
 				</div>
 				<div class="tech-category">
-					<h3>Frontend & UX</h3>
-					<p>Proficient in React, TypeScript, Redux, and building responsive, accessible user experiences</p>
+					<h3>{ i18n.Get(lang).TechFrontendTitle }</h3>
+					<p>{ i18n.Get(lang).TechFrontendDesc }</p>
 				</div>
 				<div class="tech-category">
-					<h3>Infrastructure & DevOps</h3>
-					<p>Hands-on with Docker, Kubernetes, AWS, CI/CD pipelines, and observability tools</p>
+					<h3>{ i18n.Get(lang).TechInfraTitle }</h3>
+					<p>{ i18n.Get(lang).TechInfraDesc }</p>
 				</div>
 			</div>
 

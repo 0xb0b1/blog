@@ -5,41 +5,44 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
 	"github.com/0xb0b1/blog/templates"
 )
 
 // PostsHandler handles the posts page
-
 type PostsHandler struct {
-	Posts []models.Post
+	PostsByLang map[i18n.Lang][]models.Post
 }
 
 func (h *PostsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
+	lang := extractLang(path)
+	langPrefix := "/" + string(lang)
 
 	// Handle HTMX search endpoint
-	if path == "/posts/search" {
-		h.servePostsSearch(w, r)
+	if path == langPrefix+"/posts/search" {
+		h.servePostsSearch(w, r, lang)
 		return
 	}
 
 	// Handle single post view
-	if strings.HasPrefix(path, "/posts/") && path != "/posts/" {
-		slug := strings.TrimPrefix(path, "/posts/")
-		h.serveSinglePost(w, r, slug)
+	if strings.HasPrefix(path, langPrefix+"/posts/") && path != langPrefix+"/posts/" {
+		slug := strings.TrimPrefix(path, langPrefix+"/posts/")
+		h.serveSinglePost(w, r, slug, lang)
 		return
 	}
 
 	// Handle posts list view
-	h.servePostsList(w, r)
+	h.servePostsList(w, r, lang)
 }
 
-func (h *PostsHandler) serveSinglePost(w http.ResponseWriter, r *http.Request, slug string) {
+func (h *PostsHandler) serveSinglePost(w http.ResponseWriter, r *http.Request, slug string, lang i18n.Lang) {
+	posts := h.PostsByLang[lang]
 	var post *models.Post
-	for i := range h.Posts {
-		if h.Posts[i].Slug == slug {
-			post = &h.Posts[i]
+	for i := range posts {
+		if posts[i].Slug == slug {
+			post = &posts[i]
 			break
 		}
 	}
@@ -49,25 +52,26 @@ func (h *PostsHandler) serveSinglePost(w http.ResponseWriter, r *http.Request, s
 		return
 	}
 
-	component := templates.Base(post.Title+" - Paulo's Blog", templates.Post(*post))
+	component := templates.Base(post.Title+" - Paulo's Blog", lang, r.URL.Path, templates.Post(*post, lang))
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request) {
+func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request, lang i18n.Lang) {
 	searchQuery := r.URL.Query().Get("q")
+	posts := h.PostsByLang[lang]
 	var filteredPosts []models.Post
 
 	if searchQuery != "" {
-		for _, post := range h.Posts {
+		for _, post := range posts {
 			if strings.Contains(strings.ToLower(post.Title), strings.ToLower(searchQuery)) ||
 				strings.Contains(strings.ToLower(post.Description), strings.ToLower(searchQuery)) {
 				filteredPosts = append(filteredPosts, post)
 			}
 		}
 	} else {
-		filteredPosts = h.Posts
+		filteredPosts = posts
 	}
 
 	// Sort posts by date in descending order
@@ -75,25 +79,27 @@ func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request) {
 		return filteredPosts[i].Date.After(filteredPosts[j].Date)
 	})
 
-	component := templates.Base("Posts - Paulo's Blog", templates.Posts(filteredPosts, searchQuery))
+	t := i18n.Get(lang)
+	component := templates.Base(t.PostsTitle+" - Paulo's Blog", lang, r.URL.Path, templates.Posts(filteredPosts, searchQuery, lang))
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (h *PostsHandler) servePostsSearch(w http.ResponseWriter, r *http.Request) {
+func (h *PostsHandler) servePostsSearch(w http.ResponseWriter, r *http.Request, lang i18n.Lang) {
 	searchQuery := r.URL.Query().Get("q")
+	posts := h.PostsByLang[lang]
 	var filteredPosts []models.Post
 
 	if searchQuery != "" {
-		for _, post := range h.Posts {
+		for _, post := range posts {
 			if strings.Contains(strings.ToLower(post.Title), strings.ToLower(searchQuery)) ||
 				strings.Contains(strings.ToLower(post.Description), strings.ToLower(searchQuery)) {
 				filteredPosts = append(filteredPosts, post)
 			}
 		}
 	} else {
-		filteredPosts = h.Posts
+		filteredPosts = posts
 	}
 
 	// Sort posts by date in descending order
@@ -102,9 +108,8 @@ func (h *PostsHandler) servePostsSearch(w http.ResponseWriter, r *http.Request) 
 	})
 
 	// Return only the posts list partial for HTMX
-	component := templates.PostsList(filteredPosts, searchQuery)
+	component := templates.PostsList(filteredPosts, searchQuery, lang)
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
-

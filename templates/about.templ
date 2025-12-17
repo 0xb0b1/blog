@@ -1,18 +1,19 @@
 package templates
 
-templ About() {
+import "github.com/0xb0b1/blog/i18n"
+
+templ About(lang i18n.Lang) {
 	<div class="container">
 		<div class="about">
-			<h1 class="page-title">About Me</h1>
+			<h1 class="page-title">{ i18n.Get(lang).AboutTitle }</h1>
 
 			<div class="about-content">
-				<p>Hi! I'm Paulo Vicente, a software developer passionate about programming and technology.</p>
+				<p>{ i18n.Get(lang).AboutIntro }</p>
 
-				<p>This blog is where I share my thoughts, experiences, and learnings about software development,
-				programming languages, and various technical topics that interest me.</p>
+				<p>{ i18n.Get(lang).AboutBlog }</p>
 
-				<h2>Get in Touch</h2>
-				<p>Feel free to reach out to me on <a href="https://github.com/0xb0b1" target="_blank">GitHub</a>.</p>
+				<h2>{ i18n.Get(lang).AboutContact }</h2>
+				<p>{ i18n.Get(lang).AboutContactLink } <a href="https://github.com/0xb0b1" target="_blank">GitHub</a>.</p>
 			</div>
 		</div>
 	</div>

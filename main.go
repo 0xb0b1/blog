@@ -6,37 +6,55 @@ import (
 	"os"
 
 	"github.com/0xb0b1/blog/handlers"
+	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
 )
 
 func main() {
-	// Load blog posts
-	posts, err := models.LoadPosts("content/posts")
-	if err != nil {
-		log.Printf("Warning: Failed to load posts: %v", err)
-		posts = []models.Post{} // Continue with empty posts
-	}
+	// Load blog posts for all languages
+	postsByLang := make(map[i18n.Lang][]models.Post)
 
-	log.Printf("Loaded %d posts", len(posts))
+	for _, lang := range i18n.SupportedLanguages() {
+		posts, err := models.LoadPosts("content/posts", string(lang))
+		if err != nil {
+			log.Printf("Warning: Failed to load posts for %s: %v", lang, err)
+			postsByLang[lang] = []models.Post{}
+		} else {
+			postsByLang[lang] = posts
+			log.Printf("Loaded %d posts for %s", len(posts), lang)
+		}
+	}
 
 	// Setup routes
 	mux := http.NewServeMux()
 
-	// Handlers
+	// Handlers with language support
 	homeHandler := &handlers.HomeHandler{
-		Posts: posts,
+		PostsByLang: postsByLang,
 	}
 
 	postsHandler := &handlers.PostsHandler{
-		Posts: posts,
+		PostsByLang: postsByLang,
 	}
 
 	aboutHandler := &handlers.AboutHandler{}
 
-	// Routes
-	mux.Handle("/", homeHandler)
-	mux.Handle("/posts/", postsHandler)
-	mux.Handle("/about", aboutHandler)
+	// Root redirect to default language
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			http.Redirect(w, r, "/en/", http.StatusFound)
+			return
+		}
+		http.NotFound(w, r)
+	})
+
+	// Language-prefixed routes
+	mux.Handle("/en/", homeHandler)
+	mux.Handle("/pt/", homeHandler)
+	mux.Handle("/en/posts/", postsHandler)
+	mux.Handle("/pt/posts/", postsHandler)
+	mux.Handle("/en/about", aboutHandler)
+	mux.Handle("/pt/about", aboutHandler)
 
 	// Static files
 	fs := http.FileServer(http.Dir("static"))

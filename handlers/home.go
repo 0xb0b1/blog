@@ -3,25 +3,41 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"strings"
 
+	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
 	"github.com/0xb0b1/blog/templates"
 )
 
 type HomeHandler struct {
-	Posts []models.Post
+	PostsByLang map[i18n.Lang][]models.Post
 }
 
 func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
+	// Extract language from path (e.g., /en/ or /pt/)
+	lang := extractLang(r.URL.Path)
+
+	// Only handle exact home paths like /en/ or /pt/
+	if r.URL.Path != "/"+string(lang)+"/" {
 		http.NotFound(w, r)
 		return
 	}
 
-	component := templates.Base("Home - Paulo's Blog", templates.Home())
+	t := i18n.Get(lang)
+	component := templates.Base(t.NavHome+" - Paulo's Blog", lang, r.URL.Path, templates.Home(lang))
 	if err := component.Render(r.Context(), w); err != nil {
 		log.Printf("Error executing template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
+}
+
+// extractLang extracts the language from a URL path
+func extractLang(path string) i18n.Lang {
+	parts := strings.Split(strings.Trim(path, "/"), "/")
+	if len(parts) > 0 {
+		return i18n.GetLang(parts[0])
+	}
+	return i18n.EN
 }

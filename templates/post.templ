@@ -1,18 +1,42 @@
 package templates
 
 import (
+	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
 	"fmt"
+	"time"
 )
 
-templ Post(post models.Post) {
+func formatDate(t time.Time, lang i18n.Lang) string {
+	if lang == i18n.PT {
+		months := []string{"", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"}
+		return fmt.Sprintf("%d de %s de %d", t.Day(), months[t.Month()], t.Year())
+	}
+	return t.Format("January 2, 2006")
+}
+
+func formatReadingTime(minutes int, lang i18n.Lang) string {
+	if lang == i18n.PT {
+		return fmt.Sprintf("%d min de leitura", minutes)
+	}
+	return fmt.Sprintf("%d min read", minutes)
+}
+
+func backToHomeText(lang i18n.Lang) string {
+	if lang == i18n.PT {
+		return "← Voltar ao início"
+	}
+	return "← Back to home"
+}
+
+templ Post(post models.Post, lang i18n.Lang) {
 	<div class="container">
 		<article class="post">
 			<header class="post-header">
 				<h1 class="post-title">{ post.Title }</h1>
 				<div class="post-meta">
-					<time class="post-date">{ post.Date.Format("January 2, 2006") }</time>
-					<span class="post-reading-time">{ fmt.Sprintf("%d min read", post.ReadingTime) }</span>
+					<time class="post-date">{ formatDate(post.Date, lang) }</time>
+					<span class="post-reading-time">{ formatReadingTime(post.ReadingTime, lang) }</span>
 				</div>
 				if len(post.Tags) > 0 {
 					<div class="post-tags">
@@ -28,7 +52,7 @@ templ Post(post models.Post) {
 			</div>
 
 			<footer class="post-footer">
-				<a href="/" class="back-link">← Back to home</a>
+				<a href={ templ.SafeURL("/" + string(lang) + "/") } class="back-link">{ backToHomeText(lang) }</a>
 			</footer>
 		</article>
 	</div>
