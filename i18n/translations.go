@@ -64,9 +64,9 @@ var translations = map[Lang]Translations{
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",
-		HeroRole:    "Full-Stack Software Engineer",
+		HeroRole:    "Backend Software Engineer",
 		HeroTagline: "Building scalable, resilient systems with Golang and modern distributed architectures",
-		HeroBio:     "I'm a full-stack Software Engineer with backend expertise and a passion for building scalable, resilient systems using Golang and modern distributed architectures. With years of experience designing high-performance backends—leveraging Go's concurrency model, efficient memory management, and compile-time safety—alongside modern TypeScript/React frontends, I specialize in turning challenging business requirements into efficient, maintainable end-to-end solutions.",
+		HeroBio:     "I'm a Backend Software Engineer with a passion for building scalable, resilient systems using Golang and modern distributed architectures. With years of experience designing high-performance backends—leveraging Go's concurrency model, efficient memory management, and compile-time safety—I specialize in turning challenging business requirements into efficient, maintainable solutions.",
 
 		// Tech categories
 		TechBackendTitle:  "Backend & Architecture",
@@ -100,9 +100,9 @@ var translations = map[Lang]Translations{
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",
-		HeroRole:    "Engenheiro de Software Full-Stack",
+		HeroRole:    "Engenheiro de Software Backend",
 		HeroTagline: "Construindo sistemas escaláveis e resilientes com Golang e arquiteturas distribuídas modernas",
-		HeroBio:     "Sou um Engenheiro de Software full-stack com especialização em backend e paixão por construir sistemas escaláveis e resilientes usando Golang e arquiteturas distribuídas modernas. Com anos de experiência projetando backends de alto desempenho—aproveitando o modelo de concorrência do Go, gerenciamento eficiente de memória e segurança em tempo de compilação—junto com frontends modernos em TypeScript/React, me especializo em transformar requisitos de negócio desafiadores em soluções end-to-end eficientes e mantíveis.",
+		HeroBio:     "Sou um Engenheiro de Software Backend com paixão por construir sistemas escaláveis e resilientes usando Golang e arquiteturas distribuídas modernas. Com anos de experiência projetando backends de alto desempenho—aproveitando o modelo de concorrência do Go, gerenciamento eficiente de memória e segurança em tempo de compilação—me especializo em transformar requisitos de negócio desafiadores em soluções eficientes e mantíveis.",
 
 		// Tech categories
 		TechBackendTitle:  "Backend & Arquitetura",
