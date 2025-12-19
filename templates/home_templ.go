@@ -114,9 +114,9 @@ func Home(lang i18n.Lang) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(i18n.Get(lang).TechFrontendTitle)
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(i18n.Get(lang).TechDistributedTitle)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/home.templ`, Line: 22, Col: 43}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/home.templ`, Line: 22, Col: 46}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -127,9 +127,9 @@ func Home(lang i18n.Lang) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(i18n.Get(lang).TechFrontendDesc)
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(i18n.Get(lang).TechDistributedDesc)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/home.templ`, Line: 23, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/home.templ`, Line: 23, Col: 44}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
@@ -161,7 +161,7 @@ func Home(lang i18n.Lang) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</p></div></div><div class=\"tech-stack\"><span class=\"tech-badge\">Golang</span> <span class=\"tech-badge\">Python</span> <span class=\"tech-badge\">TypeScript</span> <span class=\"tech-badge\">React</span> <span class=\"tech-badge\">Kafka</span> <span class=\"tech-badge\">RabbitMQ</span> <span class=\"tech-badge\">Docker</span> <span class=\"tech-badge\">Kubernetes</span> <span class=\"tech-badge\">AWS</span> <span class=\"tech-badge\">Microservices</span> <span class=\"tech-badge\">CQRS</span> <span class=\"tech-badge\">Event Sourcing</span> <span class=\"tech-badge\">DDD</span> <span class=\"tech-badge\">System Design</span></div><div class=\"hero-cta\"><a href=\"https://github.com/0xb0b1\" target=\"_blank\" class=\"cta-button\">GitHub</a> <a href=\"https://www.linkedin.com/in/paulo-vicente-6abab0198/\" target=\"_blank\" class=\"cta-button cta-button-secondary\">LinkedIn</a></div></div></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</p></div></div><div class=\"tech-stack\"><span class=\"tech-badge\">Golang</span> <span class=\"tech-badge\">Python</span> <span class=\"tech-badge\">PostgreSQL</span> <span class=\"tech-badge\">Redis</span> <span class=\"tech-badge\">Kafka</span> <span class=\"tech-badge\">RabbitMQ</span> <span class=\"tech-badge\">gRPC</span> <span class=\"tech-badge\">Docker</span> <span class=\"tech-badge\">Kubernetes</span> <span class=\"tech-badge\">AWS</span> <span class=\"tech-badge\">Microservices</span> <span class=\"tech-badge\">CQRS</span> <span class=\"tech-badge\">Event Sourcing</span> <span class=\"tech-badge\">DDD</span></div><div class=\"hero-cta\"><a href=\"https://github.com/0xb0b1\" target=\"_blank\" class=\"cta-button\">GitHub</a> <a href=\"https://www.linkedin.com/in/paulo-vicente-6abab0198/\" target=\"_blank\" class=\"cta-button cta-button-secondary\">LinkedIn</a></div></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

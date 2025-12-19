@@ -31,12 +31,12 @@ type Translations struct {
 	HeroBio      string
 
 	// Tech categories
-	TechBackendTitle string
-	TechBackendDesc  string
-	TechFrontendTitle string
-	TechFrontendDesc  string
-	TechInfraTitle    string
-	TechInfraDesc     string
+	TechBackendTitle     string
+	TechBackendDesc      string
+	TechDistributedTitle string
+	TechDistributedDesc  string
+	TechInfraTitle       string
+	TechInfraDesc        string
 
 	// About page
 	AboutTitle   string
@@ -69,12 +69,12 @@ var translations = map[Lang]Translations{
 		HeroBio:     "I'm a Backend Software Engineer with a passion for building scalable, resilient systems using Golang and modern distributed architectures. With years of experience designing high-performance backends—leveraging Go's concurrency model, efficient memory management, and compile-time safety—I specialize in turning challenging business requirements into efficient, maintainable solutions.",
 
 		// Tech categories
-		TechBackendTitle:  "Backend & Architecture",
-		TechBackendDesc:   "Expert in Golang, microservices, RESTful APIs, gRPC, and event-driven architectures with Kafka and RabbitMQ. Experienced with CQRS, Event Sourcing, Domain-Driven Design (DDD), and scalable system design patterns",
-		TechFrontendTitle: "Frontend & UX",
-		TechFrontendDesc:  "Proficient in React, TypeScript, Redux, and building responsive, accessible user experiences",
-		TechInfraTitle:    "Infrastructure & DevOps",
-		TechInfraDesc:     "Hands-on with Docker, Kubernetes, AWS, CI/CD pipelines, and observability tools",
+		TechBackendTitle:     "Backend & Architecture",
+		TechBackendDesc:      "Expert in Golang, microservices, RESTful APIs, gRPC, and clean architecture patterns. Experienced with Domain-Driven Design (DDD) and building maintainable, testable systems",
+		TechDistributedTitle: "Distributed Systems",
+		TechDistributedDesc:  "Deep experience with event-driven architectures, CQRS, Event Sourcing, and message brokers (Kafka, RabbitMQ). Focus on consistency patterns, fault tolerance, and systems that scale",
+		TechInfraTitle:       "Infrastructure & DevOps",
+		TechInfraDesc:        "Hands-on with Docker, Kubernetes, AWS, CI/CD pipelines, and observability tools",
 
 		// About page
 		AboutTitle:       "About Me",
@@ -105,12 +105,12 @@ var translations = map[Lang]Translations{
 		HeroBio:     "Sou um Engenheiro de Software Backend com paixão por construir sistemas escaláveis e resilientes usando Golang e arquiteturas distribuídas modernas. Com anos de experiência projetando backends de alto desempenho—aproveitando o modelo de concorrência do Go, gerenciamento eficiente de memória e segurança em tempo de compilação—me especializo em transformar requisitos de negócio desafiadores em soluções eficientes e mantíveis.",
 
 		// Tech categories
-		TechBackendTitle:  "Backend & Arquitetura",
-		TechBackendDesc:   "Especialista em Golang, microsserviços, APIs RESTful, gRPC e arquiteturas orientadas a eventos com Kafka e RabbitMQ. Experiente com CQRS, Event Sourcing, Domain-Driven Design (DDD) e padrões de design de sistemas escaláveis",
-		TechFrontendTitle: "Frontend & UX",
-		TechFrontendDesc:  "Proficiente em React, TypeScript, Redux e construção de experiências de usuário responsivas e acessíveis",
-		TechInfraTitle:    "Infraestrutura & DevOps",
-		TechInfraDesc:     "Experiência prática com Docker, Kubernetes, AWS, pipelines CI/CD e ferramentas de observabilidade",
+		TechBackendTitle:     "Backend & Arquitetura",
+		TechBackendDesc:      "Especialista em Golang, microsserviços, APIs RESTful, gRPC e padrões de arquitetura limpa. Experiente com Domain-Driven Design (DDD) e construção de sistemas testáveis e mantíveis",
+		TechDistributedTitle: "Sistemas Distribuídos",
+		TechDistributedDesc:  "Experiência profunda com arquiteturas orientadas a eventos, CQRS, Event Sourcing e message brokers (Kafka, RabbitMQ). Foco em padrões de consistência, tolerância a falhas e sistemas que escalam",
+		TechInfraTitle:       "Infraestrutura & DevOps",
+		TechInfraDesc:        "Experiência prática com Docker, Kubernetes, AWS, pipelines CI/CD e ferramentas de observabilidade",
 
 		// About page
 		AboutTitle:       "Sobre Mim",
