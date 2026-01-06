@@ -8,6 +8,7 @@ import (
 	"github.com/0xb0b1/blog/handlers"
 	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
+	"github.com/0xb0b1/blog/storage"
 )
 
 func main() {
@@ -25,19 +26,30 @@ func main() {
 		}
 	}
 
+	// Initialize visit counter
+	visits, err := storage.NewVisitCounter("data/visits.json")
+	if err != nil {
+		log.Fatalf("Failed to initialize visit counter: %v", err)
+	}
+	log.Printf("Visit counter initialized with %d visits", visits.Get())
+
 	// Setup routes
 	mux := http.NewServeMux()
 
 	// Handlers with language support
 	homeHandler := &handlers.HomeHandler{
 		PostsByLang: postsByLang,
+		Visits:      visits,
 	}
 
 	postsHandler := &handlers.PostsHandler{
 		PostsByLang: postsByLang,
+		Visits:      visits,
 	}
 
-	aboutHandler := &handlers.AboutHandler{}
+	aboutHandler := &handlers.AboutHandler{
+		Visits: visits,
+	}
 
 	// Root redirect to default language
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

@@ -7,12 +7,14 @@ import (
 
 	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
+	"github.com/0xb0b1/blog/storage"
 	"github.com/0xb0b1/blog/templates"
 )
 
 // PostsHandler handles the posts page
 type PostsHandler struct {
 	PostsByLang map[i18n.Lang][]models.Post
+	Visits      *storage.VisitCounter
 }
 
 func (h *PostsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +54,8 @@ func (h *PostsHandler) serveSinglePost(w http.ResponseWriter, r *http.Request, s
 		return
 	}
 
-	component := templates.Base(post.Title+" - Paulo's Blog", lang, r.URL.Path, templates.Post(*post, lang))
+	visitCount := h.Visits.Increment()
+	component := templates.Base(post.Title+" - Paulo's Blog", lang, r.URL.Path, visitCount, templates.Post(*post, lang))
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -80,7 +83,8 @@ func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request, la
 	})
 
 	t := i18n.Get(lang)
-	component := templates.Base(t.PostsTitle+" - Paulo's Blog", lang, r.URL.Path, templates.Posts(filteredPosts, searchQuery, lang))
+	visitCount := h.Visits.Increment()
+	component := templates.Base(t.PostsTitle+" - Paulo's Blog", lang, r.URL.Path, visitCount, templates.Posts(filteredPosts, searchQuery, lang))
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

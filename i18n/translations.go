@@ -23,6 +23,7 @@ type Translations struct {
 
 	// Footer
 	FooterCopyright string
+	FooterVisits    string
 
 	// Home page
 	HeroTitle    string
@@ -61,6 +62,7 @@ var translations = map[Lang]Translations{
 
 		// Footer
 		FooterCopyright: "Paulo Vicente. All rights reserved.",
+		FooterVisits:    "visits",
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",
@@ -97,6 +99,7 @@ var translations = map[Lang]Translations{
 
 		// Footer
 		FooterCopyright: "Paulo Vicente. Todos os direitos reservados.",
+		FooterVisits:    "visitas",
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",

@@ -1,8 +1,11 @@
 package templates
 
-import "github.com/0xb0b1/blog/i18n"
+import (
+	"fmt"
+	"github.com/0xb0b1/blog/i18n"
+)
 
-templ Base(title string, lang i18n.Lang, currentPath string, content templ.Component) {
+templ Base(title string, lang i18n.Lang, currentPath string, visitCount int64, content templ.Component) {
 	<!DOCTYPE html>
 	<html lang={ string(lang) }>
 	<head>
@@ -40,7 +43,7 @@ templ Base(title string, lang i18n.Lang, currentPath string, content templ.Compo
 			</div>
 		</main>
 
-		@Footer(lang)
+		@Footer(lang, visitCount)
 
 		@Scripts()
 	</body>
@@ -119,10 +122,11 @@ func switchLangInPath(path string, newLang i18n.Lang) string {
 	return "/" + string(newLang) + "/"
 }
 
-templ Footer(lang i18n.Lang) {
+templ Footer(lang i18n.Lang, visitCount int64) {
 	<footer class="footer">
 		<div class="container">
 			<p>&copy; 2025 { i18n.Get(lang).FooterCopyright }</p>
+			<p class="visit-count">{ fmt.Sprintf("%d", visitCount) } { i18n.Get(lang).FooterVisits }</p>
 		</div>
 	</footer>
 }
