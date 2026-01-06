@@ -1,6 +1,6 @@
 /* ========================================
-   ORGANIC / NATURAL DESIGN
-   Aesthetic: Soft Shapes, Earthy Tones
+   ORGANIC + CATPPUCCIN DESIGN
+   Aesthetic: Soft Shapes, Catppuccin Palette
    Mood: Minimal & Focused
    ======================================== */
 
@@ -13,18 +13,34 @@
 }
 
 :root {
-  /* Organic Color Palette - Earthy & Calm */
-  --color-bg: #F8F6F1;
-  --color-text: #3D3D3D;
-  --color-text-muted: #6B6B6B;
-  --color-border: #E0DCD4;
-  --color-accent: #7C9A6E;
-  --color-accent-hover: #6A8A5C;
-  --color-card-bg: #FFFFFF;
-  --color-card-hover: #FAFAF8;
-  --color-code-bg: #F0EDE6;
-  --color-warm: #C4A77D;
-  --color-leaf: #8DB580;
+  /* Catppuccin Latte - Organic Blend */
+  --color-bg: #eff1f5;
+  --color-text: #4c4f69;
+  --color-text-muted: #6c6f85;
+  --color-border: #ccd0da;
+  --color-accent: #40a02b;
+  --color-accent-hover: #379423;
+  --color-card-bg: #e6e9ef;
+  --color-card-hover: #dce0e8;
+  --color-code-bg: #dce0e8;
+  --color-warm: #fe640b;
+  --color-leaf: #40a02b;
+
+  /* Catppuccin Palette - Light */
+  --ctp-rosewater: #dc8a78;
+  --ctp-flamingo: #dd7878;
+  --ctp-pink: #ea76cb;
+  --ctp-mauve: #8839ef;
+  --ctp-red: #d20f39;
+  --ctp-maroon: #e64553;
+  --ctp-peach: #fe640b;
+  --ctp-yellow: #df8e1d;
+  --ctp-green: #40a02b;
+  --ctp-teal: #179299;
+  --ctp-sky: #04a5e5;
+  --ctp-sapphire: #209fb5;
+  --ctp-blue: #1e66f5;
+  --ctp-lavender: #7287fd;
 
   /* Typography */
   --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
@@ -53,23 +69,39 @@
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* Dark Mode - Forest Night */
+/* Dark Mode - Catppuccin Mocha */
 [data-theme="dark"] {
-  --color-bg: #1F2420;
-  --color-text: #E8E4DF;
-  --color-text-muted: #A8A49C;
-  --color-border: #3A3D38;
-  --color-accent: #9ABF8A;
-  --color-accent-hover: #B0D4A0;
-  --color-card-bg: #282C28;
-  --color-card-hover: #2E322E;
-  --color-code-bg: #252825;
-  --color-warm: #D4B896;
-  --color-leaf: #8DB580;
+  --color-bg: #1e1e2e;
+  --color-text: #cdd6f4;
+  --color-text-muted: #a6adc8;
+  --color-border: #313244;
+  --color-accent: #a6e3a1;
+  --color-accent-hover: #b8f0b3;
+  --color-card-bg: #313244;
+  --color-card-hover: #45475a;
+  --color-code-bg: #1e1e2e;
+  --color-warm: #fab387;
+  --color-leaf: #a6e3a1;
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.3);
+  /* Catppuccin Palette - Dark */
+  --ctp-rosewater: #f5e0dc;
+  --ctp-flamingo: #f2cdcd;
+  --ctp-pink: #f5c2e7;
+  --ctp-mauve: #cba6f7;
+  --ctp-red: #f38ba8;
+  --ctp-maroon: #eba0ac;
+  --ctp-peach: #fab387;
+  --ctp-yellow: #f9e2af;
+  --ctp-green: #a6e3a1;
+  --ctp-teal: #94e2d5;
+  --ctp-sky: #89dceb;
+  --ctp-sapphire: #74c7ec;
+  --ctp-blue: #89b4fa;
+  --ctp-lavender: #b4befe;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* ========================================
@@ -222,7 +254,7 @@ body::before {
 
 .sidebar-nav a.active {
   color: var(--color-accent);
-  background: rgba(124, 154, 110, 0.1);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 .sidebar-nav a.active svg {
@@ -781,7 +813,7 @@ body::before {
 
 .post-content a:hover {
   border-bottom-color: transparent;
-  background: rgba(124, 154, 110, 0.1);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
   padding: 0 0.125em;
   margin: 0 -0.125em;
   border-radius: 3px;
@@ -835,111 +867,113 @@ body::before {
    ======================================== */
 [data-theme="dark"] .chroma {
   background: var(--color-code-bg);
-  color: #E8E4DF;
+  color: #cdd6f4;
   border-radius: var(--border-radius);
   padding: var(--spacing-lg);
   margin: var(--spacing-lg) 0;
 }
 
-[data-theme="dark"] .chroma .k { color: #9ABF8A; }
-[data-theme="dark"] .chroma .kc { color: #D4B896; }
-[data-theme="dark"] .chroma .kd { color: #9ABF8A; }
-[data-theme="dark"] .chroma .kn { color: #D4B896; }
-[data-theme="dark"] .chroma .kp { color: #9ABF8A; }
-[data-theme="dark"] .chroma .kr { color: #9ABF8A; }
-[data-theme="dark"] .chroma .kt { color: #D4B896; }
-[data-theme="dark"] .chroma .n { color: #E8E4DF; }
-[data-theme="dark"] .chroma .na { color: #8DB580; }
-[data-theme="dark"] .chroma .nb { color: #D4B896; }
-[data-theme="dark"] .chroma .nc { color: #D4B896; }
-[data-theme="dark"] .chroma .nf { color: #8DB580; }
-[data-theme="dark"] .chroma .nn { color: #D4B896; }
-[data-theme="dark"] .chroma .nv { color: #E8E4DF; }
-[data-theme="dark"] .chroma .s { color: #B8C9A3; }
-[data-theme="dark"] .chroma .s1 { color: #B8C9A3; }
-[data-theme="dark"] .chroma .s2 { color: #B8C9A3; }
-[data-theme="dark"] .chroma .sb { color: #B8C9A3; }
-[data-theme="dark"] .chroma .sc { color: #B8C9A3; }
-[data-theme="dark"] .chroma .sd { color: #B8C9A3; }
-[data-theme="dark"] .chroma .se { color: #D4B896; }
-[data-theme="dark"] .chroma .sh { color: #B8C9A3; }
-[data-theme="dark"] .chroma .si { color: #D4B896; }
-[data-theme="dark"] .chroma .sr { color: #D4B896; }
-[data-theme="dark"] .chroma .ss { color: #D4B896; }
-[data-theme="dark"] .chroma .m { color: #D4B896; }
-[data-theme="dark"] .chroma .mb { color: #D4B896; }
-[data-theme="dark"] .chroma .mf { color: #D4B896; }
-[data-theme="dark"] .chroma .mh { color: #D4B896; }
-[data-theme="dark"] .chroma .mi { color: #D4B896; }
-[data-theme="dark"] .chroma .mo { color: #D4B896; }
-[data-theme="dark"] .chroma .o { color: #8DB580; }
-[data-theme="dark"] .chroma .ow { color: #8DB580; }
-[data-theme="dark"] .chroma .c { color: #6B6B6B; font-style: italic; }
-[data-theme="dark"] .chroma .c1 { color: #6B6B6B; font-style: italic; }
-[data-theme="dark"] .chroma .ch { color: #6B6B6B; font-style: italic; }
-[data-theme="dark"] .chroma .cm { color: #6B6B6B; font-style: italic; }
-[data-theme="dark"] .chroma .cp { color: #6B6B6B; font-style: italic; }
-[data-theme="dark"] .chroma .cpf { color: #6B6B6B; font-style: italic; }
-[data-theme="dark"] .chroma .cs { color: #6B6B6B; font-style: italic; }
-[data-theme="dark"] .chroma .p { color: #A8A49C; }
-[data-theme="dark"] .chroma .gd { color: #E07B5A; }
-[data-theme="dark"] .chroma .gi { color: #9ABF8A; }
-[data-theme="dark"] .chroma .gh { color: #8DB580; font-weight: bold; }
-[data-theme="dark"] .chroma .gu { color: #8DB580; font-weight: bold; }
+/* Catppuccin Mocha Syntax */
+[data-theme="dark"] .chroma .k { color: #cba6f7; }
+[data-theme="dark"] .chroma .kc { color: #fab387; }
+[data-theme="dark"] .chroma .kd { color: #cba6f7; }
+[data-theme="dark"] .chroma .kn { color: #f5c2e7; }
+[data-theme="dark"] .chroma .kp { color: #cba6f7; }
+[data-theme="dark"] .chroma .kr { color: #cba6f7; }
+[data-theme="dark"] .chroma .kt { color: #f9e2af; }
+[data-theme="dark"] .chroma .n { color: #cdd6f4; }
+[data-theme="dark"] .chroma .na { color: #89b4fa; }
+[data-theme="dark"] .chroma .nb { color: #f5e0dc; }
+[data-theme="dark"] .chroma .nc { color: #f9e2af; }
+[data-theme="dark"] .chroma .nf { color: #89b4fa; }
+[data-theme="dark"] .chroma .nn { color: #f9e2af; }
+[data-theme="dark"] .chroma .nv { color: #cdd6f4; }
+[data-theme="dark"] .chroma .s { color: #a6e3a1; }
+[data-theme="dark"] .chroma .s1 { color: #a6e3a1; }
+[data-theme="dark"] .chroma .s2 { color: #a6e3a1; }
+[data-theme="dark"] .chroma .sb { color: #a6e3a1; }
+[data-theme="dark"] .chroma .sc { color: #a6e3a1; }
+[data-theme="dark"] .chroma .sd { color: #a6e3a1; }
+[data-theme="dark"] .chroma .se { color: #fab387; }
+[data-theme="dark"] .chroma .sh { color: #a6e3a1; }
+[data-theme="dark"] .chroma .si { color: #fab387; }
+[data-theme="dark"] .chroma .sr { color: #f5c2e7; }
+[data-theme="dark"] .chroma .ss { color: #fab387; }
+[data-theme="dark"] .chroma .m { color: #fab387; }
+[data-theme="dark"] .chroma .mb { color: #fab387; }
+[data-theme="dark"] .chroma .mf { color: #fab387; }
+[data-theme="dark"] .chroma .mh { color: #fab387; }
+[data-theme="dark"] .chroma .mi { color: #fab387; }
+[data-theme="dark"] .chroma .mo { color: #fab387; }
+[data-theme="dark"] .chroma .o { color: #89dceb; }
+[data-theme="dark"] .chroma .ow { color: #89dceb; }
+[data-theme="dark"] .chroma .c { color: #6c7086; font-style: italic; }
+[data-theme="dark"] .chroma .c1 { color: #6c7086; font-style: italic; }
+[data-theme="dark"] .chroma .ch { color: #6c7086; font-style: italic; }
+[data-theme="dark"] .chroma .cm { color: #6c7086; font-style: italic; }
+[data-theme="dark"] .chroma .cp { color: #6c7086; font-style: italic; }
+[data-theme="dark"] .chroma .cpf { color: #6c7086; font-style: italic; }
+[data-theme="dark"] .chroma .cs { color: #6c7086; font-style: italic; }
+[data-theme="dark"] .chroma .p { color: #a6adc8; }
+[data-theme="dark"] .chroma .gd { color: #f38ba8; }
+[data-theme="dark"] .chroma .gi { color: #a6e3a1; }
+[data-theme="dark"] .chroma .gh { color: #89b4fa; font-weight: bold; }
+[data-theme="dark"] .chroma .gu { color: #89b4fa; font-weight: bold; }
 
 [data-theme="light"] .chroma {
   background: var(--color-code-bg);
-  color: #3D3D3D;
+  color: #4c4f69;
   border-radius: var(--border-radius);
   padding: var(--spacing-lg);
   margin: var(--spacing-lg) 0;
 }
 
-[data-theme="light"] .chroma .k { color: #7C9A6E; }
-[data-theme="light"] .chroma .kc { color: #9A7C4E; }
-[data-theme="light"] .chroma .kd { color: #7C9A6E; }
-[data-theme="light"] .chroma .kn { color: #9A7C4E; }
-[data-theme="light"] .chroma .kp { color: #7C9A6E; }
-[data-theme="light"] .chroma .kr { color: #7C9A6E; }
-[data-theme="light"] .chroma .kt { color: #9A7C4E; }
-[data-theme="light"] .chroma .n { color: #3D3D3D; }
-[data-theme="light"] .chroma .na { color: #5A8A4E; }
-[data-theme="light"] .chroma .nb { color: #9A7C4E; }
-[data-theme="light"] .chroma .nc { color: #9A7C4E; }
-[data-theme="light"] .chroma .nf { color: #5A8A4E; }
-[data-theme="light"] .chroma .nn { color: #9A7C4E; }
-[data-theme="light"] .chroma .nv { color: #3D3D3D; }
-[data-theme="light"] .chroma .s { color: #6A8A5C; }
-[data-theme="light"] .chroma .s1 { color: #6A8A5C; }
-[data-theme="light"] .chroma .s2 { color: #6A8A5C; }
-[data-theme="light"] .chroma .sb { color: #6A8A5C; }
-[data-theme="light"] .chroma .sc { color: #6A8A5C; }
-[data-theme="light"] .chroma .sd { color: #6A8A5C; }
-[data-theme="light"] .chroma .se { color: #9A7C4E; }
-[data-theme="light"] .chroma .sh { color: #6A8A5C; }
-[data-theme="light"] .chroma .si { color: #9A7C4E; }
-[data-theme="light"] .chroma .sr { color: #9A7C4E; }
-[data-theme="light"] .chroma .ss { color: #9A7C4E; }
-[data-theme="light"] .chroma .m { color: #9A7C4E; }
-[data-theme="light"] .chroma .mb { color: #9A7C4E; }
-[data-theme="light"] .chroma .mf { color: #9A7C4E; }
-[data-theme="light"] .chroma .mh { color: #9A7C4E; }
-[data-theme="light"] .chroma .mi { color: #9A7C4E; }
-[data-theme="light"] .chroma .mo { color: #9A7C4E; }
-[data-theme="light"] .chroma .o { color: #5A8A4E; }
-[data-theme="light"] .chroma .ow { color: #5A8A4E; }
-[data-theme="light"] .chroma .c { color: #8C8C8C; font-style: italic; }
-[data-theme="light"] .chroma .c1 { color: #8C8C8C; font-style: italic; }
-[data-theme="light"] .chroma .ch { color: #8C8C8C; font-style: italic; }
-[data-theme="light"] .chroma .cm { color: #8C8C8C; font-style: italic; }
-[data-theme="light"] .chroma .cp { color: #8C8C8C; font-style: italic; }
-[data-theme="light"] .chroma .cpf { color: #8C8C8C; font-style: italic; }
-[data-theme="light"] .chroma .cs { color: #8C8C8C; font-style: italic; }
-[data-theme="light"] .chroma .p { color: #6B6B6B; }
-[data-theme="light"] .chroma .gd { color: #C45D3A; }
-[data-theme="light"] .chroma .gi { color: #6A8A5C; }
-[data-theme="light"] .chroma .gh { color: #5A8A4E; font-weight: bold; }
-[data-theme="light"] .chroma .gu { color: #5A8A4E; font-weight: bold; }
+/* Catppuccin Latte Syntax */
+[data-theme="light"] .chroma .k { color: #8839ef; }
+[data-theme="light"] .chroma .kc { color: #fe640b; }
+[data-theme="light"] .chroma .kd { color: #8839ef; }
+[data-theme="light"] .chroma .kn { color: #ea76cb; }
+[data-theme="light"] .chroma .kp { color: #8839ef; }
+[data-theme="light"] .chroma .kr { color: #8839ef; }
+[data-theme="light"] .chroma .kt { color: #df8e1d; }
+[data-theme="light"] .chroma .n { color: #4c4f69; }
+[data-theme="light"] .chroma .na { color: #1e66f5; }
+[data-theme="light"] .chroma .nb { color: #dc8a78; }
+[data-theme="light"] .chroma .nc { color: #df8e1d; }
+[data-theme="light"] .chroma .nf { color: #1e66f5; }
+[data-theme="light"] .chroma .nn { color: #df8e1d; }
+[data-theme="light"] .chroma .nv { color: #4c4f69; }
+[data-theme="light"] .chroma .s { color: #40a02b; }
+[data-theme="light"] .chroma .s1 { color: #40a02b; }
+[data-theme="light"] .chroma .s2 { color: #40a02b; }
+[data-theme="light"] .chroma .sb { color: #40a02b; }
+[data-theme="light"] .chroma .sc { color: #40a02b; }
+[data-theme="light"] .chroma .sd { color: #40a02b; }
+[data-theme="light"] .chroma .se { color: #fe640b; }
+[data-theme="light"] .chroma .sh { color: #40a02b; }
+[data-theme="light"] .chroma .si { color: #fe640b; }
+[data-theme="light"] .chroma .sr { color: #ea76cb; }
+[data-theme="light"] .chroma .ss { color: #fe640b; }
+[data-theme="light"] .chroma .m { color: #fe640b; }
+[data-theme="light"] .chroma .mb { color: #fe640b; }
+[data-theme="light"] .chroma .mf { color: #fe640b; }
+[data-theme="light"] .chroma .mh { color: #fe640b; }
+[data-theme="light"] .chroma .mi { color: #fe640b; }
+[data-theme="light"] .chroma .mo { color: #fe640b; }
+[data-theme="light"] .chroma .o { color: #04a5e5; }
+[data-theme="light"] .chroma .ow { color: #04a5e5; }
+[data-theme="light"] .chroma .c { color: #9ca0b0; font-style: italic; }
+[data-theme="light"] .chroma .c1 { color: #9ca0b0; font-style: italic; }
+[data-theme="light"] .chroma .ch { color: #9ca0b0; font-style: italic; }
+[data-theme="light"] .chroma .cm { color: #9ca0b0; font-style: italic; }
+[data-theme="light"] .chroma .cp { color: #9ca0b0; font-style: italic; }
+[data-theme="light"] .chroma .cpf { color: #9ca0b0; font-style: italic; }
+[data-theme="light"] .chroma .cs { color: #9ca0b0; font-style: italic; }
+[data-theme="light"] .chroma .p { color: #6c6f85; }
+[data-theme="light"] .chroma .gd { color: #d20f39; }
+[data-theme="light"] .chroma .gi { color: #40a02b; }
+[data-theme="light"] .chroma .gh { color: #1e66f5; font-weight: bold; }
+[data-theme="light"] .chroma .gu { color: #1e66f5; font-weight: bold; }
 
 .post-content img {
   max-width: 100%;
