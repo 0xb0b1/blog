@@ -1,6 +1,6 @@
 ---
 title: "Race Conditions em Sistemas Event-Driven com Go"
-date: 2025-02-20
+date: 2025-11-02
 description: "Entendendo e prevenindo race conditions em aplicações Go event-driven, com exemplos práticos e soluções."
 tags: ["golang", "concorrência", "race-conditions", "event-driven"]
 ---

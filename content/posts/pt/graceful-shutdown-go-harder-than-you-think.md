@@ -1,6 +1,6 @@
 ---
 title: "Graceful Shutdown em Go É Mais Difícil Do Que Você Pensa"
-date: 2025-01-06
+date: 2025-07-11
 description: "Lidando com requisições em andamento, consumidores Kafka, conexões de banco de dados e sinais de terminação do Kubernetes corretamente. Os detalhes que os tutoriais pulam."
 tags:
   [

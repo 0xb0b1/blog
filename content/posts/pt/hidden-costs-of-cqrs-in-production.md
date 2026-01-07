@@ -1,6 +1,6 @@
 ---
 title: "Os Custos Ocultos do CQRS em Produção"
-date: 2025-01-06
+date: 2025-11-09
 description: "O que os tutoriais não contam sobre consistência eventual, debug de estado distribuído e a complexidade operacional que vem com a separação de leituras e escritas."
 tags:
   [

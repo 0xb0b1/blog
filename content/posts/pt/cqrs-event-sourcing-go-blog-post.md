@@ -1,6 +1,6 @@
 ---
 title: "CQRS e Event Sourcing em Go"
-date: 2025-03-15
+date: 2025-11-03
 description: "Entendendo os padrões CQRS e Event Sourcing e como implementá-los em Go para sistemas escaláveis e auditáveis."
 tags: ["golang", "cqrs", "event-sourcing", "arquitetura", "ddd"]
 ---

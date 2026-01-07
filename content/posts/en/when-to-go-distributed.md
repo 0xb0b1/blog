@@ -1,6 +1,6 @@
 ---
 title: "When to Go Distributed: Real Talk on Building Systems with Go"
-date: 2025-01-28
+date: 2025-02-21
 description: "After years building distributed systems, here's my honest take on when you should consider the complexity, and why Go excels when you do."
 tags:
   [

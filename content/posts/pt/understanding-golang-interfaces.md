@@ -1,6 +1,6 @@
 ---
 title: "Entendendo Interfaces em Go"
-date: 2025-02-10
+date: 2025-01-18
 description: "Um mergulho profundo em interfaces Go, duck typing e como usar interfaces para escrever código flexível e testável."
 tags: ["golang", "interfaces", "design-patterns", "tutorial"]
 ---

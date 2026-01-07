@@ -1,6 +1,6 @@
 ---
 title: "Quando Ir para Sistemas Distribuídos"
-date: 2025-03-01
+date: 2025-02-21
 description: "Um guia para decidir quando migrar de um monolito para arquitetura distribuída, e como fazer isso corretamente."
 tags: ["golang", "sistemas-distribuidos", "arquitetura", "microsserviços"]
 ---

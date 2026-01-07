@@ -1,6 +1,6 @@
 ---
 title: "Padrões de Propagação de Context em Grandes Codebases Go"
-date: 2025-01-06
+date: 2025-02-16
 description: "Quando passar context, quando não passar, e os erros comuns que levam a goroutines vazadas, cancelamentos perdidos e pesadelos de debug."
 tags:
   [

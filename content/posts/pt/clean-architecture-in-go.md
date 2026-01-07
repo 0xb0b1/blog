@@ -1,6 +1,6 @@
 ---
 title: "Clean Architecture em Go"
-date: 2025-02-01
+date: 2025-01-25
 description: "Implementando Clean Architecture em aplicações Go para código mais testável, manutenível e escalável."
 tags: ["golang", "arquitetura", "clean-architecture", "design-patterns"]
 ---
