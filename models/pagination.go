@@ -1,5 +1,7 @@
 package models
 
+import "slices"
+
 // Pagination holds pagination state and helpers
 type Pagination struct {
 	CurrentPage int
@@ -78,11 +80,8 @@ func FilterByTag(posts []Post, tag string) []Post {
 
 	var filtered []Post
 	for _, post := range posts {
-		for _, t := range post.Tags {
-			if t == tag {
-				filtered = append(filtered, post)
-				break
-			}
+		if slices.Contains(post.Tags, tag) {
+			filtered = append(filtered, post)
 		}
 	}
 	return filtered

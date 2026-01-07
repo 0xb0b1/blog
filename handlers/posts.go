@@ -11,7 +11,7 @@ import (
 	"github.com/0xb0b1/blog/templates"
 )
 
-const postsPerPage = 6
+const postsPerPage = 10
 
 // PostsHandler handles the posts page
 type PostsHandler struct {
