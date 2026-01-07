@@ -3,18 +3,19 @@ package handlers
 import (
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
-	"github.com/0xb0b1/blog/storage"
 	"github.com/0xb0b1/blog/templates"
 )
+
+const postsPerPage = 6
 
 // PostsHandler handles the posts page
 type PostsHandler struct {
 	PostsByLang map[i18n.Lang][]models.Post
-	Visits      *storage.VisitCounter
 }
 
 func (h *PostsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -54,66 +55,111 @@ func (h *PostsHandler) serveSinglePost(w http.ResponseWriter, r *http.Request, s
 		return
 	}
 
-	visitCount := h.Visits.Increment()
-	component := templates.Base(post.Title+" - Paulo's Blog", lang, r.URL.Path, visitCount, templates.Post(*post, lang))
+	component := templates.Base(post.Title+" - Paulo's Blog", lang, r.URL.Path, templates.Post(*post, lang))
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
 func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request, lang i18n.Lang) {
-	searchQuery := r.URL.Query().Get("q")
+	query := r.URL.Query()
+	searchQuery := query.Get("q")
+	tagFilter := query.Get("tag")
+	page := parsePageParam(query.Get("page"))
+
 	posts := h.PostsByLang[lang]
-	var filteredPosts []models.Post
+	allTags := models.CollectTags(posts)
 
-	if searchQuery != "" {
-		for _, post := range posts {
-			if strings.Contains(strings.ToLower(post.Title), strings.ToLower(searchQuery)) ||
-				strings.Contains(strings.ToLower(post.Description), strings.ToLower(searchQuery)) {
-				filteredPosts = append(filteredPosts, post)
-			}
-		}
-	} else {
-		filteredPosts = posts
-	}
+	// Filter posts
+	filteredPosts := h.filterPosts(posts, searchQuery, tagFilter)
 
-	// Sort posts by date in descending order
+	// Sort by date descending
 	sort.Slice(filteredPosts, func(i, j int) bool {
 		return filteredPosts[i].Date.After(filteredPosts[j].Date)
 	})
 
+	// Paginate
+	paginatedPosts, pagination := models.PaginatePosts(filteredPosts, page, postsPerPage)
+
 	t := i18n.Get(lang)
-	visitCount := h.Visits.Increment()
-	component := templates.Base(t.PostsTitle+" - Paulo's Blog", lang, r.URL.Path, visitCount, templates.Posts(filteredPosts, searchQuery, lang))
+	component := templates.Base(
+		t.PostsTitle+" - Paulo's Blog",
+		lang,
+		r.URL.Path,
+		templates.Posts(paginatedPosts, searchQuery, tagFilter, allTags, pagination, lang),
+	)
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
 func (h *PostsHandler) servePostsSearch(w http.ResponseWriter, r *http.Request, lang i18n.Lang) {
-	searchQuery := r.URL.Query().Get("q")
+	query := r.URL.Query()
+	searchQuery := query.Get("q")
+	tagFilter := query.Get("tag")
+	page := parsePageParam(query.Get("page"))
+
 	posts := h.PostsByLang[lang]
-	var filteredPosts []models.Post
+	allTags := models.CollectTags(posts)
 
-	if searchQuery != "" {
-		for _, post := range posts {
-			if strings.Contains(strings.ToLower(post.Title), strings.ToLower(searchQuery)) ||
-				strings.Contains(strings.ToLower(post.Description), strings.ToLower(searchQuery)) {
-				filteredPosts = append(filteredPosts, post)
-			}
-		}
-	} else {
-		filteredPosts = posts
-	}
+	// Filter posts
+	filteredPosts := h.filterPosts(posts, searchQuery, tagFilter)
 
-	// Sort posts by date in descending order
+	// Sort by date descending
 	sort.Slice(filteredPosts, func(i, j int) bool {
 		return filteredPosts[i].Date.After(filteredPosts[j].Date)
 	})
 
+	// Paginate
+	paginatedPosts, pagination := models.PaginatePosts(filteredPosts, page, postsPerPage)
+
 	// Return only the posts list partial for HTMX
-	component := templates.PostsList(filteredPosts, searchQuery, lang)
+	component := templates.PostsList(paginatedPosts, searchQuery, tagFilter, allTags, pagination, lang)
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func (h *PostsHandler) filterPosts(posts []models.Post, searchQuery, tagFilter string) []models.Post {
+	var filtered []models.Post
+
+	for _, post := range posts {
+		// Tag filter
+		if tagFilter != "" {
+			hasTag := false
+			for _, t := range post.Tags {
+				if t == tagFilter {
+					hasTag = true
+					break
+				}
+			}
+			if !hasTag {
+				continue
+			}
+		}
+
+		// Search filter
+		if searchQuery != "" {
+			searchLower := strings.ToLower(searchQuery)
+			if !strings.Contains(strings.ToLower(post.Title), searchLower) &&
+				!strings.Contains(strings.ToLower(post.Description), searchLower) {
+				continue
+			}
+		}
+
+		filtered = append(filtered, post)
+	}
+
+	return filtered
+}
+
+func parsePageParam(s string) int {
+	if s == "" {
+		return 1
+	}
+	page, err := strconv.Atoi(s)
+	if err != nil || page < 1 {
+		return 1
+	}
+	return page
 }

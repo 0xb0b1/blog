@@ -1,11 +1,13 @@
 package templates
 
 import (
+	"fmt"
+	"sort"
 	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
 )
 
-templ Posts(posts []models.Post, searchQuery string, lang i18n.Lang) {
+templ Posts(posts []models.Post, searchQuery string, tagFilter string, allTags map[string]int, pagination models.Pagination, lang i18n.Lang) {
 	<div class="posts-page">
 		<header class="posts-header">
 			<h1 class="page-title">{ i18n.Get(lang).PostsTitle }</h1>
@@ -14,6 +16,7 @@ templ Posts(posts []models.Post, searchQuery string, lang i18n.Lang) {
 				hx-target="#posts-list"
 				hx-trigger="submit, keyup changed delay:300ms from:#search-input"
 				hx-indicator=".search-indicator"
+				hx-include="[name='tag']"
 				class="search-form"
 			>
 				<input
@@ -31,22 +34,148 @@ templ Posts(posts []models.Post, searchQuery string, lang i18n.Lang) {
 			</form>
 		</header>
 
+		@TagFilter(tagFilter, allTags, searchQuery, lang)
+
 		<div id="posts-list">
-			@PostsList(posts, searchQuery, lang)
+			@PostsList(posts, searchQuery, tagFilter, allTags, pagination, lang)
 		</div>
 	</div>
 }
 
-templ PostsList(posts []models.Post, searchQuery string, lang i18n.Lang) {
-	<div class="posts">
-		if len(posts) > 0 {
-			for _, post := range posts {
-				@PostCard(post, lang)
+templ TagFilter(currentTag string, allTags map[string]int, searchQuery string, lang i18n.Lang) {
+	<div class="tag-filter">
+		<label for="tag-select" class="tag-filter-label">{ i18n.Get(lang).FilterByTag }:</label>
+		<select
+			id="tag-select"
+			name="tag"
+			class="tag-select"
+			hx-get={ "/" + string(lang) + "/posts/search" }
+			hx-target="#posts-list"
+			hx-include="#search-input"
+			hx-trigger="change"
+			hx-push-url="true"
+		>
+			<option value="" selected?={ currentTag == "" }>
+				{ i18n.Get(lang).AllTags }
+			</option>
+			for _, tag := range sortedTags(allTags) {
+				<option value={ tag } selected?={ currentTag == tag }>
+					{ tag } ({ fmt.Sprintf("%d", allTags[tag]) })
+				</option>
 			}
-		} else {
-			<div class="no-posts">
-				<p>{ i18n.Get(lang).NoPostsFound } "{ searchQuery }".</p>
-			</div>
+		</select>
+	</div>
+}
+
+templ PostsList(posts []models.Post, searchQuery string, tagFilter string, allTags map[string]int, pagination models.Pagination, lang i18n.Lang) {
+	<div class="posts-container">
+		<div class="posts">
+			if len(posts) > 0 {
+				for _, post := range posts {
+					@PostCard(post, lang)
+				}
+			} else {
+				<div class="no-posts">
+					if searchQuery != "" {
+						<p>{ i18n.Get(lang).NoPostsFound } "{ searchQuery }".</p>
+					} else if tagFilter != "" {
+						<p>{ i18n.Get(lang).NoPostsFound } "{ tagFilter }".</p>
+					}
+				</div>
+			}
+		</div>
+
+		if pagination.TotalPages > 1 {
+			@PaginationControls(pagination, searchQuery, tagFilter, lang)
 		}
 	</div>
+}
+
+templ PaginationControls(pagination models.Pagination, searchQuery string, tagFilter string, lang i18n.Lang) {
+	<nav class="pagination" aria-label="Pagination">
+		if pagination.HasPrev {
+			<a
+				href={ templ.SafeURL("/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage-1)) }
+				class="pagination-link pagination-prev"
+				hx-get={ "/" + string(lang) + "/posts/search" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage-1) }
+				hx-target="#posts-list"
+				hx-push-url={ "/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage-1) }
+			>
+				← { i18n.Get(lang).PrevPage }
+			</a>
+		} else {
+			<span class="pagination-link pagination-prev disabled">← { i18n.Get(lang).PrevPage }</span>
+		}
+
+		<span class="pagination-info">
+			{ fmt.Sprintf("%d", pagination.CurrentPage) } { i18n.Get(lang).PageOf } { fmt.Sprintf("%d", pagination.TotalPages) }
+		</span>
+
+		if pagination.HasNext {
+			<a
+				href={ templ.SafeURL("/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage+1)) }
+				class="pagination-link pagination-next"
+				hx-get={ "/" + string(lang) + "/posts/search" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage+1) }
+				hx-target="#posts-list"
+				hx-push-url={ "/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage+1) }
+			>
+				{ i18n.Get(lang).NextPage } →
+			</a>
+		} else {
+			<span class="pagination-link pagination-next disabled">{ i18n.Get(lang).NextPage } →</span>
+		}
+	</nav>
+}
+
+func buildQueryString(tag, search string) string {
+	if tag == "" && search == "" {
+		return ""
+	}
+	q := "?"
+	if tag != "" {
+		q += "tag=" + tag
+	}
+	if search != "" {
+		if tag != "" {
+			q += "&"
+		}
+		q += "q=" + search
+	}
+	return q
+}
+
+func buildPaginatedQueryString(tag, search string, page int) string {
+	q := "?"
+	params := []string{}
+
+	if tag != "" {
+		params = append(params, "tag="+tag)
+	}
+	if search != "" {
+		params = append(params, "q="+search)
+	}
+	if page > 1 {
+		params = append(params, fmt.Sprintf("page=%d", page))
+	}
+
+	if len(params) == 0 {
+		return ""
+	}
+
+	for i, p := range params {
+		if i > 0 {
+			q += "&"
+		}
+		q += p
+	}
+	return q
+}
+
+func sortedTags(tags map[string]int) []string {
+	result := make([]string, 0, len(tags))
+	for tag := range tags {
+		result = append(result, tag)
+	}
+	sort.Strings(result)
+	return result
 }

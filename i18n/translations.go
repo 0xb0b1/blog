@@ -16,14 +16,18 @@ type Translations struct {
 	NavAbout string
 
 	// Posts page
-	PostsTitle       string
+	PostsTitle        string
 	SearchPlaceholder string
-	SearchButton     string
-	NoPostsFound     string
+	SearchButton      string
+	NoPostsFound      string
+	AllTags           string
+	FilterByTag       string
+	PrevPage          string
+	NextPage          string
+	PageOf            string
 
 	// Footer
 	FooterCopyright string
-	FooterVisits    string
 
 	// Home page
 	HeroTitle    string
@@ -59,10 +63,14 @@ var translations = map[Lang]Translations{
 		SearchPlaceholder: "Search posts...",
 		SearchButton:      "Search",
 		NoPostsFound:      "No posts found for",
+		AllTags:           "All",
+		FilterByTag:       "Filter by tag",
+		PrevPage:          "Previous",
+		NextPage:          "Next",
+		PageOf:            "of",
 
 		// Footer
 		FooterCopyright: "Paulo Vicente. All rights reserved.",
-		FooterVisits:    "visits",
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",
@@ -96,10 +104,14 @@ var translations = map[Lang]Translations{
 		SearchPlaceholder: "Pesquisar posts...",
 		SearchButton:      "Pesquisar",
 		NoPostsFound:      "Nenhum post encontrado para",
+		AllTags:           "Todos",
+		FilterByTag:       "Filtrar por tag",
+		PrevPage:          "Anterior",
+		NextPage:          "Próximo",
+		PageOf:            "de",
 
 		// Footer
 		FooterCopyright: "Paulo Vicente. Todos os direitos reservados.",
-		FooterVisits:    "visitas",
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",
