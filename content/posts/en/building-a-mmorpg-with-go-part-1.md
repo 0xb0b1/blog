@@ -542,7 +542,7 @@ const (
 
 type Message struct {
     Type MessageType `json:"type"`
-    Data interface{} `json:"data"`
+    Data any         `json:"data"`
 }
 
 type PlayerState struct {

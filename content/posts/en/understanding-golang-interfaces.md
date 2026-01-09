@@ -69,10 +69,10 @@ func processData(logger Logger, data string) {
 
 ## The Empty Interface
 
-The empty interface `interface{}` can hold values of any type:
+The empty interface `any` (alias for `interface{}`) can hold values of any type:
 
 ```go
-func printAnything(v interface{}) {
+func printAnything(v any) {
     fmt.Println(v)
 }
 
@@ -85,7 +85,7 @@ printAnything([]int{1, 2, 3})
 
 1. **Keep interfaces small**: Prefer many small interfaces over large ones
 2. **Accept interfaces, return structs**: This makes your code more flexible
-3. **Use interface{} sparingly**: It loses type safety
+3. **Use `any` sparingly**: It loses type safety
 
 ## Conclusion
 

@@ -199,7 +199,7 @@ type AggregateStore interface {
 }
 
 type EventPublisher interface {
-    Publish(ctx context.Context, event interface{}) error
+    Publish(ctx context.Context, event any) error
 }
 
 type MetricsCollector interface {
@@ -369,7 +369,7 @@ func (p *EventProcessor) calculateCompleteness(agg *OrderAggregate) float64 {
     return (complete / total) * 100
 }
 
-func (p *EventProcessor) evaluateForDecision(agg *OrderAggregate) interface{} {
+func (p *EventProcessor) evaluateForDecision(agg *OrderAggregate) any {
     // Only make decisions when we have critical data
     if agg.PaymentInfo == nil || agg.InventoryStatus == nil {
         return nil

@@ -186,10 +186,10 @@ func (p *ProcessadorEventos) Processar(aggregateID string, evento Evento) {
 ```go
 // PROBLEMA: Atualizações concorrentes no cache
 type Cache struct {
-    dados map[string]interface{}
+    dados map[string]any
 }
 
-func (c *Cache) Atualizar(chave string, valor interface{}) {
+func (c *Cache) Atualizar(chave string, valor any) {
     c.dados[chave] = valor // Race condition!
 }
 
@@ -198,11 +198,11 @@ type CacheSeguro struct {
     dados sync.Map
 }
 
-func (c *CacheSeguro) Atualizar(chave string, valor interface{}) {
+func (c *CacheSeguro) Atualizar(chave string, valor any) {
     c.dados.Store(chave, valor)
 }
 
-func (c *CacheSeguro) Obter(chave string) (interface{}, bool) {
+func (c *CacheSeguro) Obter(chave string) (any, bool) {
     return c.dados.Load(chave)
 }
 ```
@@ -280,7 +280,7 @@ func (p *ProcessadorParticionado) worker(fila chan Evento) {
 type Agregado struct {
     ID      string
     Versao  int
-    Dados   interface{}
+    Dados   any
 }
 
 func (r *Repositorio) Salvar(a *Agregado) error {
@@ -308,10 +308,10 @@ func (r *Repositorio) Salvar(a *Agregado) error {
 ```go
 type Ator struct {
     mailbox chan Mensagem
-    estado  interface{}
+    estado  any
 }
 
-func NovoAtor(estadoInicial interface{}) *Ator {
+func NovoAtor(estadoInicial any) *Ator {
     a := &Ator{
         mailbox: make(chan Mensagem, 100),
         estado:  estadoInicial,

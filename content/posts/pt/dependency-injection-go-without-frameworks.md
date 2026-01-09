@@ -448,10 +448,10 @@ func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
 ```go
 // ERRADO: Padrão service locator
 type Container struct {
-    services map[string]interface{}
+    services map[string]any
 }
 
-func (c *Container) Get(name string) interface{} {
+func (c *Container) Get(name string) any {
     return c.services[name]
 }
 

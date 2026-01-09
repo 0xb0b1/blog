@@ -138,9 +138,9 @@ type ShutdownComponent interface {
 }
 
 func (m *ShutdownManager) Shutdown(ctx context.Context) error {
-    // Sort by priority
-    sort.Slice(m.components, func(i, j int) bool {
-        return m.components[i].Priority() < m.components[j].Priority()
+    // Sort by priority (using slices package from Go 1.21+)
+    slices.SortFunc(m.components, func(a, b ShutdownComponent) int {
+        return cmp.Compare(a.Priority(), b.Priority())
     })
 
     ctx, cancel := context.WithTimeout(ctx, m.timeout)
@@ -230,10 +230,10 @@ func (c *KafkaConsumerComponent) Run(ctx context.Context) {
 
             // Process batch with tracking
             c.wg.Add(1)
-            go func(msgs []kafka.Message) {
+            go func() {
                 defer c.wg.Done()
 
-                for _, msg := range msgs {
+                for _, msg := range messages {
                     select {
                     case <-c.shutdown:
                         // Shutdown requested mid-batch
@@ -247,8 +247,8 @@ func (c *KafkaConsumerComponent) Run(ctx context.Context) {
                 }
 
                 // Only commit if we processed the whole batch
-                c.consumer.Commit(msgs)
-            }(messages)
+                c.consumer.Commit(messages)
+            }()
         }
     }
 }

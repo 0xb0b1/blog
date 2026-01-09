@@ -110,7 +110,7 @@ func buildKey(prefix, id, suffix string) string {
 
 // MELHOR para casos simples: fmt com buffer pool
 var keyBufferPool = sync.Pool{
-    New: func() interface{} {
+    New: func() any {
         return new(strings.Builder)
     },
 }
@@ -156,12 +156,12 @@ func collectIDs(items []Item) []string {
 
 ```go
 // RUIM: Cada chamada faz boxing do int
-func logValue(key string, value interface{}) {
+func logValue(key string, value any) {
     log.Printf("%s: %v", key, value)
 }
 
 func process(count int) {
-    logValue("count", count) // int -> interface{} aloca
+    logValue("count", count) // int -> any aloca
 }
 
 // BOM: Métodos específicos por tipo
@@ -173,20 +173,23 @@ func logInt(key string, value int) {
 ### 4. Closures Capturando Variáveis
 
 ```go
-// RUIM: Closure captura variável do loop, pode escapar
+// Ambos os padrões são corretos no Go 1.22+, mas passar como
+// parâmetro pode ajudar a escape analysis em alguns casos
+
+// Captura em closure (correto, mas item pode escapar para heap)
 func processAll(items []Item) {
     var wg sync.WaitGroup
     for _, item := range items {
         wg.Add(1)
         go func() {
             defer wg.Done()
-            process(item) // item escapa para heap
+            process(item)
         }()
     }
     wg.Wait()
 }
 
-// BOM: Passa como parâmetro (fica na stack em alguns casos)
+// Passagem por parâmetro (pode ficar na stack em alguns casos)
 func processAll(items []Item) {
     var wg sync.WaitGroup
     for _, item := range items {
@@ -232,7 +235,7 @@ func newUser() *User {
 
 // Escapa: atribuído a interface
 func process(u User) {
-    var i interface{} = u // u escapa
+    var i any = u // u escapa
 }
 
 // Escapa: capturado por closure em goroutine
@@ -254,7 +257,7 @@ Para objetos frequentemente alocados, sync.Pool elimina alocações:
 
 ```go
 var bufferPool = sync.Pool{
-    New: func() interface{} {
+    New: func() any {
         return make([]byte, 0, 4096)
     },
 }
@@ -278,7 +281,7 @@ func processRequest(data []byte) []byte {
 
 ```go
 // ERRADO: Devolvendo tamanhos diferentes
-var pool = sync.Pool{New: func() interface{} { return make([]byte, 1024) }}
+var pool = sync.Pool{New: func() any { return make([]byte, 1024) }}
 
 func process(size int) {
     buf := pool.Get().([]byte)
@@ -321,7 +324,7 @@ Após profiling:
 ```go
 // DEPOIS: Encoders com pool
 var encoderPool = sync.Pool{
-    New: func() interface{} {
+    New: func() any {
         return &pooledEncoder{
             buf: bytes.NewBuffer(make([]byte, 0, 4096)),
         }

@@ -57,10 +57,10 @@ func main() {
 
 ## Interface Vazia
 
-A interface vazia `interface{}` (ou `any` no Go 1.18+) pode conter qualquer tipo:
+A interface vazia `any` (alias para `interface{}`) pode conter qualquer tipo:
 
 ```go
-func PrintAnything(v interface{}) {
+func PrintAnything(v any) {
     fmt.Printf("Tipo: %T, Valor: %v\n", v, v)
 }
 
@@ -74,7 +74,7 @@ PrintAnything([]int{1,2}) // Tipo: []int, Valor: [1 2]
 Para recuperar o tipo concreto de uma interface:
 
 ```go
-func Process(v interface{}) {
+func Process(v any) {
     // Type assertion com verificação
     str, ok := v.(string)
     if ok {

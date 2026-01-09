@@ -98,14 +98,14 @@ func fetchMultipleUsers(ctx context.Context, userIDs []string) ([]*User, error) 
 	errors := make(chan error, len(userIDs))
 
 	for _, id := range userIDs {
-	 go func(userID string) {
-	  user, err := fetchUserData(ctx, userID)
+	 go func() {
+	  user, err := fetchUserData(ctx, id)
 	  if err != nil {
 	   errors <- err
 	   return
 	  }
 	  results <- user
-	 }(id)
+	 }()
 	}
 
 	// Collect results
@@ -421,9 +421,9 @@ go func() {
 // 5. Use goroutines for I/O
 results := make(chan Result, len(queries))
 for _, query := range queries {
-	go func(q Query) {
-	 results <- executeQuery(q)
-	}(query)
+	go func() {
+	 results <- executeQuery(query)
+	}()
 }
 ```
 
