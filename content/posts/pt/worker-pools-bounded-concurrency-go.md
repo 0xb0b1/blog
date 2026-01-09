@@ -19,10 +19,10 @@ func processAll(items []Item) error {
     var wg sync.WaitGroup
     for _, item := range items {
         wg.Add(1)
-        go func(it Item) {
+        go func() {
             defer wg.Done()
-            process(it) // E se isso acessa um banco de dados?
-        }(item)
+            process(item) // E se isso acessa um banco de dados?
+        }()
     }
     wg.Wait()
     return nil
@@ -98,7 +98,6 @@ func processWithErrgroup(ctx context.Context, items []Item) error {
     g, ctx := errgroup.WithContext(ctx)
 
     for _, item := range items {
-        item := item // Captura variável do loop (não necessário no Go 1.22+)
         g.Go(func() error {
             return process(ctx, item)
         })
@@ -116,7 +115,6 @@ func processWithBoundedErrgroup(ctx context.Context, items []Item) error {
     g.SetLimit(10) // No máximo 10 goroutines concorrentes
 
     for _, item := range items {
-        item := item
         g.Go(func() error {
             return process(ctx, item)
         })
@@ -170,17 +168,17 @@ func processWithSemaphore(ctx context.Context, items []Item) error {
         }
 
         wg.Add(1)
-        go func(it Item) {
+        go func() {
             defer wg.Done()
             defer func() { <-sem }() // Libera semáforo
 
-            if err := process(ctx, it); err != nil {
+            if err := process(ctx, item); err != nil {
                 select {
                 case errCh <- err:
                 default:
                 }
             }
-        }(item)
+        }()
     }
 
     wg.Wait()
@@ -208,7 +206,6 @@ func processWithWeightedSemaphore(ctx context.Context, items []Item) error {
     g, ctx := errgroup.WithContext(ctx)
 
     for _, item := range items {
-        item := item
         weight := int64(item.Size / 1024) // Itens maiores consomem mais capacidade
         if weight < 1 {
             weight = 1
