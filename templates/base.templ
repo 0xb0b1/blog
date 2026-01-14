@@ -151,14 +151,39 @@ templ Scripts() {
 			updateThemeIcon(newTheme);
 		});
 
-		// Mobile navigation toggle
+		// Sidebar navigation toggle (responsive)
 		const mobileNavToggle = document.getElementById('mobile-nav-toggle');
 		const sidebar = document.getElementById('sidebar');
-		const mainContent = document.getElementById('main-content');
+
+		function isMobile() {
+			return window.innerWidth <= 1024;
+		}
 
 		mobileNavToggle.addEventListener('click', () => {
-			sidebar.classList.toggle('open');
+			if (isMobile()) {
+				// Mobile: toggle slide-in/out
+				sidebar.classList.toggle('open');
+			} else {
+				// Desktop: toggle compact/expanded
+				sidebar.classList.toggle('expanded');
+			}
 			mobileNavToggle.classList.toggle('open');
+		});
+
+		// Handle window resize
+		let resizeTimer;
+		window.addEventListener('resize', () => {
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(() => {
+				if (isMobile()) {
+					sidebar.classList.remove('expanded');
+					if (!sidebar.classList.contains('open')) {
+						mobileNavToggle.classList.remove('open');
+					}
+				} else {
+					sidebar.classList.remove('open');
+				}
+			}, 250);
 		});
 	</script>
 
