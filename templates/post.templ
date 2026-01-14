@@ -30,7 +30,7 @@ func backToHomeText(lang i18n.Lang) string {
 }
 
 templ Post(post models.Post, lang i18n.Lang) {
-	<div class="container">
+	<div class="post-layout">
 		<article class="post">
 			<header class="post-header">
 				<h1 class="post-title">{ post.Title }</h1>
@@ -47,7 +47,7 @@ templ Post(post models.Post, lang i18n.Lang) {
 				}
 			</header>
 
-			<div class="post-content">
+			<div class="post-content" id="post-content">
 				@templ.Raw(string(post.Content))
 			</div>
 
@@ -55,5 +55,19 @@ templ Post(post models.Post, lang i18n.Lang) {
 				<a href={ templ.SafeURL("/" + string(lang) + "/") } class="back-link">{ backToHomeText(lang) }</a>
 			</footer>
 		</article>
+
+		<aside class="toc-sidebar" id="toc-sidebar">
+			<nav class="toc" id="toc">
+				<h3 class="toc-title">
+					if lang == i18n.PT {
+						Neste artigo
+					} else {
+						On this page
+					}
+				</h3>
+				<ul class="toc-list" id="toc-list"></ul>
+			</nav>
+		</aside>
 	</div>
+	<script src="/static/js/toc.js"></script>
 }
