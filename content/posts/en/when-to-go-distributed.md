@@ -26,25 +26,25 @@ Handling 10k+ concurrent connections with minimal overhead. I migrated a Python 
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"sync"
-	"time"
+  "fmt"
+  "net/http"
+  "sync"
+  "time"
 )
 
 // Example: Handling thousands of concurrent requests
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	// Simulate some work
-	time.Sleep(100 * time.Millisecond)
-	fmt.Fprintf(w, "Request handled by goroutine")
+  // Simulate some work
+  time.Sleep(100 * time.Millisecond)
+  fmt.Fprintf(w, "Request handled by goroutine")
 }
 
 func main() {
-	http.HandleFunc("/", handleRequest)
+  http.HandleFunc("/", handleRequest)
 
-	// Go's HTTP server creates a goroutine per request automatically
-	// Can handle 10k+ concurrent connections with ~2GB RAM
-	http.ListenAndServe(":8080", nil)
+  // Go's HTTP server creates a goroutine per request automatically
+  // Can handle 10k+ concurrent connections with ~2GB RAM
+  http.ListenAndServe(":8080", nil)
 }
 ```
 
@@ -62,66 +62,66 @@ The standard library makes HTTP/gRPC services feel effortless. Built-in HTTP/2, 
 package main
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-	"time"
+  "context"
+  "fmt"
+  "net/http"
+  "time"
 )
 
 // Context propagation is built-in
 func fetchUserData(ctx context.Context, userID string) (*User, error) {
-	// Create HTTP client with timeout from context
-	client := &http.Client{
-	 Timeout: 5 * time.Second,
-	}
+  // Create HTTP client with timeout from context
+  client := &http.Client{
+   Timeout: 5 * time.Second,
+  }
 
-	req, err := http.NewRequestWithContext(ctx, "GET",
-	 fmt.Sprintf("https://api.example.com/users/%s", userID), nil)
-	if err != nil {
-	 return nil, err
-	}
+  req, err := http.NewRequestWithContext(ctx, "GET",
+   fmt.Sprintf("https://api.example.com/users/%s", userID), nil)
+  if err != nil {
+   return nil, err
+  }
 
-	// If parent context is cancelled, request is cancelled too
-	resp, err := client.Do(req)
-	if err != nil {
-	 return nil, err
-	}
-	defer resp.Body.Close()
+  // If parent context is cancelled, request is cancelled too
+  resp, err := client.Do(req)
+  if err != nil {
+   return nil, err
+  }
+  defer resp.Body.Close()
 
-	// Parse response...
-	return parseUser(resp.Body)
+  // Parse response...
+  return parseUser(resp.Body)
 }
 
 // Fan-out pattern with goroutines
 func fetchMultipleUsers(ctx context.Context, userIDs []string) ([]*User, error) {
-	results := make(chan *User, len(userIDs))
-	errors := make(chan error, len(userIDs))
+  results := make(chan *User, len(userIDs))
+  errors := make(chan error, len(userIDs))
 
-	for _, id := range userIDs {
-	 go func() {
-	  user, err := fetchUserData(ctx, id)
-	  if err != nil {
-	   errors <- err
-	   return
-	  }
-	  results <- user
-	 }()
-	}
+  for _, id := range userIDs {
+   go func() {
+    user, err := fetchUserData(ctx, id)
+    if err != nil {
+     errors <- err
+     return
+    }
+    results <- user
+   }()
+  }
 
-	// Collect results
-	users := make([]*User, 0, len(userIDs))
-	for i := 0; i < len(userIDs); i++ {
-	 select {
-	 case user := <-results:
-	  users = append(users, user)
-	 case err := <-errors:
-	  return nil, err
-	 case <-ctx.Done():
-	  return nil, ctx.Err()
-	 }
-	}
+  // Collect results
+  users := make([]*User, 0, len(userIDs))
+  for i := 0; i < len(userIDs); i++ {
+   select {
+   case user := <-results:
+    users = append(users, user)
+   case err := <-errors:
+    return nil, err
+   case <-ctx.Done():
+    return nil, ctx.Err()
+   }
+  }
 
-	return users, nil
+  return users, nil
 }
 ```
 
@@ -155,17 +155,17 @@ ENTRYPOINT ["/myservice"]
 ```go
 // Example: Different scaling needs
 type OrderService struct {
-	// Needs to scale for Black Friday traffic
-	// Peak: 10k orders/minute
+  // Needs to scale for Black Friday traffic
+  // Peak: 10k orders/minute
 }
 
 type ReportService struct {
-	// CPU-intensive, runs nightly
-	// Can be scaled independently
+  // CPU-intensive, runs nightly
+  // Can be scaled independently
 }
 
 type NotificationService struct {
-	// I/O bound, different resource profile
+  // I/O bound, different resource profile
 }
 ```
 
@@ -176,16 +176,16 @@ type NotificationService struct {
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-	 name: order-service
+   name: order-service
 spec:
-	 replicas: 10 # Scale for traffic
+   replicas: 10 # Scale for traffic
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-	 name: report-service
+   name: report-service
 spec:
-	 replicas: 2 # Less instances, more CPU
+   replicas: 2 # Less instances, more CPU
 ```
 
 ### Teams need autonomous deployment cycles
@@ -194,13 +194,13 @@ spec:
 // Service A can deploy independently
 // Version: 1.2.3
 type ServiceA struct {
-	// Owns user management
+  // Owns user management
 }
 
 // Service B can deploy independently
 // Version: 2.0.1
 type ServiceB struct {
-	// Owns order processing
+  // Owns order processing
 }
 
 // They communicate via well-defined APIs
@@ -212,52 +212,52 @@ type ServiceB struct {
 ```go
 // Circuit breaker pattern
 type CircuitBreaker struct {
-	failureThreshold int
-	resetTimeout     time.Duration
-	failures         int
-	lastFailureTime  time.Time
-	state            string // "closed", "open", "half-open"
+  failureThreshold int
+  resetTimeout     time.Duration
+  failures         int
+  lastFailureTime  time.Time
+  state            string // "closed", "open", "half-open"
 }
 
 func (cb *CircuitBreaker) Call(fn func() error) error {
-	if cb.state == "open" {
-	 if time.Since(cb.lastFailureTime) > cb.resetTimeout {
-	  cb.state = "half-open"
-	 } else {
-	  return fmt.Errorf("circuit breaker is open")
-	 }
-	}
+  if cb.state == "open" {
+   if time.Since(cb.lastFailureTime) > cb.resetTimeout {
+    cb.state = "half-open"
+   } else {
+    return fmt.Errorf("circuit breaker is open")
+   }
+  }
 
-	err := fn()
-	if err != nil {
-	 cb.failures++
-	 cb.lastFailureTime = time.Now()
+  err := fn()
+  if err != nil {
+   cb.failures++
+   cb.lastFailureTime = time.Now()
 
-	 if cb.failures >= cb.failureThreshold {
-	  cb.state = "open"
-	 }
-	 return err
-	}
+   if cb.failures >= cb.failureThreshold {
+    cb.state = "open"
+   }
+   return err
+  }
 
-	cb.failures = 0
-	cb.state = "closed"
-	return nil
+  cb.failures = 0
+  cb.state = "closed"
+  return nil
 }
 
 // Usage: If payment service fails, checkout still works
 func processOrder(order *Order) error {
-	// Save order first
-	if err := saveOrder(order); err != nil {
-	 return err
-	}
+  // Save order first
+  if err := saveOrder(order); err != nil {
+   return err
+  }
 
-	// Payment can fail without killing entire system
-	paymentCB.Call(func() error {
-	 return processPayment(order)
-	})
+  // Payment can fail without killing entire system
+  paymentCB.Call(func() error {
+   return processPayment(order)
+  })
 
-	// Order is saved regardless
-	return nil
+  // Order is saved regardless
+  return nil
 }
 ```
 
@@ -266,29 +266,29 @@ func processOrder(order *Order) error {
 ```go
 // Distributed tracing example
 import (
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/trace"
+  "go.opentelemetry.io/otel"
+  "go.opentelemetry.io/otel/trace"
 )
 
 func processOrder(ctx context.Context, order *Order) error {
-	// Create span for tracing
-	ctx, span := otel.Tracer("order-service").Start(ctx, "processOrder")
-	defer span.End()
+  // Create span for tracing
+  ctx, span := otel.Tracer("order-service").Start(ctx, "processOrder")
+  defer span.End()
 
-	// This trace ID follows the request across services
-	span.AddEvent("validating order")
-	if err := validateOrder(ctx, order); err != nil {
-	 span.RecordError(err)
-	 return err
-	}
+  // This trace ID follows the request across services
+  span.AddEvent("validating order")
+  if err := validateOrder(ctx, order); err != nil {
+   span.RecordError(err)
+   return err
+  }
 
-	span.AddEvent("calling payment service")
-	if err := callPaymentService(ctx, order); err != nil {
-	 span.RecordError(err)
-	 return err
-	}
+  span.AddEvent("calling payment service")
+  if err := callPaymentService(ctx, order); err != nil {
+   span.RecordError(err)
+   return err
+  }
 
-	return nil
+  return nil
 }
 ```
 
@@ -301,9 +301,9 @@ You'll spend more time on infrastructure than features.
 ```go
 // Monolith: One service, clear structure
 type Application struct {
-	userService    *UserService
-	orderService   *OrderService
-	paymentService *PaymentService
+  userService    *UserService
+  orderService   *OrderService
+  paymentService *PaymentService
 }
 
 // Still organized, still testable
@@ -316,9 +316,9 @@ type Application struct {
 # Before splitting, measure!
 $ wrk -t12 -c400 -d30s http://localhost:8080/api/orders
 Running 30s test @ http://localhost:8080/api/orders
-	 12 threads and 400 connections
-	 Requests/sec: 5000  # Can your monolith handle this?
-	 Latency avg: 50ms   # Is this actually a problem?
+   12 threads and 400 connections
+   Requests/sec: 5000  # Can your monolith handle this?
+   Latency avg: 50ms   # Is this actually a problem?
 ```
 
 ### Can't properly debug a single service yet
@@ -346,24 +346,24 @@ If you struggle with one service, wait until you have 20.
 package user
 
 type Service struct {
-	repo Repository
+  repo Repository
 }
 
 func (s *Service) CreateUser(ctx context.Context, email string) (*User, error) {
-	// Business logic
+  // Business logic
 }
 
 // internal/domain/order/service.go
 package order
 
 type Service struct {
-	repo Repository
-	userService user.Service // Clear dependency
+  repo Repository
+  userService user.Service // Clear dependency
 }
 
 func (s *Service) CreateOrder(ctx context.Context, userID string) (*Order, error) {
-	// When you split, this becomes an HTTP/gRPC call
-	// But the interface stays the same!
+  // When you split, this becomes an HTTP/gRPC call
+  // But the interface stays the same!
 }
 ```
 
@@ -372,18 +372,18 @@ func (s *Service) CreateOrder(ctx context.Context, userID string) (*Order, error
 ```go
 // Phase 1: Monolith with interface
 type UserService interface {
-	GetUser(ctx context.Context, id string) (*User, error)
+  GetUser(ctx context.Context, id string) (*User, error)
 }
 
 // Phase 2: Replace with HTTP client - same interface!
 type HTTPUserService struct {
-	baseURL string
+  baseURL string
 }
 
 func (s *HTTPUserService) GetUser(ctx context.Context, id string) (*User, error) {
-	// Call external service
-	resp, err := http.Get(s.baseURL + "/users/" + id)
-	// Parse and return
+  // Call external service
+  resp, err := http.Get(s.baseURL + "/users/" + id)
+  // Parse and return
 }
 
 // Your order service code doesn't change at all!
@@ -400,8 +400,8 @@ Anything smaller? Optimize your monolith first.
 ```go
 // 1. Add caching
 type UserService struct {
-	cache *redis.Client
-	db    *sql.DB
+  cache *redis.Client
+  db    *sql.DB
 }
 
 // 2. Add connection pooling
@@ -412,7 +412,7 @@ db.SetMaxIdleConns(25)
 // 3. Profile your code
 import _ "net/http/pprof"
 go func() {
-	http.ListenAndServe("localhost:6060", nil)
+  http.ListenAndServe("localhost:6060", nil)
 }()
 
 // 4. Add indexes
@@ -421,9 +421,9 @@ go func() {
 // 5. Use goroutines for I/O
 results := make(chan Result, len(queries))
 for _, query := range queries {
-	go func() {
-	 results <- executeQuery(query)
-	}()
+  go func() {
+   results <- executeQuery(query)
+  }()
 }
 ```
 
@@ -432,28 +432,28 @@ for _, query := range queries {
 ```go
 // Step 1: Monolith with clear boundaries
 func main() {
-	userSvc := user.NewService(userRepo)
-	orderSvc := order.NewService(orderRepo, userSvc)
+  userSvc := user.NewService(userRepo)
+  orderSvc := order.NewService(orderRepo, userSvc)
 
-	http.HandleFunc("/users", userHandler(userSvc))
-	http.HandleFunc("/orders", orderHandler(orderSvc))
+  http.HandleFunc("/users", userHandler(userSvc))
+  http.HandleFunc("/orders", orderHandler(orderSvc))
 }
 
 // Step 2: Extract one service
 // Service A (Users)
 func main() {
-	userSvc := user.NewService(userRepo)
-	http.HandleFunc("/users", userHandler(userSvc))
-	http.ListenAndServe(":8081", nil)
+  userSvc := user.NewService(userRepo)
+  http.HandleFunc("/users", userHandler(userSvc))
+  http.ListenAndServe(":8081", nil)
 }
 
 // Service B (Orders)
 func main() {
-	// Now calls users via HTTP
-	userClient := user.NewHTTPClient("http://users-service:8081")
-	orderSvc := order.NewService(orderRepo, userClient)
-	http.HandleFunc("/orders", orderHandler(orderSvc))
-	http.ListenAndServe(":8082", nil)
+  // Now calls users via HTTP
+  userClient := user.NewHTTPClient("http://users-service:8081")
+  orderSvc := order.NewService(orderRepo, userClient)
+  http.HandleFunc("/orders", orderHandler(orderSvc))
+  http.ListenAndServe(":8082", nil)
 }
 ```
 
@@ -465,20 +465,20 @@ Distributed systems are a **tool**, not a destination. Go makes them manageable,
 
 ```
 Q: Is my monolith actually slow?
-	  └─ No → Optimize first
-	  └─ Yes → Continue
+    └─ No → Optimize first
+    └─ Yes → Continue
 
 Q: Do I have >8 engineers?
-	  └─ No → Stay monolithic
-	  └─ Yes → Continue
+    └─ No → Stay monolithic
+    └─ Yes → Continue
 
 Q: Can I monitor distributed systems?
-	  └─ No → Not ready yet
-	  └─ Yes → Continue
+    └─ No → Not ready yet
+    └─ Yes → Continue
 
 Q: Are components truly independent?
-	  └─ No → Improve boundaries first
-	  └─ Yes → Consider splitting
+    └─ No → Improve boundaries first
+    └─ Yes → Consider splitting
 ```
 
 **Start simple. Scale when needed. Go makes both paths viable.**

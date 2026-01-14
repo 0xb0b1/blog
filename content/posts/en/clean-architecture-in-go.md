@@ -7,27 +7,6 @@ tags: ["golang", "architecture", "clean-architecture", "backend"]
 
 # Simplified Clean Architecture in Go
 
-<!--toc:start-->
-
-- [Simplified Clean Architecture in Go](#simplified-clean-architecture-in-go)
-  - [Handler Layer (Presentation)](#handler-layer-presentation)
-    - [Example Handler](#example-handler)
-  - [Service Layer (Application)](#service-layer-application)
-    - [Example Service](#example-service)
-  - [Repository Layer (Data Access)](#repository-layer-data-access)
-    - [Example Repository](#example-repository)
-  - [Model Layer (Domain)](#model-layer-domain)
-    - [Example Domain Model](#example-domain-model)
-  - [Dependency Rule](#dependency-rule)
-  - [Adapter Roles](#adapter-roles)
-  - [Project Structure](#project-structure)
-  - [Wiring It All Together](#wiring-it-all-together)
-  - [Benefits of This Approach](#benefits-of-this-approach)
-  - [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
-  - [Conclusion](#conclusion)
-  - [Testing Example](#testing-example)
-  <!--toc:end-->
-
 One of the best things I've learned while building backend services in Golang is how Clean Architecture can make your codebase more modular, testable, and resilient to change — if done right.
 
 Here's a simplified breakdown I wish I had when I started:
@@ -56,15 +35,15 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
   // 1. Parse and validate input
   var input CreateUserRequest
   if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-    http.Error(w, "Invalid request", http.StatusBadRequest)
-    return
+   http.Error(w, "Invalid request", http.StatusBadRequest)
+   return
   }
 
   // 2. Call service layer
   user, err := h.userService.CreateUser(r.Context(), input.Email, input.Name)
   if err != nil {
-  http.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+   http.Error(w, err.Error(), http.StatusInternalServerError)
+   return
   }
 
   // 3. Return response
@@ -99,25 +78,25 @@ type UserService struct {
 func (s *UserService) CreateUser(ctx context.Context, email, name string) (*User, error) {
   // Business validation
   if !isValidEmail(email) {
-    return nil, errors.New("invalid email format")
+   return nil, errors.New("invalid email format")
   }
 
   // Check if user already exists
   existing, _ := s.userRepo.FindByEmail(ctx, email)
   if existing != nil {
-    return nil, errors.New("user already exists")
+   return nil, errors.New("user already exists")
   }
 
   // Create user entity
   user := &User{
-    Email: strings.ToLower(email),
-    Name:  name,
-    Status: "active",
+   Email: strings.ToLower(email),
+   Name:  name,
+   Status: "active",
   }
 
   // Persist
   if err := s.userRepo.Create(ctx, user); err != nil {
-    return nil, err
+   return nil, err
   }
 
   // Send welcome email (async)
@@ -153,17 +132,16 @@ type PostgresUserRepository struct {
 
 func (r *PostgresUserRepository) Create(ctx context.Context, user *User) error {
   query := `
-  INSERT INTO users (id, email, name, status, created_at)
-  VALUES ($1, $2, $3, $4, $5)
+   INSERT INTO users (id, email, name, status, created_at)
+   VALUES ($1, $2, $3, $4, $5)
   `
   _, err := r.db.ExecContext(ctx, query,
-    user.ID,
-    user.Email,
-    user.Name,
-    user.Status,
-    user.CreatedAt,
+   user.ID,
+   user.Email,
+   user.Name,
+   user.Status,
+   user.CreatedAt,
   )
-
   return err
 }
 
@@ -172,15 +150,15 @@ func (r *PostgresUserRepository) FindByEmail(ctx context.Context, email string) 
 
   var user User
   err := r.db.QueryRowContext(ctx, query, email).Scan(
-    &user.ID,
-    &user.Email,
-    &user.Name,
-    &user.Status,
-    &user.CreatedAt,
+   &user.ID,
+   &user.Email,
+   &user.Name,
+   &user.Status,
+   &user.CreatedAt,
   )
 
   if err == sql.ErrNoRows {
-    return nil, nil
+   return nil, nil
   }
 
   return &user, err
@@ -215,11 +193,11 @@ type User struct {
 
 func NewUser(email, name string) *User {
   return &User{
-    ID:        uuid.New().String(),
-    Email:     email,
-    Name:      name,
-    Status:    "active",
-    CreatedAt: time.Now(),
+   ID:        uuid.New().String(),
+   Email:     email,
+   Name:      name,
+   Status:    "active",
+   CreatedAt: time.Now(),
   }
 }
 
@@ -297,7 +275,7 @@ func main() {
   // Infrastructure
   db, err := sql.Open("postgres", "connection_string")
   if err != nil {
-    log.Fatal(err)
+   log.Fatal(err)
   }
 
   // Repositories
@@ -374,10 +352,10 @@ func TestCreateUser(t *testing.T) {
 
   // Assert
   if err != nil {
-    t.Fatalf("expected no error, got %v", err)
+   t.Fatalf("expected no error, got %v", err)
   }
   if user.Email != "test@example.com" {
-    t.Errorf("expected email test@example.com, got %s", user.Email)
+   t.Errorf("expected email test@example.com, got %s", user.Email)
   }
 }
 ```
