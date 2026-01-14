@@ -418,7 +418,7 @@ body::before {
 }
 
 .mobile-nav-toggle::before {
-  content: '';
+  content: "";
   width: 12px;
   height: 12px;
   border-right: 2px solid var(--color-text);
@@ -1224,7 +1224,7 @@ body::before {
   background: none;
   padding: 0;
   font-size: 0.875rem;
-  color: #cdd6f4;
+  color: #4c4f69;
 }
 
 /* ========================================
@@ -1236,6 +1236,10 @@ body::before {
   border-radius: var(--border-radius);
   padding: var(--spacing-lg);
   margin: var(--spacing-lg) 0;
+}
+
+[data-theme="dark"] .post-content pre code {
+  color: #cdd6f4;
 }
 
 /* Catppuccin Mocha Syntax */
