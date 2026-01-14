@@ -159,6 +159,21 @@ templ Scripts() {
 			return window.innerWidth <= 1024;
 		}
 
+		function updateTogglePosition() {
+			if (!isMobile()) {
+				// Update toggle button position based on sidebar state
+				const isExpanded = sidebar.classList.contains('expanded');
+				if (isExpanded) {
+					mobileNavToggle.style.left = '260px';
+				} else {
+					mobileNavToggle.style.left = '80px';
+				}
+			} else {
+				// Reset inline styles on mobile
+				mobileNavToggle.style.left = '';
+			}
+		}
+
 		mobileNavToggle.addEventListener('click', () => {
 			if (isMobile()) {
 				// Mobile: toggle slide-in/out
@@ -166,6 +181,7 @@ templ Scripts() {
 			} else {
 				// Desktop: toggle compact/expanded
 				sidebar.classList.toggle('expanded');
+				updateTogglePosition();
 			}
 			mobileNavToggle.classList.toggle('open');
 		});
@@ -183,8 +199,12 @@ templ Scripts() {
 				} else {
 					sidebar.classList.remove('open');
 				}
+				updateTogglePosition();
 			}, 250);
 		});
+
+		// Initial position
+		updateTogglePosition();
 	</script>
 
 	<script src="/static/js/molecules.js"></script>
