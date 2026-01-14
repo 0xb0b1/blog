@@ -7,6 +7,27 @@ tags: ["golang", "architecture", "clean-architecture", "backend"]
 
 # Simplified Clean Architecture in Go
 
+<!--toc:start-->
+
+- [Simplified Clean Architecture in Go](#simplified-clean-architecture-in-go)
+  - [Handler Layer (Presentation)](#handler-layer-presentation)
+    - [Example Handler](#example-handler)
+  - [Service Layer (Application)](#service-layer-application)
+    - [Example Service](#example-service)
+  - [Repository Layer (Data Access)](#repository-layer-data-access)
+    - [Example Repository](#example-repository)
+  - [Model Layer (Domain)](#model-layer-domain)
+    - [Example Domain Model](#example-domain-model)
+  - [Dependency Rule](#dependency-rule)
+  - [Adapter Roles](#adapter-roles)
+  - [Project Structure](#project-structure)
+  - [Wiring It All Together](#wiring-it-all-together)
+  - [Benefits of This Approach](#benefits-of-this-approach)
+  - [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+  - [Conclusion](#conclusion)
+  - [Testing Example](#testing-example)
+  <!--toc:end-->
+
 One of the best things I've learned while building backend services in Golang is how Clean Architecture can make your codebase more modular, testable, and resilient to change — if done right.
 
 Here's a simplified breakdown I wish I had when I started:
@@ -23,31 +44,31 @@ Think of it as a **guard** — it validates input, deals with framework-specific
 package handlers
 
 import (
-	"net/http"
-	"encoding/json"
+  "net/http"
+  "encoding/json"
 )
 
 type UserHandler struct {
-	userService UserService
+  userService UserService
 }
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	// 1. Parse and validate input
-	var input CreateUserRequest
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-	 http.Error(w, "Invalid request", http.StatusBadRequest)
-	 return
-	}
+  // 1. Parse and validate input
+  var input CreateUserRequest
+  if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+    http.Error(w, "Invalid request", http.StatusBadRequest)
+    return
+  }
 
-	// 2. Call service layer
-	user, err := h.userService.CreateUser(r.Context(), input.Email, input.Name)
-	if err != nil {
-	 http.Error(w, err.Error(), http.StatusInternalServerError)
-	 return
-	}
+  // 2. Call service layer
+  user, err := h.userService.CreateUser(r.Context(), input.Email, input.Name)
+  if err != nil {
+  http.Error(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
 
-	// 3. Return response
-	json.NewEncoder(w).Encode(user)
+  // 3. Return response
+  json.NewEncoder(w).Encode(user)
 }
 ```
 
@@ -65,48 +86,48 @@ This is your **brain** 🧠. It's okay to have a bit of technical logic here, bu
 package services
 
 import (
-	"context"
-	"errors"
-	"strings"
+  "context"
+  "errors"
+  "strings"
 )
 
 type UserService struct {
-	userRepo UserRepository
-	emailService EmailService
+  userRepo UserRepository
+  emailService EmailService
 }
 
 func (s *UserService) CreateUser(ctx context.Context, email, name string) (*User, error) {
-	// Business validation
-	if !isValidEmail(email) {
-	 return nil, errors.New("invalid email format")
-	}
+  // Business validation
+  if !isValidEmail(email) {
+    return nil, errors.New("invalid email format")
+  }
 
-	// Check if user already exists
-	existing, _ := s.userRepo.FindByEmail(ctx, email)
-	if existing != nil {
-	 return nil, errors.New("user already exists")
-	}
+  // Check if user already exists
+  existing, _ := s.userRepo.FindByEmail(ctx, email)
+  if existing != nil {
+    return nil, errors.New("user already exists")
+  }
 
-	// Create user entity
-	user := &User{
-	 Email: strings.ToLower(email),
-	 Name:  name,
-	 Status: "active",
-	}
+  // Create user entity
+  user := &User{
+    Email: strings.ToLower(email),
+    Name:  name,
+    Status: "active",
+  }
 
-	// Persist
-	if err := s.userRepo.Create(ctx, user); err != nil {
-	 return nil, err
-	}
+  // Persist
+  if err := s.userRepo.Create(ctx, user); err != nil {
+    return nil, err
+  }
 
-	// Send welcome email (async)
-	go s.emailService.SendWelcome(user.Email)
+  // Send welcome email (async)
+  go s.emailService.SendWelcome(user.Email)
 
-	return user, nil
+  return user, nil
 }
 
 func isValidEmail(email string) bool {
-	return strings.Contains(email, "@")
+  return strings.Contains(email, "@")
 }
 ```
 
@@ -122,46 +143,47 @@ It's your **adapter to the outside world**. Keep it focused — just CRUD, no de
 package repositories
 
 import (
-	"context"
-	"database/sql"
+  "context"
+  "database/sql"
 )
 
 type PostgresUserRepository struct {
-	db *sql.DB
+  db *sql.DB
 }
 
 func (r *PostgresUserRepository) Create(ctx context.Context, user *User) error {
-	query := `
-	 INSERT INTO users (id, email, name, status, created_at)
-	 VALUES ($1, $2, $3, $4, $5)
-	`
-	_, err := r.db.ExecContext(ctx, query,
-	 user.ID,
-	 user.Email,
-	 user.Name,
-	 user.Status,
-	 user.CreatedAt,
-	)
-	return err
+  query := `
+  INSERT INTO users (id, email, name, status, created_at)
+  VALUES ($1, $2, $3, $4, $5)
+  `
+  _, err := r.db.ExecContext(ctx, query,
+    user.ID,
+    user.Email,
+    user.Name,
+    user.Status,
+    user.CreatedAt,
+  )
+
+  return err
 }
 
 func (r *PostgresUserRepository) FindByEmail(ctx context.Context, email string) (*User, error) {
-	query := `SELECT id, email, name, status, created_at FROM users WHERE email = $1`
+  query := `SELECT id, email, name, status, created_at FROM users WHERE email = $1`
 
-	var user User
-	err := r.db.QueryRowContext(ctx, query, email).Scan(
-	 &user.ID,
-	 &user.Email,
-	 &user.Name,
-	 &user.Status,
-	 &user.CreatedAt,
-	)
+  var user User
+  err := r.db.QueryRowContext(ctx, query, email).Scan(
+    &user.ID,
+    &user.Email,
+    &user.Name,
+    &user.Status,
+    &user.CreatedAt,
+  )
 
-	if err == sql.ErrNoRows {
-	 return nil, nil
-	}
+  if err == sql.ErrNoRows {
+    return nil, nil
+  }
 
-	return &user, err
+  return &user, err
 }
 ```
 
@@ -179,35 +201,35 @@ This layer knows nothing about HTTP, SQL, Redis, or JSON. And that's the point.
 package domain
 
 import (
-	"time"
-	"github.com/google/uuid"
+  "time"
+  "github.com/google/uuid"
 )
 
 type User struct {
-	ID        string
-	Email     string
-	Name      string
-	Status    string
-	CreatedAt time.Time
+  ID        string
+  Email     string
+  Name      string
+  Status    string
+  CreatedAt time.Time
 }
 
 func NewUser(email, name string) *User {
-	return &User{
-	 ID:        uuid.New().String(),
-	 Email:     email,
-	 Name:      name,
-	 Status:    "active",
-	 CreatedAt: time.Now(),
-	}
+  return &User{
+    ID:        uuid.New().String(),
+    Email:     email,
+    Name:      name,
+    Status:    "active",
+    CreatedAt: time.Now(),
+  }
 }
 
 // Business logic methods
 func (u *User) Deactivate() {
-	u.Status = "inactive"
+  u.Status = "inactive"
 }
 
 func (u *User) IsActive() bool {
-	return u.Status == "active"
+  return u.Status == "active"
 }
 ```
 
@@ -266,33 +288,33 @@ project/
 package main
 
 import (
-	"database/sql"
-	"log"
-	"net/http"
+  "database/sql"
+  "log"
+  "net/http"
 )
 
 func main() {
-	// Infrastructure
-	db, err := sql.Open("postgres", "connection_string")
-	if err != nil {
-	 log.Fatal(err)
-	}
+  // Infrastructure
+  db, err := sql.Open("postgres", "connection_string")
+  if err != nil {
+    log.Fatal(err)
+  }
 
-	// Repositories
-	userRepo := repositories.NewPostgresUserRepository(db)
+  // Repositories
+  userRepo := repositories.NewPostgresUserRepository(db)
 
-	// Services
-	emailService := services.NewEmailService()
-	userService := services.NewUserService(userRepo, emailService)
+  // Services
+  emailService := services.NewEmailService()
+  userService := services.NewUserService(userRepo, emailService)
 
-	// Handlers
-	userHandler := handlers.NewUserHandler(userService)
+  // Handlers
+  userHandler := handlers.NewUserHandler(userService)
 
-	// Routes
-	http.HandleFunc("/users", userHandler.CreateUser)
+  // Routes
+  http.HandleFunc("/users", userHandler.CreateUser)
 
-	log.Println("Server starting on :8080")
-	http.ListenAndServe(":8080", nil)
+  log.Println("Server starting on :8080")
+  http.ListenAndServe(":8080", nil)
 }
 ```
 
@@ -324,38 +346,38 @@ Here's how easy it becomes to test your service:
 package services_test
 
 import (
-	"context"
-	"testing"
+  "context"
+  "testing"
 )
 
 type MockUserRepository struct {
-	users map[string]*User
+  users map[string]*User
 }
 
 func (m *MockUserRepository) Create(ctx context.Context, user *User) error {
-	m.users[user.Email] = user
-	return nil
+  m.users[user.Email] = user
+  return nil
 }
 
 func (m *MockUserRepository) FindByEmail(ctx context.Context, email string) (*User, error) {
-	return m.users[email], nil
+  return m.users[email], nil
 }
 
 func TestCreateUser(t *testing.T) {
-	// Arrange
-	mockRepo := &MockUserRepository{users: make(map[string]*User)}
-	mockEmail := &MockEmailService{}
-	service := NewUserService(mockRepo, mockEmail)
+  // Arrange
+  mockRepo := &MockUserRepository{users: make(map[string]*User)}
+  mockEmail := &MockEmailService{}
+  service := NewUserService(mockRepo, mockEmail)
 
-	// Act
-	user, err := service.CreateUser(context.Background(), "test@example.com", "Test User")
+  // Act
+  user, err := service.CreateUser(context.Background(), "test@example.com", "Test User")
 
-	// Assert
-	if err != nil {
-	 t.Fatalf("expected no error, got %v", err)
-	}
-	if user.Email != "test@example.com" {
-	 t.Errorf("expected email test@example.com, got %s", user.Email)
-	}
+  // Assert
+  if err != nil {
+    t.Fatalf("expected no error, got %v", err)
+  }
+  if user.Email != "test@example.com" {
+    t.Errorf("expected email test@example.com, got %s", user.Email)
+  }
 }
 ```
