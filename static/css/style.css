@@ -56,8 +56,8 @@
   --spacing-3xl: 8rem;
 
   /* Layout */
-  --max-width: 1200px;
-  --content-width: 900px;
+  --max-width: 1440px;
+  --content-width: 1200px;
   --border-radius: 16px;
   --border-radius-lg: 24px;
   --sidebar-width-compact: 80px;
