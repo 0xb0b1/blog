@@ -39,11 +39,7 @@ Dois serviços, duas linguagens, dois ORMs acessando as mesmas tabelas PostgreSQ
 
 ## A Mudança Arquitetural
 
-O backend Go de notificações já tinha:
-- Um **chi router** servindo health checks na porta 8081
-- Uma **camada de serviços** (`DeviceService`, `UserSubscriptionService`, `SubscriptionService`) usada pelos handlers gRPC
-- Uma **camada de repositórios** com acesso PostgreSQL via `pgxpool`
-- **Integração com SNS** para entrega de notificações push
+O backend Go de notificações já tinha um chi router na porta 8081, uma camada de serviços (`DeviceService`, `UserSubscriptionService`, `SubscriptionService`) usada pelos handlers gRPC, uma camada de repositórios com acesso PostgreSQL, e integração com SNS para entrega push.
 
 O plano: adicionar handlers REST que chamam os mesmos serviços que os handlers gRPC chamam. Sem nova camada de serviços, sem nova lógica de negócio — apenas uma nova porta de entrada.
 
@@ -53,116 +49,21 @@ DEPOIS:  Mobile → Go REST → Go services → DB/SNS
          Dataloader → gRPC → Go services → DB/SNS  (sem alteração)
 ```
 
-## Fase 1: Autenticação JWT
+## Autenticação JWT: JWKS em Vez de Chamadas de API
 
-O serviço Python autenticava chamando a API de validação do FusionAuth a cada requisição (com cache de 15 minutos). O serviço Go precisava autenticar diretamente.
+O serviço Python autenticava chamando a API de validação do FusionAuth a cada requisição (com cache de 15 minutos). O serviço Go faz diferente: busca as chaves públicas do FusionAuth uma vez de `/.well-known/jwks.json`, cacheia em memória atrás de um `sync.RWMutex`, e atualiza a cada hora em uma goroutine de background. Sem chamada HTTP por requisição.
 
-Escolhemos **validação JWT local via JWKS** — buscar as chaves públicas do FusionAuth uma vez, cachear em memória, atualizar a cada hora. Sem chamada HTTP por requisição.
-
-```go
-// internal/auth/jwt.go
-type JWKSProvider struct {
-    jwksURL         string
-    refreshInterval time.Duration
-    mu              sync.RWMutex
-    keys            map[string]*rsa.PublicKey // kid → chave pública
-}
-
-func (p *JWKSProvider) Keyfunc(token *jwt.Token) (any, error) {
-    kid, ok := token.Header["kid"].(string)
-    if !ok {
-        return nil, fmt.Errorf("token missing kid header")
-    }
-
-    p.mu.RLock()
-    key, exists := p.keys[kid]
-    p.mu.RUnlock()
-
-    if !exists {
-        return nil, fmt.Errorf("unknown kid: %s", kid)
-    }
-    return key, nil
-}
-```
-
-O middleware extrai o JWT, valida com a chave pública cacheada e insere o usuário autenticado no contexto da requisição:
-
-```go
-// internal/auth/middleware.go
-func (m *Middleware) Authenticate(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        authHeader := r.Header.Get("Authorization")
-        tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-
-        token, err := jwt.Parse(tokenStr, m.jwks.Keyfunc,
-            jwt.WithValidMethods([]string{"RS256"}),
-        )
-        if err != nil {
-            writeError(w, http.StatusUnauthorized, "invalid token")
-            return
-        }
-
-        claims := token.Claims.(jwt.MapClaims)
-        userID, _ := uuid.Parse(claims["sub"].(string))
-
-        user := &AuthUser{
-            ID:       userID,
-            Role:     extractRole(claims),
-            Language: extractLanguage(claims),
-        }
-
-        ctx := ContextWithUser(r.Context(), user)
-        next.ServeHTTP(w, r.WithContext(ctx))
-    })
-}
-```
-
-Qualquer handler downstream simplesmente chama `auth.UserFromContext(r.Context())` para obter o usuário autenticado. Parse uma vez, use em todo lugar.
+Um middleware chi extrai o header `Authorization`, valida a assinatura JWT com a chave RSA cacheada, e armazena o usuário autenticado (ID, role, idioma) no contexto da requisição. Qualquer handler downstream simplesmente chama `auth.UserFromContext(r.Context())`. Parse uma vez, use em todo lugar.
 
 A diferença de performance é significativa: verificação de assinatura RSA leva microssegundos. Um round-trip HTTP para a API de validação do FusionAuth leva milissegundos na melhor das hipóteses — e introduz uma dependência de runtime na disponibilidade do FusionAuth.
 
-## Fase 2: Novos Repositórios para Validação
+## Novos Repositórios: Lendo Tabelas do Django a Partir do Go
 
 O serviço Go já tinha repositórios para dispositivos, assinaturas, tópicos e partidas. Mas os endpoints REST precisavam de queries de validação que os handlers gRPC nunca precisaram — porque Python fazia essa validação antes de encaminhar a chamada gRPC.
 
-Três novos repositórios, todos lendo de tabelas gerenciadas pelo Django:
+Adicionamos três novos repositórios (`UserRepo`, `FavoriteRepo`, `TeamRepo`) que leem tabelas gerenciadas pelo Django: `r10_user` para roles e dados do time do coração, `r10_favorite_match` e `r10_subscribed_match` para assinaturas, `r10_team` para validação de existência. Sem migração de schema, sem sincronização de dados — Go lê e escreve nas mesmas tabelas que Python.
 
-```go
-// internal/repository/user.go — queries de time do coração
-type UserRepo interface {
-    GetByID(ctx context.Context, id uuid.UUID) (*User, error)
-    GetHeartTeam(ctx context.Context, userID uuid.UUID) (*HeartTeamInfo, error)
-    SetHeartTeam(ctx context.Context, userID, teamID uuid.UUID) error
-    ClearHeartTeam(ctx context.Context, userID uuid.UUID) error
-    GetLastHeartTeamDeletion(ctx context.Context, userID uuid.UUID) (*time.Time, error)
-    SetLastHeartTeamDeletion(ctx context.Context, userID uuid.UUID, t time.Time) error
-}
-
-// internal/repository/favorite.go — queries de assinatura de partida
-type FavoriteRepo interface {
-    AddSubscribedMatch(ctx context.Context, userID, matchID uuid.UUID) error
-    RemoveSubscribedMatch(ctx context.Context, userID, matchID uuid.UUID) error
-    IsSubscribedMatch(ctx context.Context, userID, matchID uuid.UUID) (bool, error)
-}
-
-// internal/repository/team.go — validação de existência de time
-type TeamRepo interface {
-    Exists(ctx context.Context, teamID uuid.UUID) (bool, error)
-    GetByID(ctx context.Context, teamID uuid.UUID) (*Team, error)
-}
-```
-
-O `NotificationRepo` existente também precisou de operações de escrita. Antes, ele apenas lia os tipos habilitados (para a lógica de assinatura gRPC). Agora precisa habilitar, desabilitar e atualizar preferências em lote:
-
-```go
-// internal/repository/notification.go — adicionado para REST
-EnableKind(ctx context.Context, userID uuid.UUID, kind TopicKind) error
-DisableKind(ctx context.Context, userID uuid.UUID, kind TopicKind) error
-BulkSetKinds(ctx context.Context, userID uuid.UUID, toEnable, toDisable []TopicKind) error
-DisableReminderKindsExcept(ctx context.Context, userID uuid.UUID, except TopicKind) error
-```
-
-Todas as operações de escrita usam cláusulas `ON CONFLICT` para idempotência — REST é stateless, clientes podem retentar, e o banco deve lidar com isso graciosamente:
+O `NotificationRepo` existente também precisou de operações de escrita. Antes, ele apenas lia tipos de notificação habilitados (para lógica de assinatura gRPC). Agora habilita, desabilita e atualiza preferências em lote. Todas as escritas usam `ON CONFLICT` para idempotência — REST é stateless, clientes podem retentar, e o banco lida com isso graciosamente:
 
 ```go
 func (r *NotificationRepository) EnableKind(ctx context.Context, userID uuid.UUID, kind models.TopicKind) error {
@@ -176,30 +77,11 @@ func (r *NotificationRepository) EnableKind(ctx context.Context, userID uuid.UUI
 }
 ```
 
-## Fase 3: Handlers REST — Adaptadores Finos de Protocolo
+## Handlers REST: Adaptadores Finos de Protocolo
 
-A struct do handler mantém referências a repositórios e serviços. Sem lógica de negócio aqui — apenas tradução de protocolo:
-
-```go
-// internal/rest/handlers.go
-type Handler struct {
-    userRepo      repository.UserRepo
-    favoriteRepo  repository.FavoriteRepo
-    teamRepo      repository.TeamRepo
-    notifRepo     repository.NotificationRepo
-    deviceService *service.DeviceService
-    userSubSvc    *service.UserSubscriptionService
-    subSvc        *service.SubscriptionService
-    logger        *zap.Logger
-    cfg           config.RESTConfig
-    asyncSem      chan struct{}
-}
-```
-
-O registro de rotas é direto — todos os endpoints sob `/api/v1/` com autenticação JWT:
+A struct do handler mantém referências a repositórios e serviços — sem lógica de negócio, apenas tradução de protocolo. O registro de rotas coloca todos os 11 endpoints sob `/api/v1/` com autenticação JWT:
 
 ```go
-// internal/rest/routes.go
 func RegisterRoutes(r chi.Router, h *Handler, authMW *auth.Middleware) {
     r.Route("/api/v1", func(r chi.Router) {
         r.Use(authMW.Authenticate)
@@ -222,43 +104,13 @@ func RegisterRoutes(r chi.Router, h *Handler, authMW *auth.Middleware) {
 }
 ```
 
-Repare que os paths são novos — não seguem o estilo `/api/v1.8/users/device/` do Python. Isso foi intencional. Paths novos significam que podemos rodar ambas as APIs simultaneamente sem conflitos, embora exija um release mobile coordenado.
+Os paths são intencionalmente diferentes do estilo `/api/v1.8/users/device/` do Python. Paths novos significam que podemos rodar ambas as APIs simultaneamente sem conflitos, embora exija um release mobile coordenado.
 
 ### Sync vs. Async: Uma Divisão Estratégica
 
 Os handlers seguem um padrão consistente: **escritas síncronas no banco, operações SNS assíncronas**. Usuários esperam feedback imediato ao mudar preferências. Assinaturas de tópicos SNS podem ser eventualmente consistentes.
 
-O registro de dispositivo é totalmente síncrono — o app mobile lê o registro do dispositivo imediatamente após:
-
 ```go
-// internal/rest/device.go
-func (h *Handler) RegisterDevice(w http.ResponseWriter, r *http.Request) {
-    user := auth.UserFromContext(r.Context())
-
-    var req registerDeviceRequest
-    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-        writeError(w, http.StatusBadRequest, "invalid request body")
-        return
-    }
-
-    err := h.deviceService.RegisterDevice(r.Context(), service.RegisterDeviceRequest{
-        UserID:      user.ID,
-        DeviceToken: req.DeviceToken,
-        HeartTeamID: parseUUID(req.HeartTeamID),
-    })
-    if err != nil {
-        writeError(w, http.StatusInternalServerError, "device registration failed")
-        return
-    }
-
-    writeOK(w, map[string]string{"status": "ok"})
-}
-```
-
-Mudanças de tipo de notificação escrevem no banco sincronamente, depois disparam a atualização de assinatura SNS em fire-and-forget:
-
-```go
-// internal/rest/notification.go (simplificado)
 func (h *Handler) EnableNotification(w http.ResponseWriter, r *http.Request) {
     user := auth.UserFromContext(r.Context())
     kind := models.TopicKind(strings.ToUpper(chi.URLParam(r, "kind")))
@@ -279,177 +131,31 @@ func (h *Handler) EnableNotification(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-O padrão `runAsync` usa um semáforo baseado em channel — mesmo padrão que os handlers gRPC usam — para limitar goroutines concorrentes:
-
-```go
-func (h *Handler) runAsync(fn func(ctx context.Context)) {
-    h.asyncSem <- struct{}{}
-    go func() {
-        defer func() { <-h.asyncSem }()
-        ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
-        defer cancel()
-        fn(ctx)
-    }()
-}
-```
-
-Isso previne explosão de goroutines sob carga. Se o semáforo estiver cheio (1000 tarefas assíncronas concorrentes), o handler bloqueia brevemente no envio em vez de criar goroutines ilimitadas.
+O método `runAsync` usa um semáforo baseado em channel (capacidade 1000) — mesmo padrão que os handlers gRPC usam. Se o semáforo estiver cheio, o handler bloqueia brevemente em vez de criar goroutines ilimitadas. Cada tarefa assíncrona recebe um contexto novo com timeout de 5 minutos, desvinculado do ciclo de vida da requisição HTTP.
 
 ### Atualizações Bulk Declarativas
 
-A API Python exigia que o app mobile habilitasse/desabilitasse tipos um por vez. A API Go adiciona um endpoint bulk declarativo — envie o conjunto desejado de tipos habilitados, deixe o servidor calcular o diff:
-
-```go
-// PUT /api/v1/notifications
-// Body: {"enabled_kinds": ["GOAL", "MATCH_START", "REMINDER_15_MINUTES_BEFORE"]}
-
-func (h *Handler) BulkUpdateNotifications(w http.ResponseWriter, r *http.Request) {
-    user := auth.UserFromContext(r.Context())
-
-    var req bulkNotificationsRequest
-    json.NewDecoder(r.Body).Decode(&req)
-
-    // Parsear estado desejado
-    desiredSet := make(map[models.TopicKind]bool)
-    for _, raw := range req.EnabledKinds {
-        desiredSet[models.TopicKind(strings.ToUpper(raw))] = true
-    }
-
-    // Buscar estado atual
-    currentKinds, _ := h.notifRepo.GetEnabledKindsByUser(r.Context(), user.ID)
-    currentSet := make(map[models.TopicKind]bool)
-    for _, k := range currentKinds {
-        currentSet[k] = true
-    }
-
-    // Calcular diff
-    var toEnable, toDisable []models.TopicKind
-    for kind := range desiredSet {
-        if !currentSet[kind] {
-            toEnable = append(toEnable, kind)
-        }
-    }
-    for kind := range currentSet {
-        if !desiredSet[kind] {
-            toDisable = append(toDisable, kind)
-        }
-    }
-
-    // Transação única
-    h.notifRepo.BulkSetKinds(r.Context(), user.ID, toEnable, toDisable)
-
-    // Async: assinaturas SNS seguem
-    h.runAsync(func(ctx context.Context) {
-        for _, kind := range toEnable {
-            h.userSubSvc.SubscribeToNotificationKind(ctx, userID, kind)
-        }
-        for _, kind := range toDisable {
-            h.userSubSvc.UnsubscribeFromNotificationKind(ctx, userID, kind)
-        }
-    })
-
-    writeOK(w, bulkNotificationsResponse{Enabled: toEnable, Disabled: toDisable})
-}
-```
-
-Isso elimina múltiplos round-trips no lado mobile. Em vez de 5 chamadas sequenciais de enable/disable, o cliente envia uma requisição com o estado desejado.
+A API Python exigia que o app mobile habilitasse/desabilitasse tipos de notificação um por vez. A API Go adiciona um endpoint bulk declarativo: `PUT /api/v1/notifications` aceita `{"enabled_kinds": ["GOAL", "MATCH_START"]}`. O handler busca o estado atual, calcula o diff (o que habilitar, o que desabilitar), escreve o delta em uma única transação, e depois dispara atualizações assíncronas de assinaturas SNS. Uma requisição em vez de cinco chamadas sequenciais.
 
 ### Lógica de Validação Portada
 
-Várias regras de negócio que viviam no Python precisaram ser portadas:
-
-**Limite de notificações para guest** — convidados só podem habilitar N tipos de notificação:
-
-```go
-if user.Role == "GUEST" && h.cfg.MaxGuestNotificationKinds > 0 {
-    count, _ := h.notifRepo.CountEnabledByUser(r.Context(), user.ID)
-    if count >= h.cfg.MaxGuestNotificationKinds {
-        writeError(w, http.StatusForbidden, "guest notification limit reached")
-        return
-    }
-}
-```
-
-**Cooldown do time do coração** — usuários não podem trocar de time favorito mais de uma vez a cada 10 dias:
-
-```go
-if h.cfg.HeartTeamDeletionCooldown > 0 {
-    lastDeletion, _ := h.userRepo.GetLastHeartTeamDeletion(r.Context(), user.ID)
-    if lastDeletion != nil {
-        cooldownEnd := lastDeletion.Add(h.cfg.HeartTeamDeletionCooldown)
-        if time.Now().Before(cooldownEnd) {
-            remaining := time.Until(cooldownEnd)
-            writeError(w, http.StatusTooManyRequests,
-                fmt.Sprintf("heart team deletion on cooldown, %d days remaining",
-                    int(remaining.Hours()/24)+1))
-            return
-        }
-    }
-}
-```
-
-**Exclusão mútua de lembretes** — apenas um intervalo de lembrete pode estar ativo por vez (15min, 30min, 1h, 2h):
-
-```go
-if reminderKinds[kind] {
-    h.notifRepo.DisableReminderKindsExcept(r.Context(), user.ID, kind)
-}
-```
+Várias regras de negócio que viviam no Python precisaram ser portadas para os handlers REST: limites de notificação para guests (máximo configurável de tipos), cooldown do time do coração (período de 10 dias entre mudanças), exclusão mútua de lembretes (apenas um intervalo de lembrete ativo por vez), e verificação de existência de time antes de definir o time do coração.
 
 Essa validação vive nos handlers REST, não na camada de serviços. Os serviços permanecem agnósticos ao transporte — eles não sabem sobre roles de usuário, cooldowns ou códigos de status HTTP. Os handlers gRPC têm sua própria validação (delegada do Python anteriormente). Isso mantém ambos os adaptadores de protocolo independentes.
 
-## Fase 4: Conectando Tudo
-
-A função main inicializa o provedor JWKS, cria os novos repositórios e registra as rotas REST no chi router existente:
-
-```go
-// cmd/server/main.go
-func main() {
-    // ... setup existente (config, logger, db pool, services) ...
-
-    // Novo: provedor JWKS para autenticação JWT
-    jwksProvider := auth.NewJWKSProvider(
-        cfg.Auth.FusionAuthURL,
-        cfg.Auth.JWKSRefreshInterval,
-        logger,
-    )
-    jwksProvider.Start(ctx)
-    authMiddleware := auth.NewMiddleware(jwksProvider, logger)
-
-    // Novo: repositórios para validação REST
-    userRepo := repository.NewUserRepository(dbPool, logger)
-    favoriteRepo := repository.NewFavoriteRepository(dbPool, logger)
-    teamRepo := repository.NewTeamRepository(dbPool, logger)
-
-    // Novo: handler REST (reutiliza serviços existentes)
-    restHandler := rest.NewHandler(
-        userRepo, favoriteRepo, teamRepo, notificationRepo,
-        deviceService, userSubscriptionService, subscriptionService,
-        logger, cfg.REST,
-    )
-
-    // Registrar no chi router existente
-    rest.RegisterRoutes(router, restHandler, authMiddleware)
-}
-```
-
-O servidor gRPC continua rodando na porta 50052 para serviços internos. O servidor HTTP na porta 8081 agora serve tanto health checks quanto endpoints REST. Mesmo processo, mesmos serviços, dois protocolos.
-
-## A Camada de Serviços: Onde gRPC e REST se Encontram
+## Onde gRPC e REST se Encontram
 
 A decisão de design crítica que faz tudo funcionar: **ambos os adaptadores de protocolo chamam os mesmos serviços**.
 
-Veja como o registro de dispositivo funciona de cada lado:
-
 ```go
-// Handler REST (internal/rest/device.go)
+// Handler REST
 err := h.deviceService.RegisterDevice(r.Context(), service.RegisterDeviceRequest{
     UserID:      user.ID,
     DeviceToken: req.DeviceToken,
     HeartTeamID: parseUUID(req.HeartTeamID),
 })
 
-// Handler gRPC (internal/grpc/handlers/event_handler.go)
+// Handler gRPC
 err := h.deps.DeviceService.RegisterDevice(ctx, service.RegisterDeviceRequest{
     UserID:      userID,
     DeviceToken: req.DeviceToken,
@@ -457,21 +163,15 @@ err := h.deps.DeviceService.RegisterDevice(ctx, service.RegisterDeviceRequest{
 })
 ```
 
-Mesmo serviço, mesma struct de request, mesmo comportamento. O método `DeviceService.RegisterDevice` lida com o ciclo de vida complexo: deduplicando tokens de dispositivo entre usuários, criando endpoints SNS, assinando tipos de notificação habilitados, assinando o time do coração — tudo em uma chamada. Ambos os handlers gRPC e REST são wrappers finos que parseiam seus respectivos protocolos, chamam o serviço e formatam a resposta.
+Mesmo serviço, mesma struct de request, mesmo comportamento. `DeviceService.RegisterDevice` lida com o ciclo de vida complexo: deduplicando tokens de dispositivo entre usuários, criando endpoints SNS, assinando tipos de notificação habilitados — tudo em uma chamada. Ambos os handlers são wrappers finos que parseiam seus respectivos protocolos, chamam o serviço e formatam a resposta.
+
+O servidor gRPC continua na porta 50052 para serviços internos como o dataloader. O servidor HTTP na porta 8081 agora serve tanto health checks quanto a REST API. Mesmo processo, mesmos serviços, dois protocolos.
 
 ## O Que Quebrou no Caminho
 
-### Split de versão de módulo Go
+**Split de versão de módulo Go.** O Swagger UI carregava normalmente, mas `/swagger/doc.json` retornava 500. Causa raiz: `docs.go` importava `github.com/swaggo/swag/v2` (RC), mas o handler HTTP importava `github.com/swaggo/swag` (v1). Em Go modules, esses são pacotes completamente separados com registros globais independentes. Os docs registravam a spec no v2; o handler lia do v1; não encontrava nada; 500. Correção: regenerar com o CLI v1, fixar em v1.16.4.
 
-Os docs do Swagger carregavam normalmente (`/swagger/index.html` → 200), mas `/swagger/doc.json` retornava 500. Causa raiz: `docs.go` importava `github.com/swaggo/swag/v2` (RC), mas o handler HTTP importava `github.com/swaggo/swag` (v1). Em Go modules, esses são pacotes completamente separados com registros globais independentes. Os docs registravam a spec no v2; o handler lia do v1; não encontrava nada; 500.
-
-Correção: regenerar docs com o CLI v1, fixar `swag` em v1.16.4.
-
-### Endpoint JWKS errado por ambiente
-
-O serviço Go validava JWTs buscando chaves públicas do `/.well-known/jwks.json` do FusionAuth. A configuração padrão apontava para o FusionAuth de produção, mas tokens de dev são emitidos por uma instância diferente do FusionAuth com pares de chaves RSA diferentes. Mesmo formato de `kid` — a verificação de assinatura falhava silenciosamente.
-
-Correção: tornar `fusionauth_url` uma variável de configuração por ambiente.
+**Endpoint JWKS errado por ambiente.** A configuração padrão apontava para o FusionAuth de produção, mas tokens de dev são emitidos por uma instância diferente com pares de chaves RSA diferentes. Mesmo formato de `kid` — a verificação de assinatura falhava silenciosamente. Correção: tornar `fusionauth_url` uma variável de configuração por ambiente.
 
 ## O Padrão Strangler Fig
 
