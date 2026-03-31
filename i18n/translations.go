@@ -74,8 +74,8 @@ var translations = map[Lang]Translations{
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",
-		HeroRole:    "Backend Software Engineer",
-		HeroTagline: "Building scalable, resilient systems with Golang and modern distributed architectures",
+		HeroRole:    "Backend Software Engineer & Cybersecurity Enthusiast",
+		HeroTagline: "Building scalable, resilient systems with Golang — and learning how to break them",
 		HeroBio:     "I'm a Backend Software Engineer with a passion for building scalable, resilient systems using Golang and modern distributed architectures. With years of experience designing high-performance backends—leveraging Go's concurrency model, efficient memory management, and compile-time safety—I specialize in turning challenging business requirements into efficient, maintainable solutions.",
 
 		// Tech categories
@@ -88,7 +88,7 @@ var translations = map[Lang]Translations{
 
 		// About page
 		AboutTitle:       "About Me",
-		AboutIntro:       "Hi! I'm Paulo Vicente, a software developer passionate about programming and technology.",
+		AboutIntro:       "Hi! I'm Paulo Vicente, a backend software engineer passionate about building resilient systems and exploring cybersecurity.",
 		AboutBlog:        "This blog is where I share my thoughts, experiences, and learnings about software development, programming languages, and various technical topics that interest me.",
 		AboutContact:     "Get in Touch",
 		AboutContactLink: "Feel free to reach out to me on",
@@ -115,8 +115,8 @@ var translations = map[Lang]Translations{
 
 		// Home page
 		HeroTitle:   "Paulo Vicente",
-		HeroRole:    "Engenheiro de Software Backend",
-		HeroTagline: "Construindo sistemas escaláveis e resilientes com Golang e arquiteturas distribuídas modernas",
+		HeroRole:    "Engenheiro de Software Backend & Entusiasta de Cybersecurity",
+		HeroTagline: "Construindo sistemas escaláveis e resilientes com Golang — e aprendendo como quebrá-los",
 		HeroBio:     "Sou um Engenheiro de Software Backend com paixão por construir sistemas escaláveis e resilientes usando Golang e arquiteturas distribuídas modernas. Com anos de experiência projetando backends de alto desempenho—aproveitando o modelo de concorrência do Go, gerenciamento eficiente de memória e segurança em tempo de compilação—me especializo em transformar requisitos de negócio desafiadores em soluções eficientes e mantíveis.",
 
 		// Tech categories
@@ -129,7 +129,7 @@ var translations = map[Lang]Translations{
 
 		// About page
 		AboutTitle:       "Sobre Mim",
-		AboutIntro:       "Olá! Sou Paulo Vicente, um desenvolvedor de software apaixonado por programação e tecnologia.",
+		AboutIntro:       "Olá! Sou Paulo Vicente, engenheiro de software backend apaixonado por construir sistemas resilientes e explorar cybersecurity.",
 		AboutBlog:        "Este blog é onde compartilho meus pensamentos, experiências e aprendizados sobre desenvolvimento de software, linguagens de programação e vários tópicos técnicos que me interessam.",
 		AboutContact:     "Entre em Contato",
 		AboutContactLink: "Fique à vontade para me contatar no",
