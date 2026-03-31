@@ -75,21 +75,21 @@ var translations = map[Lang]Translations{
 		// Home page
 		HeroTitle:   "Paulo Vicente",
 		HeroRole:    "Backend Software Engineer & Cybersecurity Enthusiast",
-		HeroTagline: "Building scalable, resilient systems with Golang — and learning how to break them",
-		HeroBio:     "I'm a Backend Software Engineer with a passion for building scalable, resilient systems using Golang and modern distributed architectures. With years of experience designing high-performance backends—leveraging Go's concurrency model, efficient memory management, and compile-time safety—I specialize in turning challenging business requirements into efficient, maintainable solutions.",
+		HeroTagline: "Building resilient systems with Go, modern distributed architectures, and a growing interest in application security",
+		HeroBio:     "I'm a Backend Software Engineer with years of experience building production systems in Go — microservices, event-driven architectures, and distributed backends handling millions of requests. I specialize in turning challenging business requirements into maintainable, well-architected solutions. Lately, I've been studying application security — understanding how systems break is making me a better engineer.",
 
 		// Tech categories
 		TechBackendTitle:     "Backend & Architecture",
-		TechBackendDesc:      "Expert in Golang, microservices, RESTful APIs, gRPC, and clean architecture patterns. Experienced with Domain-Driven Design (DDD) and building maintainable, testable systems",
+		TechBackendDesc:      "Golang, microservices, RESTful APIs, gRPC, and clean architecture patterns. Experienced with Domain-Driven Design (DDD) and building maintainable, testable systems",
 		TechDistributedTitle: "Distributed Systems",
-		TechDistributedDesc:  "Deep experience with event-driven architectures, CQRS, Event Sourcing, and message brokers (Kafka, RabbitMQ). Focus on consistency patterns, fault tolerance, and systems that scale",
-		TechInfraTitle:       "Infrastructure & DevOps",
-		TechInfraDesc:        "Hands-on with Docker, Kubernetes, AWS, CI/CD pipelines, and observability tools",
+		TechDistributedDesc:  "Event-driven architectures, CQRS, Event Sourcing, and message brokers (Kafka, RabbitMQ). Focus on consistency patterns, fault tolerance, and resilient design",
+		TechInfraTitle:       "Infrastructure & Security",
+		TechInfraDesc:        "Docker, Kubernetes, AWS, CI/CD pipelines, and observability. Currently studying application security and secure development practices",
 
 		// About page
 		AboutTitle:       "About Me",
-		AboutIntro:       "Hi! I'm Paulo Vicente, a backend software engineer passionate about building resilient systems and exploring cybersecurity.",
-		AboutBlog:        "This blog is where I share my thoughts, experiences, and learnings about software development, programming languages, and various technical topics that interest me.",
+		AboutIntro:       "Hi! I'm Paulo Vicente, a backend software engineer who builds distributed systems and writes about the real-world tradeoffs behind them. Currently studying application security.",
+		AboutBlog:        "This blog is where I share what I learn about software architecture, distributed systems, and the security lessons I pick up along the way.",
 		AboutContact:     "Get in Touch",
 		AboutContactLink: "Feel free to reach out to me on",
 	},
@@ -116,21 +116,21 @@ var translations = map[Lang]Translations{
 		// Home page
 		HeroTitle:   "Paulo Vicente",
 		HeroRole:    "Engenheiro de Software Backend & Entusiasta de Cybersecurity",
-		HeroTagline: "Construindo sistemas escaláveis e resilientes com Golang — e aprendendo como quebrá-los",
-		HeroBio:     "Sou um Engenheiro de Software Backend com paixão por construir sistemas escaláveis e resilientes usando Golang e arquiteturas distribuídas modernas. Com anos de experiência projetando backends de alto desempenho—aproveitando o modelo de concorrência do Go, gerenciamento eficiente de memória e segurança em tempo de compilação—me especializo em transformar requisitos de negócio desafiadores em soluções eficientes e mantíveis.",
+		HeroTagline: "Construindo sistemas resilientes com Go, arquiteturas distribuídas modernas, e um interesse crescente em application security",
+		HeroBio:     "Sou Engenheiro de Software Backend com anos de experiência construindo sistemas em produção com Go — microsserviços, arquiteturas orientadas a eventos e backends distribuídos processando milhões de requisições. Me especializo em transformar requisitos de negócio desafiadores em soluções mantíveis e bem arquitetadas. Ultimamente, tenho estudado application security — entender como sistemas quebram está me tornando um engenheiro melhor.",
 
 		// Tech categories
 		TechBackendTitle:     "Backend & Arquitetura",
-		TechBackendDesc:      "Especialista em Golang, microsserviços, APIs RESTful, gRPC e padrões de arquitetura limpa. Experiente com Domain-Driven Design (DDD) e construção de sistemas testáveis e mantíveis",
+		TechBackendDesc:      "Golang, microsserviços, APIs RESTful, gRPC e padrões de arquitetura limpa. Experiente com Domain-Driven Design (DDD) e construção de sistemas testáveis e mantíveis",
 		TechDistributedTitle: "Sistemas Distribuídos",
-		TechDistributedDesc:  "Experiência profunda com arquiteturas orientadas a eventos, CQRS, Event Sourcing e message brokers (Kafka, RabbitMQ). Foco em padrões de consistência, tolerância a falhas e sistemas que escalam",
-		TechInfraTitle:       "Infraestrutura & DevOps",
-		TechInfraDesc:        "Experiência prática com Docker, Kubernetes, AWS, pipelines CI/CD e ferramentas de observabilidade",
+		TechDistributedDesc:  "Arquiteturas orientadas a eventos, CQRS, Event Sourcing e message brokers (Kafka, RabbitMQ). Foco em padrões de consistência, tolerância a falhas e design resiliente",
+		TechInfraTitle:       "Infraestrutura & Segurança",
+		TechInfraDesc:        "Docker, Kubernetes, AWS, pipelines CI/CD e observabilidade. Atualmente estudando application security e práticas de desenvolvimento seguro",
 
 		// About page
 		AboutTitle:       "Sobre Mim",
-		AboutIntro:       "Olá! Sou Paulo Vicente, engenheiro de software backend apaixonado por construir sistemas resilientes e explorar cybersecurity.",
-		AboutBlog:        "Este blog é onde compartilho meus pensamentos, experiências e aprendizados sobre desenvolvimento de software, linguagens de programação e vários tópicos técnicos que me interessam.",
+		AboutIntro:       "Olá! Sou Paulo Vicente, engenheiro de software backend que constrói sistemas distribuídos e escreve sobre os tradeoffs reais por trás deles. Atualmente estudando application security.",
+		AboutBlog:        "Este blog é onde compartilho o que aprendo sobre arquitetura de software, sistemas distribuídos e as lições de segurança que vou aprendendo no caminho.",
 		AboutContact:     "Entre em Contato",
 		AboutContactLink: "Fique à vontade para me contatar no",
 	},
