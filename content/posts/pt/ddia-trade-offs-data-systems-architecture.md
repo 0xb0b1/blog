@@ -20,7 +20,7 @@ O primeiro capítulo da segunda edição de _Designing Data-Intensive Applicatio
 
 > Não existem soluções; existem apenas trade-offs. [...] Mas você tenta conseguir o melhor trade-off possível, e isso é tudo que você pode esperar.
 
-Eu já escrevi sobre [como os conceitos de stream processing do DDIA se aplicam a um sistema de notificações real](/posts/ddia-stream-processing-notification-systems). Aquele capítulo me ensinou técnicas — event streams, backpressure, exactly-once. O Capítulo 1 é diferente. Ele não te ensina uma técnica. Ele te ensina quais perguntas fazer antes de escolher uma, percorrendo quatro escolhas contrastantes que moldam todo sistema de dados: operacional vs analítico, cloud vs self-hosting, distribuído vs single-node, e a tensão entre o negócio e os direitos das pessoas cujos dados você guarda.
+Eu já escrevi sobre [como os conceitos de stream processing do DDIA se aplicam a um sistema de notificações real](/pt/posts/ddia-stream-processing-notification-systems). Aquele capítulo me ensinou técnicas — event streams, backpressure, exactly-once. O Capítulo 1 é diferente. Ele não te ensina uma técnica. Ele te ensina quais perguntas fazer antes de escolher uma, percorrendo quatro escolhas contrastantes que moldam todo sistema de dados: operacional vs analítico, cloud vs self-hosting, distribuído vs single-node, e a tensão entre o negócio e os direitos das pessoas cujos dados você guarda.
 
 Ler isso depois do fato foi desconfortável, no bom sentido. Cada decisão que o capítulo enquadra como um trade-off, eu tinha tomado sob pressão de prazo na R10 Score — às vezes bem, às vezes por acidente. Este post passa quatro dessas decisões de volta pela lente de Kleppmann e Riccomini. Não para exibir boa arquitetura, mas para mostrar como é quando você escolhe o lado "errado" de uma "boa prática" de propósito e sabe exatamente o que abriu mão.
 
@@ -36,7 +36,7 @@ E sobre microservices especificamente:
 
 Essa frase é a que eu gostaria de ter lido três anos antes. A R10 começou como um monolito Python/Django — o `r10-hub` — e continuou assim por muito mais tempo do que os posts sobre microservices diziam que deveria. Só extraímos serviços em Go quando havia uma razão concreta que o DDIA reconheceria: notificações tinham um perfil de recursos genuinamente diferente (I/O-bound, com picos de fan-out durante as partidas) e precisavam escalar de forma independente do monolito que serve requisições. Odds era um time separado com seu próprio ritmo de deploy. Essas são as razões do "problema de pessoas" e do "escalar de forma independente", não "microservices são o jeito moderno".
 
-Eu já escrevi a versão longa desse argumento em [When to Go Distributed](/posts/when-to-go-distributed). A versão curta, e a parte que o Capítulo 1 afiou pra mim, é que a extração só continuou barata porque a fronteira já existia dentro do monolito primeiro. Em Go essa fronteira é uma interface:
+Eu já escrevi a versão longa desse argumento em [When to Go Distributed](/pt/posts/when-to-go-distributed). A versão curta, e a parte que o Capítulo 1 afiou pra mim, é que a extração só continuou barata porque a fronteira já existia dentro do monolito primeiro. Em Go essa fronteira é uma interface:
 
 ```go
 // Inside the monolith: order depends on an interface, not a package
@@ -66,7 +66,7 @@ Aqui está o Capítulo 1 enunciando a regra da forma mais direta possível:
 
 Nós compartilhamos um banco entre serviços. Três deles — o monolito Django, o `r10-notifications` e o `r10-odds` — leem e escrevem na mesma instância PostgreSQL. Pelo livro, isso é o antipadrão com nome e sobrenome: o monolito distribuído, acoplado no schema em vez de na API.
 
-Eu sei. Eu [escrevi sobre isso em detalhe](/posts/shared-database-microservices-migration). A questão não é que não conhecíamos a regra. A questão é que, durante uma migração de monolito para microservices, a resposta "correta" — banco por serviço no dia um — exige resolver o problema de dados distribuídos antes de você ter entregue uma única feature, e o negócio não pausa para isso. Então assumimos o trade-off que o DDIA descreve, de olhos abertos, e depois gastamos nosso esforço de engenharia contendo o raio de impacto em vez de fingir que o tínhamos evitado.
+Eu sei. Eu [escrevi sobre isso em detalhe](/pt/posts/shared-database-microservices-migration). A questão não é que não conhecíamos a regra. A questão é que, durante uma migração de monolito para microservices, a resposta "correta" — banco por serviço no dia um — exige resolver o problema de dados distribuídos antes de você ter entregue uma única feature, e o negócio não pausa para isso. Então assumimos o trade-off que o DDIA descreve, de olhos abertos, e depois gastamos nosso esforço de engenharia contendo o raio de impacto em vez de fingir que o tínhamos evitado.
 
 A contenção é um conjunto de regras, e cada uma delas é uma resposta direta a "o schema agora faz parte da API":
 
@@ -104,7 +104,7 @@ query := `SELECT id, role, language FROM r10_user WHERE id = $1`
 // A miss here means "the source of truth moved on," not "the DB is broken."
 ```
 
-(Não vou recobrir de propósito o cache de tópicos no Redis aqui — esse é o exemplo clássico de dados derivados e eu já o trabalhei como [dualidade stream-tabela](/posts/ddia-stream-processing-notification-systems) no outro post.)
+(Não vou recobrir de propósito o cache de tópicos no Redis aqui — esse é o exemplo clássico de dados derivados e eu já o trabalhei como [dualidade stream-tabela](/pt/posts/ddia-stream-processing-notification-systems) no outro post.)
 
 O que o Capítulo 1 me fez encarar é a parte que eu não tinha resolvido: dados derivados precisam ser mantidos atualizados. Kleppmann e Riccomini são diretos ao dizer que "quando os dados em um sistema são derivados dos dados em outro, você precisa de um processo para atualizar os dados derivados quando o original no system of record muda". Neste momento os serviços Go leem `r10_user` e `r10_match` fazendo query direto na tabela fonte — o "processo de atualização" mais rudimentar possível, que é não ter cópia derivada nenhuma e simplesmente enfiar a mão na fonte. Isso só funciona porque compartilhamos o banco. No momento em que o separarmos, passamos a dever uma resposta de verdade: uma read replica, um stream de change data capture, ou uma chamada de API. Cada uma é um trade-off diferente entre desatualização, acoplamento e custo operacional, e o Capítulo 1 é honesto ao dizer que não existe versão de graça.
 

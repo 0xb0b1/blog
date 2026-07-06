@@ -20,7 +20,7 @@ The first chapter of the second edition of _Designing Data-Intensive Application
 
 > There are no solutions; there are only trade-offs. [...] But you try to get the best trade-off you can get, and that's all you can hope for.
 
-I wrote earlier about [how DDIA's stream processing concepts map to a real notification system](/posts/ddia-stream-processing-notification-systems). That chapter taught me techniques—event streams, backpressure, exactly-once. Chapter 1 is different. It doesn't teach you a technique. It teaches you which questions to ask before you reach for one, by walking through four contrasting choices that shape every data system: operational vs analytical, cloud vs self-hosting, distributed vs single-node, and the tension between the business and the rights of the people whose data you hold.
+I wrote earlier about [how DDIA's stream processing concepts map to a real notification system](/en/posts/ddia-stream-processing-notification-systems). That chapter taught me techniques—event streams, backpressure, exactly-once. Chapter 1 is different. It doesn't teach you a technique. It teaches you which questions to ask before you reach for one, by walking through four contrasting choices that shape every data system: operational vs analytical, cloud vs self-hosting, distributed vs single-node, and the tension between the business and the rights of the people whose data you hold.
 
 Reading it after the fact was uncomfortable, in a good way. Every decision the chapter frames as a trade-off, I'd made under deadline pressure at R10 Score—sometimes well, sometimes by accident. This post runs four of those decisions back through Kleppmann and Riccomini's framing. Not to show off good architecture, but to show what it looks like when you pick the losing side of a "best practice" on purpose and know exactly what you gave up.
 
@@ -36,7 +36,7 @@ And on microservices specifically:
 
 That sentence is the one I wish I'd read three years earlier. R10 started as a Python/Django monolith—`r10-hub`—and stayed one far longer than the microservices blog posts said it should. We only extracted Go services when there was a concrete reason DDIA would recognize: notifications had a genuinely different resource profile (I/O-bound, spiky fan-out during matches) and needed to scale independently of the request-serving monolith. Odds was a separate team with its own deploy cadence. Those are the "people problem" and "independent scaling" reasons, not "microservices are the modern way."
 
-I already wrote the long version of this argument in [When to Go Distributed](/posts/when-to-go-distributed). The short version, and the part Chapter 1 sharpened for me, is that the extraction only stayed cheap because the boundary existed inside the monolith first. In Go that boundary is an interface:
+I already wrote the long version of this argument in [When to Go Distributed](/en/posts/when-to-go-distributed). The short version, and the part Chapter 1 sharpened for me, is that the extraction only stayed cheap because the boundary existed inside the monolith first. In Go that boundary is an interface:
 
 ```go
 // Inside the monolith: order depends on an interface, not a package
@@ -66,7 +66,7 @@ Here is Chapter 1 stating the rule as plainly as it gets:
 
 We share a database across services. Three of them—the Django monolith, `r10-notifications`, and `r10-odds`—all read and write the same PostgreSQL instance. By the book, this is the antipattern with a name: the distributed monolith, coupled at the schema instead of the API.
 
-I know. I [wrote about it in detail](/posts/shared-database-microservices-migration). The point isn't that we didn't know the rule. The point is that during a monolith-to-microservices migration, the "correct" answer—database-per-service on day one—requires solving the distributed data problem before you've shipped a single feature, and the business doesn't pause for that. So we took the trade-off DDIA describes, with eyes open, and then spent our engineering effort containing the blast radius rather than pretending we'd avoided it.
+I know. I [wrote about it in detail](/en/posts/shared-database-microservices-migration). The point isn't that we didn't know the rule. The point is that during a monolith-to-microservices migration, the "correct" answer—database-per-service on day one—requires solving the distributed data problem before you've shipped a single feature, and the business doesn't pause for that. So we took the trade-off DDIA describes, with eyes open, and then spent our engineering effort containing the blast radius rather than pretending we'd avoided it.
 
 The containment is a set of rules, and every one of them is a direct response to "the schema is now part of the API":
 
@@ -104,7 +104,7 @@ query := `SELECT id, role, language FROM r10_user WHERE id = $1`
 // A miss here means "the source of truth moved on," not "the DB is broken."
 ```
 
-(I deliberately won't re-cover the Redis topic cache here—that's the classic derived-data example and I already worked through it as [stream-table duality](/posts/ddia-stream-processing-notification-systems) in the other post.)
+(I deliberately won't re-cover the Redis topic cache here—that's the classic derived-data example and I already worked through it as [stream-table duality](/en/posts/ddia-stream-processing-notification-systems) in the other post.)
 
 What Chapter 1 made me confront is the part I hadn't solved: derived data has to be kept up to date. Kleppmann and Riccomini are blunt that "when the data in one system is derived from the data in another, you need a process for updating the derived data when the original in the system of record changes." Right now the Go services read `r10_user` and `r10_match` by querying the source table directly—the crudest possible "update process," which is to have no derived copy at all and just reach into the source. That works only because we share the database. The moment we split it, we owe a real answer: a read replica, a change data capture stream, or an API call. Each is a different trade-off between staleness, coupling, and operational cost, and Chapter 1 is honest that there's no free version.
 
