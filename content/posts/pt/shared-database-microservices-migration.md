@@ -116,7 +116,7 @@ query := `
 
 O serviço Go também **escreve** em `r10_notification` (ativando/desativando preferências de notificação) e `r10_device` (registro de dispositivos). Essa costumava ser a parte bagunçada — dois serviços escrevendo nas mesmas tabelas.
 
-Resolvemos isso. A [migração strangler fig](/posts/strangler-fig-python-to-go-rest-api) moveu todos os endpoints REST de notificação de Python para Go. O app mobile agora acessa o serviço Go diretamente. Python não escreve mais em `r10_notification`, `r10_device`, ou qualquer tabela relacionada a notificações. O serviço Go é o único escritor.
+Resolvemos isso. A [migração strangler fig](/pt/posts/strangler-fig-python-to-go-rest-api) moveu todos os endpoints REST de notificação de Python para Go. O app mobile agora acessa o serviço Go diretamente. Python não escreve mais em `r10_notification`, `r10_device`, ou qualquer tabela relacionada a notificações. O serviço Go é o único escritor.
 
 Mas antes dessa migração, convivemos com escritas duplas por meses. Dois serviços escrevendo na mesma tabela significa:
 

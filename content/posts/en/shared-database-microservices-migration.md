@@ -116,7 +116,7 @@ query := `
 
 The Go service also **writes** to `r10_notification` (enabling/disabling notification preferences) and `r10_device` (device registration). This used to be the messy part — two services writing to the same tables.
 
-We fixed it. The [strangler fig migration](/posts/strangler-fig-python-to-go-rest-api) moved all notification REST endpoints from Python to Go. The mobile app now hits the Go service directly. Python no longer writes to `r10_notification`, `r10_device`, or any notification-related table. The Go service is the single writer.
+We fixed it. The [strangler fig migration](/en/posts/strangler-fig-python-to-go-rest-api) moved all notification REST endpoints from Python to Go. The mobile app now hits the Go service directly. Python no longer writes to `r10_notification`, `r10_device`, or any notification-related table. The Go service is the single writer.
 
 But before that migration, we lived with dual writes for months. Two services writing to the same table means:
 

@@ -5,7 +5,7 @@ description: "A hands-on guide to implementing Event Sourcing and CQRS in Go, wi
 tags: ["golang", "event-sourcing", "CQRS", "DDD", "architecture", "backend"]
 ---
 
-I wrote about [CQRS and Event Sourcing patterns](/posts/cqrs-event-sourcing-go-blog-post) a while back, covering the theory and concepts. But theory only gets you so far. This time, I'm sharing something different: **a complete, working implementation** you can run, study, and extend.
+I wrote about [CQRS and Event Sourcing patterns](/en/posts/cqrs-event-sourcing-go-blog-post) a while back, covering the theory and concepts. But theory only gets you so far. This time, I'm sharing something different: **a complete, working implementation** you can run, study, and extend.
 
 The project is called [eventsource](https://github.com/0xb0b1/eventsource) — a banking system that demonstrates Event Sourcing and CQRS in action. Let's break down how it all fits together.
 
@@ -537,6 +537,6 @@ The beauty of Event Sourcing is that you can always add new projections later. Y
 ## Resources
 
 - [eventsource on GitHub](https://github.com/0xb0b1/eventsource) — The complete code
-- [My previous post on CQRS/ES theory](/posts/cqrs-event-sourcing-go-blog-post)
+- [My previous post on CQRS/ES theory](/en/posts/cqrs-event-sourcing-go-blog-post)
 - [Go with the Domain - Three Dots Labs](https://threedots.tech/go-with-the-domain/) — Excellent DDD patterns in Go
 - [Martin Fowler on Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
