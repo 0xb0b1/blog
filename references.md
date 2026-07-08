@@ -1,0 +1,6 @@
+- Advanced patterns for building APIs and web applications in Go
+- Concurrency in Go
+- Gist of Go: Concurrency: https://antonz.org/go-concurrency/
+- Go with domain [Robert Laszczak & Milosz Smólka]
+- gRPC Microservices in Go
+- 100 Go Mistakes and How to Avoid Them

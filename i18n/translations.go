@@ -30,10 +30,10 @@ type Translations struct {
 	FooterCopyright string
 
 	// Home page
-	HeroTitle    string
-	HeroRole     string
-	HeroTagline  string
-	HeroBio      string
+	HeroTitle   string
+	HeroRole    string
+	HeroTagline string
+	HeroBio     string
 
 	// Tech categories
 	TechBackendTitle     string
@@ -42,12 +42,14 @@ type Translations struct {
 	TechDistributedDesc  string
 	TechInfraTitle       string
 	TechInfraDesc        string
+	TechFunctionalTitle  string
+	TechFunctionalDesc   string
 
 	// About page
-	AboutTitle   string
-	AboutIntro   string
-	AboutBlog    string
-	AboutContact string
+	AboutTitle       string
+	AboutIntro       string
+	AboutBlog        string
+	AboutContact     string
 	AboutContactLink string
 }
 
@@ -75,8 +77,8 @@ var translations = map[Lang]Translations{
 		// Home page
 		HeroTitle:   "Paulo Vicente",
 		HeroRole:    "Backend Software Engineer & Cybersecurity Enthusiast",
-		HeroTagline: "Building resilient systems with Go, modern distributed architectures, and a growing interest in application security",
-		HeroBio:     "I'm a Backend Software Engineer with years of experience building production systems in Go — microservices, event-driven architectures, and distributed backends handling millions of requests. I specialize in turning challenging business requirements into maintainable, well-architected solutions. Lately, I've been studying application security — understanding how systems break is making me a better engineer.",
+		HeroTagline: "Building resilient, data-heavy systems with Clojure and Go — modern distributed architectures and a growing interest in application security",
+		HeroBio:     "I'm a Backend Software Engineer with years of experience building production systems in Clojure and Go. In Clojure I've built data-heavy applications — service-oriented backends, typed HTTP contracts and backend-for-frontends with Ring and Reitit, reactive front-ends with re-frame, and immutable, time-aware data models on Datomic. In Go I build microservices and event-driven backends handling millions of requests. I turn challenging business requirements into maintainable, well-architected solutions, and lately I've been studying application security — understanding how systems break is making me a better engineer.",
 
 		// Tech categories
 		TechBackendTitle:     "Backend & Architecture",
@@ -85,11 +87,13 @@ var translations = map[Lang]Translations{
 		TechDistributedDesc:  "Event-driven architectures, CQRS, Event Sourcing, and message brokers (Kafka, RabbitMQ). Focus on consistency patterns, fault tolerance, and resilient design",
 		TechInfraTitle:       "Infrastructure & Security",
 		TechInfraDesc:        "Docker, Kubernetes, AWS, CI/CD pipelines, and observability. Currently studying application security and secure development practices",
+		TechFunctionalTitle:  "Functional Programming",
+		TechFunctionalDesc:   "Clojure and ClojureScript for data-heavy products: typed HTTP contracts with Ring, Reitit and malli, backend-for-frontend patterns, reactive UIs with re-frame, concurrent data pipelines with core.async, and Datomic for immutable data with built-in history.",
 
 		// About page
 		AboutTitle:       "About Me",
-		AboutIntro:       "Hi! I'm Paulo Vicente, a backend software engineer who builds distributed systems and writes about the real-world tradeoffs behind them. Currently studying application security.",
-		AboutBlog:        "This blog is where I share what I learn about software architecture, distributed systems, and the security lessons I pick up along the way.",
+		AboutIntro:       "Hi! I'm Paulo Vicente, a backend software engineer who builds systems in Clojure and Go — from data-heavy Clojure applications to distributed Go backends — and writes about the real-world tradeoffs behind them. Currently studying application security.",
+		AboutBlog:        "This blog is where I share what I learn about software architecture, functional programming in Clojure, distributed systems, and the security lessons I pick up along the way.",
 		AboutContact:     "Get in Touch",
 		AboutContactLink: "Feel free to reach out to me on",
 	},
@@ -116,8 +120,8 @@ var translations = map[Lang]Translations{
 		// Home page
 		HeroTitle:   "Paulo Vicente",
 		HeroRole:    "Engenheiro de Software Backend & Entusiasta de Cybersecurity",
-		HeroTagline: "Construindo sistemas resilientes com Go, arquiteturas distribuídas modernas, e um interesse crescente em application security",
-		HeroBio:     "Sou Engenheiro de Software Backend com anos de experiência construindo sistemas em produção com Go — microsserviços, arquiteturas orientadas a eventos e backends distribuídos processando milhões de requisições. Me especializo em transformar requisitos de negócio desafiadores em soluções mantíveis e bem arquitetadas. Ultimamente, tenho estudado application security — entender como sistemas quebram está me tornando um engenheiro melhor.",
+		HeroTagline: "Construindo sistemas resilientes e com muitos dados usando Clojure e Go — arquiteturas distribuídas modernas e um interesse crescente em application security",
+		HeroBio:     "Sou Engenheiro de Software Backend com anos de experiência construindo sistemas em produção com Clojure e Go. Em Clojure construí aplicações com muitos dados — backends orientados a serviços, contratos HTTP tipados e backend-for-frontends com Ring e Reitit, front-ends reativos com re-frame, e modelos de dados imutáveis e temporais no Datomic. Em Go construo microsserviços e backends orientados a eventos processando milhões de requisições. Transformo requisitos de negócio desafiadores em soluções mantíveis e bem arquitetadas, e ultimamente tenho estudado application security — entender como sistemas quebram está me tornando um engenheiro melhor.",
 
 		// Tech categories
 		TechBackendTitle:     "Backend & Arquitetura",
@@ -126,11 +130,13 @@ var translations = map[Lang]Translations{
 		TechDistributedDesc:  "Arquiteturas orientadas a eventos, CQRS, Event Sourcing e message brokers (Kafka, RabbitMQ). Foco em padrões de consistência, tolerância a falhas e design resiliente",
 		TechInfraTitle:       "Infraestrutura & Segurança",
 		TechInfraDesc:        "Docker, Kubernetes, AWS, pipelines CI/CD e observabilidade. Atualmente estudando application security e práticas de desenvolvimento seguro",
+		TechFunctionalTitle:  "Programação Funcional",
+		TechFunctionalDesc:   "Clojure e ClojureScript para produtos com muitos dados: contratos HTTP tipados com Ring, Reitit e malli, padrões backend-for-frontend, UIs reativas com re-frame, pipelines de dados concorrentes com core.async, e Datomic para dados imutáveis com histórico embutido.",
 
 		// About page
 		AboutTitle:       "Sobre Mim",
-		AboutIntro:       "Olá! Sou Paulo Vicente, engenheiro de software backend que constrói sistemas distribuídos e escreve sobre os tradeoffs reais por trás deles. Atualmente estudando application security.",
-		AboutBlog:        "Este blog é onde compartilho o que aprendo sobre arquitetura de software, sistemas distribuídos e as lições de segurança que vou aprendendo no caminho.",
+		AboutIntro:       "Olá! Sou Paulo Vicente, engenheiro de software backend que constrói sistemas em Clojure e Go — de aplicações Clojure com muitos dados a backends distribuídos em Go — e escreve sobre os tradeoffs reais por trás deles. Atualmente estudando application security.",
+		AboutBlog:        "Este blog é onde compartilho o que aprendo sobre arquitetura de software, programação funcional em Clojure, sistemas distribuídos e as lições de segurança que vou aprendendo no caminho.",
 		AboutContact:     "Entre em Contato",
 		AboutContactLink: "Fique à vontade para me contatar no",
 	},
