@@ -1,6 +1,9 @@
 package models
 
-import "slices"
+import (
+	"slices"
+	"sort"
+)
 
 // Pagination holds pagination state and helpers
 type Pagination struct {
@@ -70,6 +73,21 @@ func CollectTags(posts []Post) map[string]int {
 		}
 	}
 	return tags
+}
+
+// CollectYears returns the distinct years present in posts, sorted descending
+func CollectYears(posts []Post) []int {
+	seen := make(map[int]bool)
+	var years []int
+	for _, post := range posts {
+		y := post.Date.Year()
+		if !seen[y] {
+			seen[y] = true
+			years = append(years, y)
+		}
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(years)))
+	return years
 }
 
 // FilterByTag returns posts that have the specified tag

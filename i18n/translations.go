@@ -22,6 +22,9 @@ type Translations struct {
 	NoPostsFound      string
 	AllTags           string
 	FilterByTag       string
+	FilterByYear      string
+	FilterByTopic     string
+	SearchTopics      string
 	PrevPage          string
 	NextPage          string
 	PageOf            string
@@ -67,6 +70,9 @@ var translations = map[Lang]Translations{
 		NoPostsFound:      "No posts found for",
 		AllTags:           "All",
 		FilterByTag:       "Filter by tag",
+		FilterByYear:      "Year",
+		FilterByTopic:     "Topic",
+		SearchTopics:      "Search topics...",
 		PrevPage:          "Previous",
 		NextPage:          "Next",
 		PageOf:            "of",
@@ -110,6 +116,9 @@ var translations = map[Lang]Translations{
 		NoPostsFound:      "Nenhum post encontrado para",
 		AllTags:           "Todos",
 		FilterByTag:       "Filtrar por tag",
+		FilterByYear:      "Ano",
+		FilterByTopic:     "Tópico",
+		SearchTopics:      "Buscar tópicos...",
 		PrevPage:          "Anterior",
 		NextPage:          "Próximo",
 		PageOf:            "de",

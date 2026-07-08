@@ -128,15 +128,19 @@ func getStringMeta(data map[string]interface{}, key, defaultVal string) string {
 
 func getDateMeta(data map[string]interface{}, key string) time.Time {
 	if val, ok := data[key]; ok {
-		if str, ok := val.(string); ok {
-			// Try parsing common date formats
+		switch v := val.(type) {
+		case time.Time:
+			// yaml.v2 resolves an unquoted `date: 2006-01-02` to time.Time
+			return v
+		case string:
+			// Quoted dates arrive as strings; try common formats
 			formats := []string{
 				"2006-01-02",
 				"2006-01-02 15:04:05",
 				time.RFC3339,
 			}
 			for _, format := range formats {
-				if t, err := time.Parse(format, str); err == nil {
+				if t, err := time.Parse(format, v); err == nil {
 					return t
 				}
 			}

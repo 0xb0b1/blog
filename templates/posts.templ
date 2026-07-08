@@ -7,7 +7,7 @@ import (
 	"github.com/0xb0b1/blog/models"
 )
 
-templ Posts(posts []models.Post, searchQuery string, tagFilter string, allTags map[string]int, pagination models.Pagination, lang i18n.Lang) {
+templ Posts(posts []models.Post, searchQuery string, tagFilter string, yearFilter string, allTags map[string]int, years []int, pagination models.Pagination, lang i18n.Lang) {
 	<div class="posts-page">
 		<header class="posts-header">
 			<h1 class="page-title">{ i18n.Get(lang).PostsTitle }</h1>
@@ -16,7 +16,7 @@ templ Posts(posts []models.Post, searchQuery string, tagFilter string, allTags m
 				hx-target="#posts-list"
 				hx-trigger="submit, keyup changed delay:300ms from:#search-input"
 				hx-indicator=".search-indicator"
-				hx-include="[name='tag']"
+				hx-include="#tag-input, [name='year']:checked"
 				class="search-form"
 			>
 				<input
@@ -34,40 +34,84 @@ templ Posts(posts []models.Post, searchQuery string, tagFilter string, allTags m
 			</form>
 		</header>
 
-		@TagFilter(tagFilter, allTags, searchQuery, lang)
+		@FilterBar(tagFilter, yearFilter, allTags, years, lang)
 
 		<div id="posts-list">
-			@PostsList(posts, searchQuery, tagFilter, allTags, pagination, lang)
+			@PostsList(posts, searchQuery, tagFilter, yearFilter, allTags, pagination, lang)
 		</div>
 	</div>
 }
 
-templ TagFilter(currentTag string, allTags map[string]int, searchQuery string, lang i18n.Lang) {
-	<div class="tag-filter">
-		<label for="tag-select" class="tag-filter-label">{ i18n.Get(lang).FilterByTag }:</label>
-		<select
-			id="tag-select"
-			name="tag"
-			class="tag-select"
+templ FilterBar(currentTag string, yearFilter string, allTags map[string]int, years []int, lang i18n.Lang) {
+	<div class="filter-bar">
+		<div
+			class="filter-group"
 			hx-get={ "/" + string(lang) + "/posts/search" }
 			hx-target="#posts-list"
-			hx-include="#search-input"
+			hx-include="#search-input, #tag-input, [name='year']:checked"
 			hx-trigger="change"
 			hx-push-url="true"
 		>
-			<option value="" selected?={ currentTag == "" }>
-				{ i18n.Get(lang).AllTags }
-			</option>
-			for _, tag := range sortedTags(allTags) {
-				<option value={ tag } selected?={ currentTag == tag }>
-					{ tag } ({ fmt.Sprintf("%d", allTags[tag]) })
-				</option>
-			}
-		</select>
+			<span class="filter-label">{ i18n.Get(lang).FilterByYear }</span>
+			<div class="pill-row">
+				<input type="radio" name="year" id="year-all" value="" class="pill-radio" checked?={ yearFilter == "" }/>
+				<label for="year-all" class="pill">{ i18n.Get(lang).AllTags }</label>
+				for _, y := range years {
+					<input type="radio" name="year" id={ fmt.Sprintf("year-%d", y) } value={ fmt.Sprintf("%d", y) } class="pill-radio" checked?={ yearFilter == fmt.Sprintf("%d", y) }/>
+					<label for={ fmt.Sprintf("year-%d", y) } class="pill">{ fmt.Sprintf("%d", y) }</label>
+				}
+			</div>
+		</div>
+
+		<div class="filter-group">
+			<span class="filter-label" id="topic-label">{ i18n.Get(lang).FilterByTopic }</span>
+			<div class="topic-dropdown" data-topic-filter>
+				<input
+					type="hidden"
+					id="tag-input"
+					name="tag"
+					class="topic-input"
+					value={ currentTag }
+					hx-get={ "/" + string(lang) + "/posts/search" }
+					hx-target="#posts-list"
+					hx-include="#search-input, [name='year']:checked"
+					hx-trigger="topic-changed"
+					hx-push-url="true"
+				/>
+				<button type="button" class="topic-trigger" aria-haspopup="true" aria-expanded="false" aria-labelledby="topic-label">
+					<span class="topic-trigger-label">
+						if currentTag == "" {
+							{ i18n.Get(lang).AllTags }
+						} else {
+							{ currentTag }
+						}
+					</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="topic-chevron"><path d="m6 9 6 6 6-6"></path></svg>
+				</button>
+				<div class="topic-panel" hidden>
+					<input type="text" class="topic-search" placeholder={ i18n.Get(lang).SearchTopics } aria-label={ i18n.Get(lang).SearchTopics }/>
+					<ul class="topic-options">
+						<li>
+							<button type="button" class={ "topic-option", templ.KV("is-active", currentTag == "") } data-value="" data-label={ i18n.Get(lang).AllTags }>
+								<span>{ i18n.Get(lang).AllTags }</span>
+							</button>
+						</li>
+						for _, tag := range sortedTags(allTags) {
+							<li>
+								<button type="button" class={ "topic-option", templ.KV("is-active", currentTag == tag) } data-value={ tag } data-label={ tag }>
+									<span>{ tag }</span>
+									<span class="topic-count">{ fmt.Sprintf("%d", allTags[tag]) }</span>
+								</button>
+							</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
 	</div>
 }
 
-templ PostsList(posts []models.Post, searchQuery string, tagFilter string, allTags map[string]int, pagination models.Pagination, lang i18n.Lang) {
+templ PostsList(posts []models.Post, searchQuery string, tagFilter string, yearFilter string, allTags map[string]int, pagination models.Pagination, lang i18n.Lang) {
 	<div class="posts-container">
 		<div class="posts">
 			if len(posts) > 0 {
@@ -78,28 +122,28 @@ templ PostsList(posts []models.Post, searchQuery string, tagFilter string, allTa
 				<div class="no-posts">
 					if searchQuery != "" {
 						<p>{ i18n.Get(lang).NoPostsFound } "{ searchQuery }".</p>
-					} else if tagFilter != "" {
-						<p>{ i18n.Get(lang).NoPostsFound } "{ tagFilter }".</p>
+					} else {
+						<p>{ i18n.Get(lang).NoPostsFound }.</p>
 					}
 				</div>
 			}
 		</div>
 
 		if pagination.TotalPages > 1 {
-			@PaginationControls(pagination, searchQuery, tagFilter, lang)
+			@PaginationControls(pagination, searchQuery, tagFilter, yearFilter, lang)
 		}
 	</div>
 }
 
-templ PaginationControls(pagination models.Pagination, searchQuery string, tagFilter string, lang i18n.Lang) {
+templ PaginationControls(pagination models.Pagination, searchQuery string, tagFilter string, yearFilter string, lang i18n.Lang) {
 	<nav class="pagination" aria-label="Pagination">
 		if pagination.HasPrev {
 			<a
-				href={ templ.SafeURL("/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage-1)) }
+				href={ templ.SafeURL("/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, yearFilter, pagination.CurrentPage-1)) }
 				class="pagination-link pagination-prev"
-				hx-get={ "/" + string(lang) + "/posts/search" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage-1) }
+				hx-get={ "/" + string(lang) + "/posts/search" + buildPaginatedQueryString(tagFilter, searchQuery, yearFilter, pagination.CurrentPage-1) }
 				hx-target="#posts-list"
-				hx-push-url={ "/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage-1) }
+				hx-push-url={ "/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, yearFilter, pagination.CurrentPage-1) }
 			>
 				← { i18n.Get(lang).PrevPage }
 			</a>
@@ -113,11 +157,11 @@ templ PaginationControls(pagination models.Pagination, searchQuery string, tagFi
 
 		if pagination.HasNext {
 			<a
-				href={ templ.SafeURL("/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage+1)) }
+				href={ templ.SafeURL("/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, yearFilter, pagination.CurrentPage+1)) }
 				class="pagination-link pagination-next"
-				hx-get={ "/" + string(lang) + "/posts/search" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage+1) }
+				hx-get={ "/" + string(lang) + "/posts/search" + buildPaginatedQueryString(tagFilter, searchQuery, yearFilter, pagination.CurrentPage+1) }
 				hx-target="#posts-list"
-				hx-push-url={ "/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, pagination.CurrentPage+1) }
+				hx-push-url={ "/" + string(lang) + "/posts/" + buildPaginatedQueryString(tagFilter, searchQuery, yearFilter, pagination.CurrentPage+1) }
 			>
 				{ i18n.Get(lang).NextPage } →
 			</a>
@@ -127,25 +171,7 @@ templ PaginationControls(pagination models.Pagination, searchQuery string, tagFi
 	</nav>
 }
 
-func buildQueryString(tag, search string) string {
-	if tag == "" && search == "" {
-		return ""
-	}
-	q := "?"
-	if tag != "" {
-		q += "tag=" + tag
-	}
-	if search != "" {
-		if tag != "" {
-			q += "&"
-		}
-		q += "q=" + search
-	}
-	return q
-}
-
-func buildPaginatedQueryString(tag, search string, page int) string {
-	q := "?"
+func buildPaginatedQueryString(tag, search, year string, page int) string {
 	params := []string{}
 
 	if tag != "" {
@@ -153,6 +179,9 @@ func buildPaginatedQueryString(tag, search string, page int) string {
 	}
 	if search != "" {
 		params = append(params, "q="+search)
+	}
+	if year != "" {
+		params = append(params, "year="+year)
 	}
 	if page > 1 {
 		params = append(params, fmt.Sprintf("page=%d", page))
@@ -162,6 +191,7 @@ func buildPaginatedQueryString(tag, search string, page int) string {
 		return ""
 	}
 
+	q := "?"
 	for i, p := range params {
 		if i > 0 {
 			q += "&"

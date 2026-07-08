@@ -65,13 +65,15 @@ func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request, la
 	query := r.URL.Query()
 	searchQuery := query.Get("q")
 	tagFilter := query.Get("tag")
+	yearFilter := query.Get("year")
 	page := parsePageParam(query.Get("page"))
 
 	posts := h.PostsByLang[lang]
 	allTags := models.CollectTags(posts)
+	years := models.CollectYears(posts)
 
 	// Filter posts
-	filteredPosts := h.filterPosts(posts, searchQuery, tagFilter)
+	filteredPosts := h.filterPosts(posts, searchQuery, tagFilter, yearFilter)
 
 	// Sort by date descending
 	sort.Slice(filteredPosts, func(i, j int) bool {
@@ -86,7 +88,7 @@ func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request, la
 		t.PostsTitle+" - Paulo's Blog",
 		lang,
 		r.URL.Path,
-		templates.Posts(paginatedPosts, searchQuery, tagFilter, allTags, pagination, lang),
+		templates.Posts(paginatedPosts, searchQuery, tagFilter, yearFilter, allTags, years, pagination, lang),
 	)
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -94,16 +96,24 @@ func (h *PostsHandler) servePostsList(w http.ResponseWriter, r *http.Request, la
 }
 
 func (h *PostsHandler) servePostsSearch(w http.ResponseWriter, r *http.Request, lang i18n.Lang) {
+	// Direct navigation (reload, bookmark, shared link) is not an htmx request,
+	// so serve the full page with layout instead of a bare, unstyled partial.
+	if r.Header.Get("HX-Request") != "true" {
+		h.servePostsList(w, r, lang)
+		return
+	}
+
 	query := r.URL.Query()
 	searchQuery := query.Get("q")
 	tagFilter := query.Get("tag")
+	yearFilter := query.Get("year")
 	page := parsePageParam(query.Get("page"))
 
 	posts := h.PostsByLang[lang]
 	allTags := models.CollectTags(posts)
 
 	// Filter posts
-	filteredPosts := h.filterPosts(posts, searchQuery, tagFilter)
+	filteredPosts := h.filterPosts(posts, searchQuery, tagFilter, yearFilter)
 
 	// Sort by date descending
 	sort.Slice(filteredPosts, func(i, j int) bool {
@@ -113,17 +123,37 @@ func (h *PostsHandler) servePostsSearch(w http.ResponseWriter, r *http.Request, 
 	// Paginate
 	paginatedPosts, pagination := models.PaginatePosts(filteredPosts, page, postsPerPage)
 
+	// Keep the browser URL on the canonical page path (not /posts/search) so a
+	// reload lands on the full-page handler above.
+	pushURL := "/" + string(lang) + "/posts/"
+	if r.URL.RawQuery != "" {
+		pushURL += "?" + r.URL.RawQuery
+	}
+	w.Header().Set("HX-Push-Url", pushURL)
+
 	// Return only the posts list partial for HTMX
-	component := templates.PostsList(paginatedPosts, searchQuery, tagFilter, allTags, pagination, lang)
+	component := templates.PostsList(paginatedPosts, searchQuery, tagFilter, yearFilter, allTags, pagination, lang)
 	if err := component.Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (h *PostsHandler) filterPosts(posts []models.Post, searchQuery, tagFilter string) []models.Post {
+func (h *PostsHandler) filterPosts(posts []models.Post, searchQuery, tagFilter, yearFilter string) []models.Post {
 	var filtered []models.Post
 
+	year := 0
+	if yearFilter != "" {
+		if y, err := strconv.Atoi(yearFilter); err == nil {
+			year = y
+		}
+	}
+
 	for _, post := range posts {
+		// Year filter
+		if year != 0 && post.Date.Year() != year {
+			continue
+		}
+
 		// Tag filter
 		if tagFilter != "" {
 			hasTag := false
