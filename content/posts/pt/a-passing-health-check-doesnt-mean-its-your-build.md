@@ -1,6 +1,6 @@
 ---
 title: "Um Health Check Que Passa Não Significa Que É o Seu Build"
-date: "2026-08-05"
+date: "2026-08-02"
 description: "O rebuild funcionou, o restart falhou em silêncio, e o endpoint de health continuou respondendo — do binário antigo. Relatei uma mudança como no ar quando não estava. Sobre verificar que o processo que você iniciou é o que está servindo, e por que a invocação do lsof que todo mundo copia está errada de duas formas independentes."
 tags:
   [

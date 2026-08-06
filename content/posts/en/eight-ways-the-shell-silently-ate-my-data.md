@@ -1,6 +1,6 @@
 ---
 title: "Eight Ways the Shell Silently Ate My Data"
-date: "2026-08-05"
+date: "2026-08-01"
 description: "Every one of these produced no error, no warning, and a plausible-looking wrong result. Collected from a single day of writing bash, jq and git glue: heredocs that steal stdin, tab as IFS whitespace, NUL bytes vanishing in command substitution, jq's dot rebinding after a pipe, and four more."
 tags:
   [

@@ -1,6 +1,6 @@
 ---
 title: "Oito Formas do Shell Comer Meus Dados em Silêncio"
-date: "2026-08-05"
+date: "2026-08-01"
 description: "Cada uma delas produziu nenhum erro, nenhum aviso, e um resultado errado de aparência plausível. Coletadas de um único dia escrevendo cola em bash, jq e git: heredocs que roubam o stdin, tab como espaço em branco do IFS, bytes NUL desaparecendo em substituição de comando, o ponto do jq mudando de contexto depois de um pipe, e quatro outras."
 tags:
   [

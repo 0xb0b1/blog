@@ -1,6 +1,6 @@
 ---
 title: "A Passing Health Check Doesn't Mean It's Your Build"
-date: "2026-08-05"
+date: "2026-08-02"
 description: "The rebuild succeeded, the restart silently didn't, and the health endpoint kept answering — from the old binary. I reported a change as live when it wasn't. On verifying that the process you started is the one serving, and why the lsof invocation everyone copy-pastes is wrong in two independent ways."
 tags:
   [

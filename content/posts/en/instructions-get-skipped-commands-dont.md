@@ -1,6 +1,6 @@
 ---
 title: "Instructions Get Skipped. Commands Don't."
-date: "2026-08-05"
+date: "2026-07-30"
 description: "Three times in one day a step that was clearly documented in my workflow got skipped anyway. The fix was never better wording — it was folding the step into the command that already ran at that moment. On why written procedure decays, why 'same as before' is a documentation smell, and what it means to make a step unskippable."
 tags:
   [

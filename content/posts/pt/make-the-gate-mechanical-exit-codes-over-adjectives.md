@@ -1,6 +1,6 @@
 ---
 title: "Faça o Portão Ser Mecânico: Códigos de Saída em Vez de Adjetivos"
-date: "2026-08-05"
+date: "2026-07-29"
 description: "Se a definição de pronto é uma frase, ela vai ser negociada. Sobre tornar critérios de aceite executáveis, deixar um código de saída de processo ser o veredito, recusar registrar uma lição sem evidência por trás — e a lacuna que encontrei entre dez critérios que tinham testes e zero que haviam passado."
 tags:
   [

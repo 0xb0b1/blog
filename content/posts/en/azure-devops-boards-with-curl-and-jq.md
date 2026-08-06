@@ -1,6 +1,6 @@
 ---
 title: "Azure DevOps Boards with Nothing but curl and jq"
-date: "2026-08-05"
+date: "2026-08-04"
 description: "A complete Boards client — fetch, create, transition, link, reparent, WIQL — in one bash script with no SDK. Most of the post is the four failures that shaped it: a permissions problem that arrives as HTTP 500, parents that mark themselves as your work, a flag that silently orphans cards, and two tokens of identical length where one was revoked."
 tags:
   [

@@ -1,6 +1,6 @@
 ---
 title: "Make the Gate Mechanical: Exit Codes Over Adjectives"
-date: "2026-08-05"
+date: "2026-07-29"
 description: "If the definition of done is a sentence, it will be negotiated. On making acceptance criteria executable, letting a process exit code be the verdict, refusing to record a lesson without evidence behind it — and the gap I found between ten criteria that had tests and zero that had passed."
 tags:
   [

@@ -1,6 +1,6 @@
 ---
 title: "When State Is Keyed by Absolute Path, Syncing Files Isn't Enough"
-date: "2026-08-05"
+date: "2026-07-31"
 description: "A tool that keys per-project state by absolute working directory. Copy the files to a second machine with a different home directory and you don't merge history — you accumulate parallel copies of it. One repository had three. On identifiers derived from environment facts, and why making the environments agree beats translating forever."
 tags:
   [

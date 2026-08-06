@@ -1,6 +1,6 @@
 ---
 title: "Sua Detecção de Mudança Nunca Dispara Se o Payload Carrega um Relógio"
-date: "2026-08-05"
+date: "2026-08-03"
 description: "Uma guarda comparava payloads JSON inteiros para evitar re-renders desnecessários. O payload incluía um timestamp gerado, então ela nunca coincidiu uma única vez — a interface se reconstruía a cada 2,5 segundos e te jogava de volta ao topo de qualquer documento que você estivesse lendo. Sobre campos voláteis, e por que condicionar um evento a 'mudou?' pode perder esse evento permanentemente."
 tags:
   [

@@ -1,6 +1,6 @@
 ---
 title: "Your Change Detection Never Fires If the Payload Carries a Clock"
-date: "2026-08-05"
+date: "2026-08-03"
 description: "A guard compared whole JSON payloads to avoid needless re-renders. The payload included a generated timestamp, so it never matched once — the UI rebuilt every 2.5 seconds and threw you back to the top of any document you were reading. On volatile fields, and why gating an event on 'did it change' can lose that event permanently."
 tags:
   [

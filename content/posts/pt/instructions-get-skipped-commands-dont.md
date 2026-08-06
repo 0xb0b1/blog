@@ -1,6 +1,6 @@
 ---
 title: "Instruções São Ignoradas. Comandos Não."
-date: "2026-08-05"
+date: "2026-07-30"
 description: "Três vezes em um único dia, um passo claramente documentado no meu fluxo de trabalho foi ignorado. A correção nunca foi escrever melhor — foi embutir o passo no comando que já rodava naquele momento. Sobre por que procedimento escrito se degrada, por que 'igual a antes' é um cheiro de documentação, e o que significa tornar um passo impossível de esquecer."
 tags:
   [

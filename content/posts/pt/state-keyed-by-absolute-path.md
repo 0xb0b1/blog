@@ -1,6 +1,6 @@
 ---
 title: "Quando o Estado É Indexado por Caminho Absoluto, Sincronizar Arquivos Não Basta"
-date: "2026-08-05"
+date: "2026-07-31"
 description: "Uma ferramenta que indexa estado por projeto usando o diretório de trabalho absoluto. Copie os arquivos para uma segunda máquina com um home diferente e você não funde o histórico — você acumula cópias paralelas dele. Um repositório tinha três. Sobre identificadores derivados de fatos do ambiente, e por que fazer os ambientes concordarem vence traduzir para sempre."
 tags:
   [
