@@ -822,14 +822,36 @@ body::before {
   color: var(--color-text-muted);
 }
 
-.post-card-category {
+.post-card-tags {
+  /* text + vertical padding + borders — keep in sync with .post-card-tag */
+  --tag-height: calc(0.6875rem * 1.2 + 0.625rem + 2px);
+  --tag-gap: 0.4375rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tag-gap);
+  /* Reserve two rows: tag names vary enough that some cards wrap and some
+     don't, which would stagger the titles across a row. */
+  min-height: calc(2 * var(--tag-height) + var(--tag-gap));
+  align-content: flex-start;
+}
+
+.post-card-tag {
   padding: 0.3125rem 0.6875rem;
-  border: 1px solid color-mix(in srgb, var(--card-accent) 40%, transparent);
+  border: 1px solid var(--color-border);
   border-radius: 999px;
+  background: color-mix(in srgb, var(--color-text-muted) 8%, transparent);
+  color: var(--color-text-muted);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Only the tag the card's hue came from is coloured; the rest stay quiet so a
+   row of cards doesn't read as a rainbow. */
+.post-card-tag.is-primary {
+  border-color: color-mix(in srgb, var(--card-accent) 40%, transparent);
   background: color-mix(in srgb, var(--card-accent) 12%, transparent);
   /* Blending toward the body text keeps the lighter hues legible in both themes */
   color: color-mix(in srgb, var(--card-accent) 72%, var(--color-text));
-  font-weight: 500;
 }
 
 .post-card-timing {

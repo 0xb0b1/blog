@@ -17,6 +17,17 @@ var cardAccents = []string{
 	"green", "sapphire", "yellow", "red", "lavender",
 }
 
+// maxCardTags caps how many tags a card shows; posts carry up to five and the
+// rest would wrap the meta row past two lines.
+const maxCardTags = 3
+
+func cardTags(post models.Post) []string {
+	if len(post.Tags) > maxCardTags {
+		return post.Tags[:maxCardTags]
+	}
+	return post.Tags
+}
+
 func cardAccentClass(post models.Post) string {
 	key := post.Slug
 	if len(post.Tags) > 0 {
@@ -49,7 +60,11 @@ templ PostCard(post models.Post, lang i18n.Lang) {
 		<div class="post-card-body">
 			<div class="post-card-meta">
 				if len(post.Tags) > 0 {
-					<span class="post-card-category">{ post.Tags[0] }</span>
+					<div class="post-card-tags">
+						for i, tag := range cardTags(post) {
+							<span class={ "post-card-tag", templ.KV("is-primary", i == 0) }>{ tag }</span>
+						}
+					</div>
 				}
 				<span class="post-card-timing">
 					<time datetime={ post.Date.Format("2006-01-02") }>{ formatCardDate(post.Date, lang) }</time>
