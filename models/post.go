@@ -14,6 +14,7 @@ import (
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	meta "github.com/yuin/goldmark-meta"
+	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"github.com/alecthomas/chroma/v2/formatters/html"
 )
@@ -32,6 +33,9 @@ type Post struct {
 var markdown = goldmark.New(
 	goldmark.WithExtensions(
 		meta.Meta,
+		// Table only, not extension.GFM: GFM also enables Linkify, which would turn
+		// bare URLs and domains in existing posts into links.
+		extension.Table,
 		highlighting.NewHighlighting(
 			highlighting.WithFormatOptions(
 				html.WithClasses(true), // Use CSS classes instead of inline styles
