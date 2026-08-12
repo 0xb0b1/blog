@@ -732,55 +732,127 @@ body::before {
 }
 
 /* ========================================
-   Post Cards - Soft & Elegant
+   Post Cards - Card Grid
    ======================================== */
 .posts {
   display: grid;
+  /* min(320px, 100%) keeps a single column from overflowing narrow viewports */
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: var(--spacing-lg);
 }
 
 .post-card {
-  padding: var(--spacing-lg);
+  --card-accent: var(--ctp-mauve);
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
-  position: relative;
+  transition:
+    translate 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
+.post-card.accent-mauve {
+  --card-accent: var(--ctp-mauve);
+}
+.post-card.accent-blue {
+  --card-accent: var(--ctp-blue);
+}
+.post-card.accent-teal {
+  --card-accent: var(--ctp-teal);
+}
+.post-card.accent-peach {
+  --card-accent: var(--ctp-peach);
+}
+.post-card.accent-pink {
+  --card-accent: var(--ctp-pink);
+}
+.post-card.accent-green {
+  --card-accent: var(--ctp-green);
+}
+.post-card.accent-sapphire {
+  --card-accent: var(--ctp-sapphire);
+}
+.post-card.accent-yellow {
+  --card-accent: var(--ctp-yellow);
+}
+.post-card.accent-red {
+  --card-accent: var(--ctp-red);
+}
+.post-card.accent-lavender {
+  --card-accent: var(--ctp-lavender);
+}
+
+/* The lift uses `translate`, not `transform`: the entry animation below owns
+   `transform`, and an animated property beats a :hover declaration. */
 .post-card:hover {
-  transform: translateY(-4px);
+  translate: 0 -6px;
   box-shadow: var(--shadow-lg);
+  border-color: color-mix(in srgb, var(--card-accent) 45%, var(--color-border));
 }
 
-/* Subtle accent line - Editorial */
-.post-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: var(--spacing-lg);
-  right: var(--spacing-lg);
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--color-accent),
-    var(--color-accent-secondary)
-  );
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.post-card:focus-within {
+  box-shadow: var(--shadow-lg);
+  border-color: color-mix(in srgb, var(--card-accent) 60%, var(--color-border));
 }
 
-.post-card:hover::before {
-  opacity: 1;
+.post-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + 0.25rem);
+}
+
+/* Stacked rather than inline: tag names vary enough in length that a single row
+   wraps on some cards and not others, which staggers the titles across a row. */
+.post-card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.post-card-category {
+  padding: 0.3125rem 0.6875rem;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 40%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card-accent) 12%, transparent);
+  /* Blending toward the body text keeps the lighter hues legible in both themes */
+  color: color-mix(in srgb, var(--card-accent) 72%, var(--color-text));
+  font-weight: 500;
+}
+
+.post-card-timing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.post-card-dot {
+  opacity: 0.6;
 }
 
 .post-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
   font-family: var(--font-display);
-  font-size: 1.625rem;
+  font-size: 1.375rem;
   font-weight: 600;
-  line-height: 1.3;
-  margin-bottom: var(--spacing-sm);
+  line-height: 1.25;
   letter-spacing: -0.01em;
 }
 
@@ -790,8 +862,62 @@ body::before {
   transition: color 0.3s ease;
 }
 
-.post-card-title a:hover {
-  color: var(--color-accent);
+/* The title link is the card's click target */
+.post-card-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.post-card:hover .post-card-title a {
+  color: color-mix(in srgb, var(--card-accent) 70%, var(--color-text));
+}
+
+.post-card-title a:focus-visible {
+  outline: none;
+}
+
+.post-card:has(.post-card-title a:focus-visible) {
+  outline: 2px solid var(--card-accent);
+  outline-offset: 3px;
+}
+
+.post-card-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.post-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: auto;
+  padding-top: var(--spacing-xs);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color 0.3s ease;
+}
+
+.post-card-cta svg {
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover .post-card-cta {
+  color: color-mix(in srgb, var(--card-accent) 72%, var(--color-text));
+}
+
+.post-card:hover .post-card-cta svg {
+  transform: translateX(4px);
 }
 
 /* Search Form - Organic */
@@ -1184,12 +1310,6 @@ body::before {
   align-items: center;
 }
 
-.post-description {
-  color: var(--color-text-muted);
-  line-height: 1.7;
-  font-size: 1rem;
-}
-
 .post-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1214,6 +1334,8 @@ body::before {
 }
 
 .no-posts {
+  /* Empty state is a grid item: span the whole row instead of one column */
+  grid-column: 1 / -1;
   text-align: center;
   color: var(--color-text-muted);
   font-size: 1.125rem;
@@ -2038,7 +2160,7 @@ body::before {
     gap: var(--spacing-md);
   }
 
-  .post-card {
+  .post-card-body {
     padding: var(--spacing-md);
   }
 
@@ -2219,17 +2341,32 @@ body::before {
 }
 
 .post-card:nth-child(1) {
-  animation-delay: 0.1s;
+  animation-delay: 0.05s;
 }
 .post-card:nth-child(2) {
-  animation-delay: 0.15s;
+  animation-delay: 0.1s;
 }
 .post-card:nth-child(3) {
-  animation-delay: 0.2s;
+  animation-delay: 0.15s;
 }
 .post-card:nth-child(4) {
-  animation-delay: 0.25s;
+  animation-delay: 0.2s;
 }
 .post-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.post-card:nth-child(6) {
   animation-delay: 0.3s;
+}
+.post-card:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.post-card:nth-child(8) {
+  animation-delay: 0.4s;
+}
+.post-card:nth-child(9) {
+  animation-delay: 0.45s;
+}
+.post-card:nth-child(10) {
+  animation-delay: 0.5s;
 }
