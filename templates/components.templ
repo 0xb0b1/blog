@@ -1,23 +1,90 @@
 package templates
 
 import (
+	"fmt"
+	"hash/fnv"
+	"time"
+
 	"github.com/0xb0b1/blog/i18n"
 	"github.com/0xb0b1/blog/models"
-	"fmt"
 )
 
+// cardAccents are the Catppuccin hues a post card can take. The hue is derived
+// from the post's primary tag, so within a language the same topic always
+// renders the same colour.
+var cardAccents = []string{
+	"mauve", "blue", "teal", "peach", "pink",
+	"green", "sapphire", "yellow", "red", "lavender",
+}
+
+// maxCardTags caps how many tags a card shows; posts carry up to five and the
+// rest would wrap the meta row past two lines.
+const maxCardTags = 3
+
+func cardTags(post models.Post) []string {
+	if len(post.Tags) > maxCardTags {
+		return post.Tags[:maxCardTags]
+	}
+	return post.Tags
+}
+
+func cardAccentClass(post models.Post) string {
+	key := post.Slug
+	if len(post.Tags) > 0 {
+		key = post.Tags[0]
+	}
+	h := fnv.New32a()
+	h.Write([]byte(key))
+	return "accent-" + cardAccents[h.Sum32()%uint32(len(cardAccents))]
+}
+
+// formatCardDate is the compact form used in card meta rows, where the long
+// form from formatDate would wrap.
+func formatCardDate(t time.Time, lang i18n.Lang) string {
+	if lang == i18n.PT {
+		months := []string{"", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"}
+		return fmt.Sprintf("%d %s %d", t.Day(), months[t.Month()], t.Year())
+	}
+	return t.Format("2 Jan 2006")
+}
+
+func readArticleText(lang i18n.Lang) string {
+	if lang == i18n.PT {
+		return "Ler artigo"
+	}
+	return "Read article"
+}
+
 templ PostCard(post models.Post, lang i18n.Lang) {
-	<div class="post-card">
-		<h2 class="post-card-title"><a href={ templ.SafeURL("/" + string(lang) + "/posts/" + post.Slug) }>{ post.Title }</a></h2>
-		<div class="post-meta">
-			<span class="post-date">{ formatDate(post.Date, lang) }</span>
-			<span class="post-reading-time">{ fmt.Sprintf("%d min read", post.ReadingTime) }</span>
-		</div>
-		<p class="post-description">{ post.Description }</p>
-		<div class="post-tags">
-			for _, tag := range post.Tags {
-				<span class="tag">{ tag }</span>
+	<article class={ "post-card", cardAccentClass(post) }>
+		<div class="post-card-body">
+			<div class="post-card-meta">
+				if len(post.Tags) > 0 {
+					<div class="post-card-tags">
+						for i, tag := range cardTags(post) {
+							<span class={ "post-card-tag", templ.KV("is-primary", i == 0) }>{ tag }</span>
+						}
+					</div>
+				}
+				<span class="post-card-timing">
+					<time datetime={ post.Date.Format("2006-01-02") }>{ formatCardDate(post.Date, lang) }</time>
+					<span class="post-card-dot" aria-hidden="true">·</span>
+					<span>{ formatReadingTime(post.ReadingTime, lang) }</span>
+				</span>
+			</div>
+			<h2 class="post-card-title">
+				<a href={ templ.SafeURL("/" + string(lang) + "/posts/" + post.Slug) }>{ post.Title }</a>
+			</h2>
+			if post.Description != "" {
+				<p class="post-card-description">{ post.Description }</p>
 			}
+			<span class="post-card-cta" aria-hidden="true">
+				{ readArticleText(lang) }
+				<svg width="20" height="8" viewBox="0 0 20 8" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M0 4h18"></path>
+					<path d="M14.5 1 18 4l-3.5 3"></path>
+				</svg>
+			</span>
 		</div>
-	</div>
+	</article>
 }
