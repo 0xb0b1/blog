@@ -9,10 +9,11 @@ tags:
     "configuration",
     "testing",
     "aws",
+    "subscriptions-extraction",
   ]
 ---
 
-Context first. We're extracting the subscriptions and payments half of a Django monolith into a Go service — App Store and Google Play webhooks, the purchase endpoints the mobile app calls, the logic that decides who gets the paid tier. The new service runs on ECS Fargate. Its configuration is environment variables only, validated at startup, sourced from Secrets Manager and injected by a GitHub Actions deploy that writes an ECS task definition. Infrastructure is Terraform. There are two AWS accounts with deliberately different topologies.
+We're [extracting the subscriptions and payments half of a Django monolith into a Go service](/en/posts/quantify-the-failure-before-you-redesign-it). The new service runs on ECS Fargate. Its configuration is environment variables only, validated at startup, sourced from Secrets Manager and injected by a GitHub Actions deploy that writes an ECS task definition. Infrastructure is Terraform. There are two AWS accounts with deliberately different topologies.
 
 That's an ordinary setup, and I want to count something about it. For a database credential to reach the code that opens a connection, it crosses: Terraform, Secrets Manager, an IAM policy, the deploy workflow, the task definition, the container environment, the config loader, the DSN builder, the connection pool. **Nine boundaries.** At each one, two individually-correct artefacts can disagree.
 
@@ -144,3 +145,7 @@ And the entry point now logs which surfaces mounted. The *absence* of that line 
 **A test that builds its own subject proves the subject, not its construction.** Both are worth testing and they're different tests — so prove the last mile against the real binary.
 
 **Decomposing by layer leaves the seams unowned.** If no task names the entry point, nothing changes it and nothing checks it.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

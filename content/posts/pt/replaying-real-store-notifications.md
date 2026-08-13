@@ -9,6 +9,7 @@ tags:
     "arquitetura",
     "backend",
     "go",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -84,3 +85,7 @@ Eu agora trataria isso como padrão para qualquer webhook externo: **guarde o co
 **Dê ao harness seu próprio banco efêmero.** Um replay precisa escrever, então somente-leitura não está disponível; separação está. Torne-o *incapaz* de alcançar produção em vez de *improvável* de alcançar.
 
 **Guarde payloads crus na entrada.** É a opcionalidade mais barata em software, e a versão de você fazendo a reescrita em três anos vai achar isso mais valioso que qualquer coisa que você projetou de propósito.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

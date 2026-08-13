@@ -9,6 +9,7 @@ tags:
     "postgres",
     "confiabilidade",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -74,3 +75,7 @@ E os nomes dos campos vêm da convenção existente da plataforma em vez de sere
 **Valide toda a configuração no boot e nomeie o que está errado.** A alternativa é descobrir na requisição que por acaso precisa dela.
 
 Nada disso entregou uma feature. É a fase que tornou toda fase posterior segura de tentar, e os critérios valem mais para mim do que o código que produziram — o código são algumas centenas de linhas e seria escrito diferente em outra linguagem, mas "readiness reflete o banco, liveness não" transfere para todo lugar.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

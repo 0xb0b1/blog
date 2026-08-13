@@ -9,6 +9,7 @@ tags:
     "vendor-evaluation",
     "decision-making",
     "backend",
+    "provider-migration",
   ]
 ---
 
@@ -77,3 +78,7 @@ This is the same instinct as declaring coverage gaps in a test harness, and it s
 **Check in the raw probe responses.** Dated evidence, reviewable, re-runnable. It also lets you ask the vendor a precise question when the answer differs from the docs.
 
 **Label unproven sections as unproven.** Including something you couldn't verify is fine. Including it at the same confidence as everything else is a way of misleading a reader with true statements.
+
+---
+
+*Part of a two-post thread on replacing a sports-data provider — alongside [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), the project running at the same time.*

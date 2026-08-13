@@ -9,6 +9,7 @@ tags:
     "sqs",
     "confiabilidade",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -82,3 +83,7 @@ Estacionada visivelmente significa que é registrada, não processada, e exposta
 **Especifique a DLQ e seu alarme juntos.** Uma dead-letter queue sobre a qual ninguém é avisado é um mecanismo silencioso de perda de dados vestido de confiabilidade.
 
 **Substitua decisões no lugar em vez de apagá-las.** A opção rejeitada é a forma mais barata de impedir que o mesmo debate volte.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

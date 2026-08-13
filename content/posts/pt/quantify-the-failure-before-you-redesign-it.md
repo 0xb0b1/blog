@@ -9,6 +9,7 @@ tags:
     "aws",
     "debugging",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -100,3 +101,7 @@ A razão pela qual precisamos de uma semana escavando logs é que o código orig
 **Versione a medição.** O número, a janela, a consulta, o log group. Não custa nada e converte uma alegação em evidência — que é a diferença entre uma revisão de design que discute interpretação e uma que discute impressões.
 
 A extração seguiu adiante, por razões que sobreviveram à medição. Mas a primeira coisa que ela entregou foi uma tabela de estados, e isso não seria verdade se tivéssemos confiado na premissa.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

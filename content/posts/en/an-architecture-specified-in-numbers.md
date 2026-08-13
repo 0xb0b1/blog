@@ -8,6 +8,7 @@ tags:
     "system-design",
     "documentation",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -78,3 +79,7 @@ There's a nice property here too: enumerating failure modes precisely enough to 
 **Give each failure mode a queryable signal before you build it.** The alternative is measuring it later from logs that were never designed to be measured — and that price is paid in whole afternoons.
 
 The general shape: for every adjective in a design document, ask what would have to be true for it to be false. If there's no answer, the adjective isn't doing any work, and it will be quietly dropped by whoever implements the thing.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

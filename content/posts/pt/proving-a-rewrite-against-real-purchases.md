@@ -9,6 +9,7 @@ tags:
     "migracao",
     "arquitetura",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -91,3 +92,7 @@ Existe um benefício mais subtil. Um relatório de discordância rico o suficien
 **Gaste o esforço no relatório de discordância, não no resumo.** A contagem te diz se deve olhar. O relatório é como você olha.
 
 O resultado foi uma reescrita que subiu tendo já respondido um quarto de milhão de perguntas reais de forma idêntica ao sistema que substituiu. Essa é uma posição muito melhor que uma suíte de testes, e custou menos do que a suíte custaria — porque o oráculo já estava escrito, e estava em produção havia anos.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

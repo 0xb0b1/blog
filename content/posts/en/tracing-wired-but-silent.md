@@ -9,6 +9,7 @@ tags:
     "opentelemetry",
     "logging",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -69,3 +70,7 @@ Writing "present but silent" as a heading rather than a comment is what converts
 **Document the deferral as a decision, with its reason.** Otherwise the next person reads a disabled feature as an unfinished one — and they're not being unreasonable.
 
 **Get the correlation id into your logs first.** It answers the question people actually ask, and it doesn't need anyone to pick a product.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

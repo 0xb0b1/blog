@@ -9,6 +9,7 @@ tags:
     "postgres",
     "reliability",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -74,3 +75,7 @@ And the field names come from the existing platform convention rather than being
 **Validate all configuration at boot and name what's wrong.** The alternative is discovering it on the request that happens to need it.
 
 None of this shipped a feature. It's the phase that made every later phase safe to attempt, and the criteria are worth more to me than the code they produced — the code is a few hundred lines and would be written differently in another language, but "readiness reflects the database, liveness does not" transfers everywhere.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

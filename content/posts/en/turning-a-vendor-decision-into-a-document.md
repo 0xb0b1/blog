@@ -8,6 +8,7 @@ tags:
     "decision-making",
     "documentation",
     "vendor-evaluation",
+    "provider-migration",
   ]
 ---
 
@@ -73,3 +74,7 @@ The combination is what works: **one recommendation, its main risk, and the full
 **Make the loss list the headline deliverable.** It's the uncomfortable half, it's what makes the document trustworthy, and it's the part that's still valuable a year later when someone asks whether this was known.
 
 **Then recommend.** With one named risk. Analysis that refuses to conclude has outsourced the decision to whoever talks most in the meeting.
+
+---
+
+*Part of a two-post thread on replacing a sports-data provider — alongside [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), the project running at the same time.*

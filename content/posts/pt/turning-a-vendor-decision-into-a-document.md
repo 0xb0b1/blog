@@ -8,6 +8,7 @@ tags:
     "tomada-de-decisao",
     "documentacao",
     "avaliacao-de-fornecedor",
+    "migracao-de-provedor",
   ]
 ---
 
@@ -73,3 +74,7 @@ A combinação é o que funciona: **uma recomendação, seu risco principal, e a
 **Faça da lista de perdas o entregável principal.** É a metade desconfortável, é o que torna o documento confiável, e é a parte que ainda vale um ano depois quando alguém pergunta se isso era conhecido.
 
 **Então recomende.** Com um risco nomeado. Análise que se recusa a concluir terceirizou a decisão para quem fala mais na reunião.
+
+---
+
+*Parte de uma linha de dois posts sobre substituir um provedor de dados esportivos — ao lado de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), o projeto que corria em paralelo.*

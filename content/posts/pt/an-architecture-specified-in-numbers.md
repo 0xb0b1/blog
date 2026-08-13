@@ -8,6 +8,7 @@ tags:
     "design-de-sistemas",
     "documentacao",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -78,3 +79,7 @@ Existe uma propriedade agradável aqui também: enumerar modos de falha com prec
 **Dê a cada modo de falha um sinal consultável antes de construí-lo.** A alternativa é medi-lo depois a partir de logs que nunca foram projetados para serem medidos — e esse preço é pago em tardes inteiras.
 
 A forma geral: para todo adjetivo num documento de design, pergunte o que teria que ser verdade para ele ser falso. Se não há resposta, o adjetivo não está fazendo trabalho nenhum, e vai ser silenciosamente descartado por quem implementar a coisa.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

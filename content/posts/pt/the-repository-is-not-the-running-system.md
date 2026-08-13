@@ -9,10 +9,11 @@ tags:
     "configuracao",
     "testes",
     "aws",
+    "extracao-de-assinaturas",
   ]
 ---
 
-Contexto primeiro. Estamos extraindo a metade de assinaturas e pagamentos de um monolito Django para um serviço em Go — webhooks de App Store e Google Play, os endpoints de compra que o app mobile chama, a lógica que decide quem recebe o tier pago. O novo serviço roda em ECS Fargate. Sua configuração é apenas variáveis de ambiente, validadas no startup, vindas do Secrets Manager e injetadas por um deploy em GitHub Actions que escreve uma task definition do ECS. Infraestrutura é Terraform. Existem duas contas AWS com topologias deliberadamente diferentes.
+Estamos [extraindo a metade de assinaturas e pagamentos de um monolito Django para um serviço em Go](/pt/posts/quantify-the-failure-before-you-redesign-it). O novo serviço roda em ECS Fargate. Sua configuração é apenas variáveis de ambiente, validadas no startup, vindas do Secrets Manager e injetadas por um deploy em GitHub Actions que escreve uma task definition do ECS. Infraestrutura é Terraform. Existem duas contas AWS com topologias deliberadamente diferentes.
 
 Isso é um setup ordinário, e quero contar uma coisa sobre ele. Para uma credencial de banco chegar ao código que abre uma conexão, ela atravessa: Terraform, Secrets Manager, uma policy de IAM, o workflow de deploy, a task definition, o ambiente do container, o carregador de config, o construtor da DSN, o pool de conexão. **Nove fronteiras.** Em cada uma, dois artefatos individualmente corretos podem discordar.
 
@@ -144,3 +145,7 @@ E o entry point agora loga quais superfícies montaram. A *ausência* dessa linh
 **Um teste que constrói seu próprio sujeito prova o sujeito, não sua construção.** Os dois valem testar e são testes diferentes — então prove o último quilômetro contra o binário real.
 
 **Decompor por camada deixa as costuras sem dono.** Se nenhuma tarefa nomeia o entry point, nada o muda e nada o verifica.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

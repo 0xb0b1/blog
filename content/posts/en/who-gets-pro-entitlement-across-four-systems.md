@@ -9,10 +9,11 @@ tags:
     "reliability",
     "identity",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
-The system is a sports app with a paid tier. Someone subscribes through the App Store or Google Play, and that should unlock the paid features. We're extracting that machinery out of a Django monolith into a Go service, against the same shared Postgres — so for the whole transition, both implementations are live.
+The system is a sports app with a paid tier. Someone subscribes through the App Store or Google Play, and that should unlock the paid features. We're [extracting that machinery out of a Django monolith into a Go service](/en/posts/quantify-the-failure-before-you-redesign-it), against the same shared Postgres — so for the whole transition, both implementations are live.
 
 Before any of the interesting problems, the vocabulary, because "unlock the paid features" hides two separate questions.
 
@@ -136,3 +137,7 @@ The general shape of the error is worth naming. A store's subscription status de
 **Two implementations of one rule must be fixed in one change**, or a true parity claim becomes a false alarm you learn to ignore.
 
 **Name a set after the question it answers, not the values it contains.** Two questions that agree on most inputs are still two questions, and the input where they differed was a paying subscriber being told they'd never bought anything.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

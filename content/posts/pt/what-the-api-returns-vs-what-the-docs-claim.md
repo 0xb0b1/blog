@@ -9,6 +9,7 @@ tags:
     "avaliacao-de-fornecedor",
     "tomada-de-decisao",
     "backend",
+    "migracao-de-provedor",
   ]
 ---
 
@@ -77,3 +78,7 @@ Esse é o mesmo instinto de declarar lacunas de cobertura num harness de teste, 
 **Versione as respostas cruas das sondagens.** Evidência datada, revisável, reexecutável. Também permite fazer ao fornecedor uma pergunta precisa quando a resposta difere da documentação.
 
 **Rotule seções não comprovadas como não comprovadas.** Incluir algo que você não conseguiu verificar é aceitável. Incluir com a mesma confiança de todo o resto é uma forma de enganar quem lê usando afirmações verdadeiras.
+
+---
+
+*Parte de uma linha de dois posts sobre substituir um provedor de dados esportivos — ao lado de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), o projeto que corria em paralelo.*

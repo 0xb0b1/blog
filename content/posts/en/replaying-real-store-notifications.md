@@ -9,6 +9,7 @@ tags:
     "architecture",
     "backend",
     "go",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -84,3 +85,7 @@ I'd now treat it as a default for any external webhook: **keep the raw body, kee
 **Give the harness its own ephemeral database.** A replay must write, so read-only isn't available; separation is. Make it *unable* to reach production rather than *unlikely* to.
 
 **Store raw payloads on the way in.** It's the cheapest optionality in software, and the version of you doing the rewrite in three years will find it worth more than anything you designed on purpose.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

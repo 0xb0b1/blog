@@ -9,6 +9,7 @@ tags:
     "idempotencia",
     "confiabilidade",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -76,3 +77,7 @@ O mesmo raciocínio aparece em outros pontos deste projeto: um pool "limitado po
 **Coloque a origem na chave quando você ingere de múltiplos sistemas.** Os identificadores deles são únicos no espaço deles, não no seu.
 
 **Onde a correção só é visível sob concorrência, nomeie o mecanismo no requisito.** "Imposta pelo banco" é verificável em revisão. "Gera uma linha" é verificável por um teste que passa pelo motivo errado.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

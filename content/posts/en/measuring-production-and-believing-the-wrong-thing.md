@@ -9,10 +9,11 @@ tags:
     "debugging",
     "aws",
     "testing",
+    "subscriptions-extraction",
   ]
 ---
 
-We're porting the subscriptions half of a Django monolith to a Go service. Which means, constantly, that scoping a task depends on a fact about production: is this receipt format still in use, does this log field exist, how many of these stored rows can we actually replay, is anyone still calling this endpoint.
+We're [porting the subscriptions half of a Django monolith to a Go service](/en/posts/quantify-the-failure-before-you-redesign-it). Which means, constantly, that scoping a task depends on a fact about production: is this receipt format still in use, does this log field exist, how many of these stored rows can we actually replay, is anyone still calling this endpoint.
 
 There's no way to answer those from the repository. The code contains every branch that was ever written, including the ones no traffic has taken in three years. So the project made measurement a first-class step — an early phase's acceptance criterion was literally *the failure picture is measured, and reproducible*, and that habit paid for itself repeatedly.
 
@@ -116,3 +117,7 @@ And upstream of all of it: **don't take a claim about what is logged from a spec
 **Look at the distribution over time, not the average.** The month that recovered 0 of 5,255 was invisible inside a corpus-wide percentage.
 
 **Measure the whole thing once, early.** It's a query. It costs minutes, settles the question, and tells you things you didn't ask — like that the environment you planned to verify in had been silent for three months.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

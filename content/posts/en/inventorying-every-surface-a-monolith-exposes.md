@@ -9,6 +9,7 @@ tags:
     "api",
     "contracts",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -79,3 +80,7 @@ Grouped by consumer, the report answers that directly, and a cutover plan more o
 **Group the summary by consumer.** The data wants to be organised by surface type. The reader wants to know what breaks for them.
 
 The whole thing took a fraction of the time the extraction did, and it was the artefact I referred back to most — including twice to answer "does anything still use this?" with a citation rather than a guess.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

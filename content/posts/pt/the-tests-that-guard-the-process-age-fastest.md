@@ -9,12 +9,11 @@ tags:
     "verificacao",
     "refatoracao",
     "workflow",
+    "extracao-de-assinaturas",
   ]
 ---
 
-Um pouco de setup, já que a maquinaria é o assunto.
-
-Estamos extraindo a metade de assinaturas e pagamentos de um monolito Django para um serviço em Go, em fases — quatorze até agora. Cada fase recebe uma especificação com user stories e critérios de aceitação numerados, e a regra que faz isso ser mais que papelada é esta: **todo critério de aceitação precisa de um teste que passa, e o veredito é um exit code de processo em vez da opinião de alguém.** Uma fase ou audita limpa ou não está pronta. Não há adjetivo disponível.
+Estamos [extraindo a metade de assinaturas e pagamentos de um monolito Django para um serviço em Go](/pt/posts/quantify-the-failure-before-you-redesign-it), em fases — quatorze até agora. Cada fase recebe uma especificação com user stories e critérios de aceitação numerados, e a regra que faz isso ser mais que papelada é esta: **todo critério de aceitação precisa de um teste que passa, e o veredito é um exit code de processo em vez da opinião de alguém.** Uma fase ou audita limpa ou não está pronta. Não há adjetivo disponível.
 
 Isso se pagou. Pegou critérios que tinham testes que nunca de fato passaram, arquivos que foram escritos e nunca mapeados a nenhuma tarefa, e — repetidamente — a descoberta de que o estado real de uma fase era pior que o resumo do autor.
 
@@ -91,3 +90,7 @@ Que é o argumento para o veredito ser um exit code em primeiro lugar. Não porq
 **Espere que asserções estruturais falhem em mudanças boas, e orce o reescopamento delas.** Esse é o custo da técnica, não um defeito nela.
 
 **Assuma que cada uma dessas vai aparecer quando você estiver a um passo de pronto.** É para esse caso que o veredito mecânico existe.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

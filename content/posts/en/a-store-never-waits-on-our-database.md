@@ -9,6 +9,7 @@ tags:
     "sqs",
     "reliability",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -82,3 +83,7 @@ Parked visibly means it's recorded, not processed, and surfaced. When Stripe arr
 **Specify the DLQ and its alarm together.** A dead-letter queue nobody is told about is a silent data-loss mechanism wearing a reliability costume.
 
 **Supersede decisions in place rather than deleting them.** The rejected option is the cheapest way to stop the same debate recurring.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

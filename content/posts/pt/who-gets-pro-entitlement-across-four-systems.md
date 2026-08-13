@@ -9,10 +9,11 @@ tags:
     "confiabilidade",
     "identidade",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
-O sistema é um app de esportes com um tier pago. Alguém assina pela App Store ou Google Play, e isso deveria liberar as features pagas. Estamos extraindo essa maquinaria de um monolito Django para um serviço em Go, contra o mesmo Postgres compartilhado — então por toda a transição, as duas implementações estão vivas.
+O sistema é um app de esportes com um tier pago. Alguém assina pela App Store ou Google Play, e isso deveria liberar as features pagas. Estamos [extraindo essa maquinaria de um monolito Django para um serviço em Go](/pt/posts/quantify-the-failure-before-you-redesign-it), contra o mesmo Postgres compartilhado — então por toda a transição, as duas implementações estão vivas.
 
 Antes dos problemas interessantes, o vocabulário, porque "liberar as features pagas" esconde duas perguntas separadas.
 
@@ -136,3 +137,7 @@ A forma geral do erro vale nomear. O status de assinatura de uma loja descreve u
 **Duas implementações de uma regra precisam ser corrigidas numa mudança**, ou uma afirmação de paridade verdadeira se torna um falso alarme que você aprende a ignorar.
 
 **Nomeie um conjunto pela pergunta que ele responde, não pelos valores que contém.** Duas perguntas que concordam na maioria das entradas ainda são duas perguntas, e a entrada em que elas diferiam era um assinante pagante sendo informado de que nunca havia comprado nada.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

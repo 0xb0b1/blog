@@ -9,6 +9,7 @@ tags:
     "migration",
     "architecture",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -91,3 +92,7 @@ There's a subtler benefit. A disagreement report rich enough to diagnose is also
 **Spend the effort on the disagreement report, not the summary.** The count tells you whether to look. The report is how you look.
 
 The result was a rewrite that went live having already answered a quarter of a million real questions identically to the system it replaced. That's a much better position than a test suite, and it cost less than the test suite would have — because the oracle was already written, and had been in production for years.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

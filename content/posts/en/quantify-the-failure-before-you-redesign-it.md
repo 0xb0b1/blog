@@ -9,6 +9,7 @@ tags:
     "aws",
     "debugging",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -100,3 +101,7 @@ The reason we needed a week of log spelunking is that the original code collapse
 **Check the measurement in.** The number, the window, the query, the log group. It costs nothing and it converts a claim into evidence — which is the difference between a design review that argues about interpretation and one that argues about vibes.
 
 The extraction went ahead, for reasons that survived the measurement. But the first thing it shipped was a state table, and that would not have been true if we'd trusted the premise.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

@@ -9,14 +9,11 @@ tags:
     "go",
     "python",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
-Um pouco de contexto, porque o resto só faz sentido com ele.
-
-O produto é um app de esportes com um tier pago. Usuários assinam pela App Store da Apple, pelo Google Play, ou por Stripe na web, e uma assinatura bem-sucedida concede a eles uma role — internamente PRO — que libera as features pagas. Tudo isso vivia num único monolito Django: os endpoints de compra que o app mobile chama, os endpoints de webhook que as lojas chamam, o catálogo do que é comprável, e a lógica que decide se uma compra dá direito ao PRO.
-
-Estamos extraindo a metade de assinaturas disso para um novo serviço em Go. E a decisão mais consequente do projeto inteiro foi tomada antes de qualquer código: **os dados não se movem.** O serviço Go conecta no cluster Postgres existente do monolito e escreve as mesmas tabelas. Nenhum banco novo, nenhuma migração, nenhuma camada de dual-write.
+Estamos [extraindo a metade de assinaturas de um monolito Django para um serviço em Go](/pt/posts/quantify-the-failure-before-you-redesign-it) — um app de esportes cujo tier pago, internamente PRO, é comprado pela App Store da Apple, pelo Google Play, ou por Stripe na web. A decisão mais consequente do projeto inteiro foi tomada antes de qualquer código: **os dados não se movem.** O serviço Go conecta no cluster Postgres existente do monolito e escreve as mesmas tabelas. Nenhum banco novo, nenhuma migração, nenhuma camada de dual-write.
 
 Isso foi julgado o risco menor. Mover tabelas de pagamento não pode sofrer rollback em minutos, e quebraria todo relatório de back-office que faz join nelas. O custo de evitar isso é que, por toda a transição, **duas implementações escritas independentemente escrevem as mesmas linhas.** O monolito também não pode ser desligado — Stripe ainda é inteiramente problema dele — então isso não é uma janela breve de cutover. É o estado normal das coisas por meses.
 
@@ -115,3 +112,7 @@ Existe um epílogo que torna "estrutural" concreto. A lista de revogação vive 
 **Uma mudança de performance que altera quando um fato se torna falso é uma mudança de segurança.** Nomeie a janela em unidades e deixe o dono dela decidir.
 
 **Registre divergências deliberadas onde o harness consiga ver.** Então concordância significa algo, e discordância é esperada em vez de ambígua.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

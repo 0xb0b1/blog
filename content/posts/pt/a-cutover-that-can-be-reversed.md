@@ -9,6 +9,7 @@ tags:
     "migracao",
     "risco",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -83,3 +84,7 @@ O que é outra forma de enunciar a regra de ordenação: passos irreversíveis v
 **Declare o que fica para trás.** O restante indefinido é onde dois sistemas acabam escrevendo a mesma linha.
 
 **Nomeie os passos irreversíveis e coloque-os no fim.** Você não pode consertá-los; pode garantir que aconteçam depois de você ter aprendido tudo o que é mais barato.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

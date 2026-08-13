@@ -9,6 +9,7 @@ tags:
     "api",
     "contratos",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -79,3 +80,7 @@ Agrupado por consumidor, o relatório responde isso diretamente, e um plano de c
 **Agrupe o resumo por consumidor.** Os dados querem ser organizados por tipo de superfície. O leitor quer saber o que quebra para ele.
 
 A coisa toda levou uma fração do tempo da extração, e foi o artefato ao qual eu mais recorri — incluindo duas vezes para responder "alguma coisa ainda usa isso?" com uma citação em vez de um chute.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

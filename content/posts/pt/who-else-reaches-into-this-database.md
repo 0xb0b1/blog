@@ -9,10 +9,11 @@ tags:
     "posse-de-dados",
     "microsservicos",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
-Já escrevi antes que uma fronteira de serviço é sobre posse de dados: um serviço possui uma fatia de dados e é a única coisa que a escreve. Esse é o princípio. Este post é sobre o levantamento que você tem que fazer antes de conseguir aplicá-lo a um banco que é mais antigo que o princípio.
+Já escrevi antes que [uma fronteira de serviço é sobre posse de dados](/pt/posts/designing-service-boundaries-api-contracts): um serviço possui uma fatia de dados e é a única coisa que a escreve. Esse é o princípio. Este post é sobre o levantamento que você tem que fazer antes de conseguir aplicá-lo a um banco que é mais antigo que o princípio.
 
 A pergunta é simples e a resposta nunca está na cabeça de uma única pessoa: **quem mais mexe neste banco, e para quê?**
 
@@ -41,7 +42,7 @@ Nós ingerimos dados esportivos de provedores externos. Muitas entidades são ch
 
 Isso é normal, e em grande parte inofensivo, até o momento em que você considera trocar de provedor. Então uma entidade chaveada a exatamente um provedor significa que todo o seu histórico daquela entidade está expresso num vocabulário para o qual você não tem mais assinatura. Você pode manter as linhas. Você só não pode juntá-las a nada novo, e não pode rebuscar o que falta.
 
-O critério chama isso de **histórico-exposto**, e marcá-lo é o valor inteiro. Em paralelo estávamos avaliando se um provedor de dados esportivos poderia substituir outro; as entidades marcadas aqui são exatamente aquelas em que essa migração deixa de ser um exercício de integração e se torna um exercício de migração de dados. Duas features em repositórios diferentes, e o risco mais difícil da segunda estava escrito no inventário da primeira.
+O critério chama isso de **histórico-exposto**, e marcá-lo é o valor inteiro. Em paralelo estávamos [avaliando se um provedor de dados esportivos poderia substituir outro](/pt/posts/what-the-api-returns-vs-what-the-docs-claim); as entidades marcadas aqui são exatamente aquelas em que essa migração deixa de ser um exercício de integração e se torna um exercício de migração de dados. Duas features em repositórios diferentes, e o risco mais difícil da segunda estava escrito no inventário da primeira.
 
 Se seu schema chaveia qualquer coisa pelo identificador de um fornecedor, isso é um acoplamento ao fornecedor tão real quanto uma chamada de API — e muito menos visível, porque não aparece em nenhuma lista de dependências.
 
@@ -76,3 +77,7 @@ As duas metades são deliberadas.
 **Procure identificadores de fornecedor nas suas chaves.** Uma coluna guardando o id de outra pessoa é um acoplamento àquele fornecedor sem nenhuma da visibilidade de uma dependência de API. Se exatamente um provedor pode fornecer aquela chave, seu histórico está exposto ao contrato daquele provedor.
 
 **Pontue opções contra os acoplamentos que você encontrou, não no abstrato.** Encerra a discussão, e torna "não extraia isso" uma opção visível em vez de uma indizível.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

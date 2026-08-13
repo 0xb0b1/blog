@@ -9,12 +9,11 @@ tags:
     "verification",
     "refactoring",
     "workflow",
+    "subscriptions-extraction",
   ]
 ---
 
-Some setup, since the machinery is the subject.
-
-We're extracting the subscriptions and payments half of a Django monolith into a Go service, in phases — fourteen of them so far. Each phase gets a specification with numbered user stories and acceptance criteria, and the rule that makes it more than paperwork is this: **every acceptance criterion must have a passing test, and the verdict is a process exit code rather than anyone's opinion.** A phase either audits clean or it isn't done. There's no adjective available.
+We're [extracting the subscriptions and payments half of a Django monolith into a Go service](/en/posts/quantify-the-failure-before-you-redesign-it), in phases — fourteen of them so far. Each phase gets a specification with numbered user stories and acceptance criteria, and the rule that makes it more than paperwork is this: **every acceptance criterion must have a passing test, and the verdict is a process exit code rather than anyone's opinion.** A phase either audits clean or it isn't done. There's no adjective available.
 
 That has earned its place. It's caught criteria that had tests which had never actually passed, files that were written and never mapped to any task, and — repeatedly — the discovery that a phase's real state was worse than its author's summary.
 
@@ -91,3 +90,7 @@ Which is the argument for having the verdict be an exit code in the first place.
 **Expect structural assertions to fail on good changes, and budget for re-scoping them.** That's the technique's cost, not a defect in it.
 
 **Assume every one of these will surface when you're one step from done.** That's the case the mechanical verdict exists for.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

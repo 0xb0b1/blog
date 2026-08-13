@@ -9,10 +9,11 @@ tags:
     "data-ownership",
     "microservices",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
-I've written before that a service boundary is about data ownership: a service owns a slice of data and is the only thing that writes it. That's the principle. This post is about the survey you have to do before you can apply it to a database that predates the principle.
+I've written before that [a service boundary is about data ownership](/en/posts/designing-service-boundaries-api-contracts): a service owns a slice of data and is the only thing that writes it. That's the principle. This post is about the survey you have to do before you can apply it to a database that predates the principle.
 
 The question is simple and the answer is never in one person's head: **who else reaches into this database, and for what?**
 
@@ -41,7 +42,7 @@ We ingest sports data from external providers. Many entities are keyed by the pr
 
 That's normal, and mostly harmless, right up to the moment you consider changing provider. Then an entity keyed to exactly one provider means all your history for that entity is expressed in a vocabulary you no longer have a subscription to. You can keep the rows. You just can't join them to anything new, and you can't re-fetch what's missing.
 
-The criterion calls that **history-exposed**, and flagging it is the whole value. In parallel we were evaluating whether one sports-data provider could replace another; the entities flagged here are exactly the ones where that migration stops being an integration exercise and becomes a data-migration exercise. Two features in different repositories, and the second one's hardest risk was written down in the first one's inventory.
+The criterion calls that **history-exposed**, and flagging it is the whole value. In parallel we were [evaluating whether one sports-data provider could replace another](/en/posts/what-the-api-returns-vs-what-the-docs-claim); the entities flagged here are exactly the ones where that migration stops being an integration exercise and becomes a data-migration exercise. Two features in different repositories, and the second one's hardest risk was written down in the first one's inventory.
 
 If your schema keys anything by a vendor's identifier, that's a coupling to the vendor as real as an API call — and much less visible, because it doesn't appear in any dependency list.
 
@@ -76,3 +77,7 @@ Both halves are deliberate.
 **Look for vendor identifiers in your keys.** A column holding someone else's id is a coupling to that vendor with none of the visibility of an API dependency. If exactly one provider can supply that key, your history is exposed to that provider's contract.
 
 **Score options against the couplings you found, not in the abstract.** It ends the argument, and it makes "don't extract this" a visible option rather than an unspeakable one.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

@@ -9,14 +9,11 @@ tags:
     "go",
     "python",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
-Some context, because the rest of this only makes sense with it.
-
-The product is a sports app with a paid tier. Users subscribe through Apple's App Store, Google Play, or Stripe on the web, and a successful subscription grants them a role — internally PRO — that unlocks the paid features. All of it lived in one Django monolith: the purchase endpoints the mobile app calls, the webhook endpoints the stores call, the catalog of what's purchasable, and the logic that decides whether a given purchase entitles someone to PRO.
-
-We're pulling the subscriptions half of that into a new Go service. And the most consequential decision in the whole project was made before any code: **the data does not move.** The Go service connects to the monolith's existing Postgres cluster and writes the same tables. No new database, no migration, no dual-write layer.
+We're [pulling the subscriptions half of a Django monolith into a Go service](/en/posts/quantify-the-failure-before-you-redesign-it) — a sports app whose paid tier, internally PRO, is bought through Apple's App Store, Google Play, or Stripe on the web. The most consequential decision in the whole project was made before any code: **the data does not move.** The Go service connects to the monolith's existing Postgres cluster and writes the same tables. No new database, no migration, no dual-write layer.
 
 That was judged the lesser risk. Moving payment tables can't be rolled back in minutes, and it would break every back-office report that joins them. The cost of avoiding it is that for the entire transition, **two independently-written implementations write the same rows.** The monolith can't be switched off either — Stripe is still entirely its problem — so this isn't a brief cutover window. It's the normal state of affairs for months.
 
@@ -115,3 +112,7 @@ There's a coda that makes "load-bearing" concrete. The revocation list lives in 
 **A performance change that alters when a fact becomes false is a security change.** Name the window in units and let its owner decide.
 
 **Record deliberate divergences where the harness can see them.** Then agreement means something, and disagreement is expected rather than ambiguous.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

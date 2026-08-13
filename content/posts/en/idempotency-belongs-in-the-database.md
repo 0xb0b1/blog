@@ -9,6 +9,7 @@ tags:
     "idempotency",
     "reliability",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -76,3 +77,7 @@ The same reasoning appears elsewhere in this project: a pool "bounded by configu
 **Put the source in the key when you ingest from multiple systems.** Their identifiers are unique in their namespace, not yours.
 
 **Where correctness is only visible under concurrency, name the mechanism in the requirement.** "Enforced by the database" is checkable in review. "Yields one row" is checkable by a test that passes for the wrong reason.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

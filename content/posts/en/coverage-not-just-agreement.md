@@ -9,10 +9,11 @@ tags:
     "go",
     "python",
     "quality",
+    "subscriptions-extraction",
   ]
 ---
 
-I wrote about proving a rewrite by comparing it against the system it replaced over a full corpus. The number that came out was zero disagreements, and I said at the time that the number was the least interesting part.
+I wrote about [proving a rewrite by comparing it against the system it replaced](/en/posts/proving-a-rewrite-against-real-purchases) over a full corpus. The number that came out was zero disagreements, and I said at the time that the number was the least interesting part.
 
 This is why. A comparison result has two dimensions, and only one of them gets reported by default.
 
@@ -71,3 +72,7 @@ The general pattern, which shows up in three different places in this project: *
 **Write down what your harness does not cover.** A stated boundary can be argued with. An assumed one gets discovered during an incident.
 
 **Prefer the narrower defensible claim.** "The deterministic core agrees across the corpus" is worth more than "the handler is verified," because the first one is true.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

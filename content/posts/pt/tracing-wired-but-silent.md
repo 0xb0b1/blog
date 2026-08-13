@@ -9,6 +9,7 @@ tags:
     "opentelemetry",
     "logging",
     "backend",
+    "extracao-de-assinaturas",
   ]
 ---
 
@@ -69,3 +70,7 @@ Escrever "presente mas silencioso" como um título em vez de um comentário é o
 **Documente o adiamento como uma decisão, com sua razão.** Caso contrário a próxima pessoa lê uma feature desligada como inacabada — e não está sendo irracional.
 
 **Coloque o id de correlação nos seus logs primeiro.** Responde a pergunta que as pessoas de fato fazem, e não precisa de ninguém escolhendo um produto.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

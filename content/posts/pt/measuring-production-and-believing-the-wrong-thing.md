@@ -9,10 +9,11 @@ tags:
     "debugging",
     "aws",
     "testes",
+    "extracao-de-assinaturas",
   ]
 ---
 
-Estamos portando a metade de assinaturas de um monolito Django para um serviço em Go. O que significa, constantemente, que dimensionar uma tarefa depende de um fato sobre produção: este formato de recibo ainda está em uso, este campo de log existe, quantas dessas linhas armazenadas conseguimos de fato replicar, alguém ainda chama este endpoint.
+Estamos [portando a metade de assinaturas de um monolito Django para um serviço em Go](/pt/posts/quantify-the-failure-before-you-redesign-it). O que significa, constantemente, que dimensionar uma tarefa depende de um fato sobre produção: este formato de recibo ainda está em uso, este campo de log existe, quantas dessas linhas armazenadas conseguimos de fato replicar, alguém ainda chama este endpoint.
 
 Não há como responder essas do repositório. O código contém todo branch que já foi escrito, incluindo os que nenhum tráfego percorreu em três anos. Então o projeto fez da medição um passo de primeira classe — o critério de aceitação de uma fase inicial era literalmente *o quadro de falha é medido, e reproduzível*, e esse hábito se pagou repetidamente.
 
@@ -116,3 +117,7 @@ E acima de tudo isso: **não aceite de uma especificação uma afirmação sobre
 **Olhe a distribuição no tempo, não a média.** O mês que recuperou 0 de 5.255 era invisível dentro de uma porcentagem do corpus inteiro.
 
 **Meça a coisa inteira uma vez, cedo.** É uma query. Custa minutos, resolve a pergunta, e te conta coisas que você não perguntou — como que o ambiente no qual você planejava verificar estava em silêncio havia três meses.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*

@@ -9,6 +9,7 @@ tags:
     "migration",
     "risk",
     "backend",
+    "subscriptions-extraction",
   ]
 ---
 
@@ -83,3 +84,7 @@ Which is another way of stating the ordering rule: irreversible steps go last, a
 **State what stays behind.** The undefined remainder is where two systems end up writing the same row.
 
 **Name the irreversible steps and put them last.** You can't fix them; you can make sure they happen after you've learned everything cheaper.
+
+---
+
+*Part of [The Subscriptions Extraction](/en/posts/the-subscriptions-extraction-a-reading-order), seventeen posts on pulling the subscriptions half of a Django monolith into a Go service.*

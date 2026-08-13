@@ -9,10 +9,11 @@ tags:
     "go",
     "python",
     "qualidade",
+    "extracao-de-assinaturas",
   ]
 ---
 
-Escrevi sobre provar uma reescrita comparando-a com o sistema que ela substituiu sobre um corpus completo. O número que saiu foi zero discordâncias, e eu disse na ocasião que o número era a parte menos interessante.
+Escrevi sobre [provar uma reescrita comparando-a com o sistema que ela substituiu](/pt/posts/proving-a-rewrite-against-real-purchases) sobre um corpus completo. O número que saiu foi zero discordâncias, e eu disse na ocasião que o número era a parte menos interessante.
 
 Este é o porquê. Um resultado de comparação tem duas dimensões, e apenas uma delas é reportada por padrão.
 
@@ -71,3 +72,7 @@ O padrão geral, que aparece em três lugares diferentes neste projeto: **manten
 **Escreva o que seu harness não cobre.** Uma fronteira declarada pode ser discutida. Uma presumida é descoberta durante um incidente.
 
 **Prefira a alegação mais estreita e defensável.** "O núcleo determinístico concorda sobre o corpus" vale mais que "o handler está verificado", porque a primeira é verdadeira.
+
+---
+
+*Parte de [A Extração de Assinaturas](/pt/posts/the-subscriptions-extraction-a-reading-order), dezessete posts sobre extrair a metade de assinaturas de um monolito Django para um serviço em Go.*
